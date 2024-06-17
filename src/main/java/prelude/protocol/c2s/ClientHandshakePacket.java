@@ -78,7 +78,7 @@ public final class ClientHandshakePacket extends C2SPacket {
      * Attempts to parse a byte array into a packet
      * @return null if failed to parse, or a new instance of this packet
      * */
-    public static ClientHandshakePacket toPacket(InputStream is) {
+    public static ClientHandshakePacket fromBytes(InputStream is) {
         try {
             if ((byte) is.read() != C2SPacket.CLIENT_HANDSHAKE_ID)
                 return null;

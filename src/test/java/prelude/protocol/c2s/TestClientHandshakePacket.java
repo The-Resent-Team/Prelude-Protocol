@@ -22,7 +22,7 @@ public class TestClientHandshakePacket {
 
         byte[] bytes = packet.toBytes();
         ClientHandshakePacket deserializedPacket =
-                ClientHandshakePacket.toPacket(new ByteArrayInputStream(bytes));
+                ClientHandshakePacket.fromBytes(new ByteArrayInputStream(bytes));
 
         Assertions.assertEquals(packet, deserializedPacket);
     }

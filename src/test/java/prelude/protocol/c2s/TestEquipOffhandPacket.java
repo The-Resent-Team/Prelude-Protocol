@@ -6,7 +6,6 @@ import org.junit.platform.commons.annotation.Testable;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
 @Testable
 public class TestEquipOffhandPacket {
@@ -18,11 +17,11 @@ public class TestEquipOffhandPacket {
 
         byte[] bytes = packet.toBytes();
         EquipOffhandPacket deserializedPacket =
-                EquipOffhandPacket.toPacket(new ByteArrayInputStream(bytes));
+                EquipOffhandPacket.fromBytes(new ByteArrayInputStream(bytes));
 
         Assertions.assertEquals(packet, deserializedPacket);
 
-        ClientHandshakePacket handshakePacket = ClientHandshakePacket.toPacket(new ByteArrayInputStream(bytes));
+        ClientHandshakePacket handshakePacket = ClientHandshakePacket.fromBytes(new ByteArrayInputStream(bytes));
         Assertions.assertNull(handshakePacket);
     }
 }
