@@ -7,7 +7,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.StringJoiner;
 
@@ -64,6 +63,7 @@ public final class ClientHandshakePacket extends C2SPacket {
 
         StreamUtils.writeShort(sb.length(), bao);
         bao.write(sb.toString().getBytes(StandardCharsets.US_ASCII));
+
         return bao.toByteArray();
     }
 
