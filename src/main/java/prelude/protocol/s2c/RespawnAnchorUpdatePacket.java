@@ -68,7 +68,7 @@ public class RespawnAnchorUpdatePacket extends S2CPacket {
     }
 
     public static class Builder {
-        private byte charge;
+        private byte charge = -1;
         private int x;
         private int y;
         private int z;
@@ -96,6 +96,9 @@ public class RespawnAnchorUpdatePacket extends S2CPacket {
         }
 
         public RespawnAnchorUpdatePacket build() {
+            if (charge == -1)
+                throw new IllegalStateException("Not all required fields are set!");
+
             return new RespawnAnchorUpdatePacket(charge, x, y, z);
         }
     }

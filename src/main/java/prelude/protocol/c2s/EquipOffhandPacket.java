@@ -56,7 +56,7 @@ public class EquipOffhandPacket extends C2SPacket {
     }
 
     public static class Builder {
-        private short slot;
+        private short slot = -1;
 
         private Builder() {}
 
@@ -66,6 +66,9 @@ public class EquipOffhandPacket extends C2SPacket {
         }
 
         public EquipOffhandPacket build() {
+            if (slot == -1)
+                throw new IllegalStateException("Not all required fields are set!");
+
             return new EquipOffhandPacket(slot);
         }
     }

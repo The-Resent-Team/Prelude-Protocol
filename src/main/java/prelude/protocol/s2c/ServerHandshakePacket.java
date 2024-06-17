@@ -78,13 +78,13 @@ public class ServerHandshakePacket extends S2CPacket {
     }
 
     public static class Builder {
-        private byte preludeMajorVersion;
-        private byte preludeMinorVersion;
-        private byte preludePatchVersion;
+        private byte preludeMajorVersion = -1;
+        private byte preludeMinorVersion = -1;
+        private byte preludePatchVersion = -1;
 
-        private byte serverMajorVersion;
-        private byte serverMinorVersion;
-        private byte serverPatchVersion;
+        private byte serverMajorVersion = -1;
+        private byte serverMinorVersion = -1;
+        private byte serverPatchVersion = -1;
 
         private Builder() {}
 
@@ -119,6 +119,10 @@ public class ServerHandshakePacket extends S2CPacket {
         }
 
         public ServerHandshakePacket build() {
+            if (preludeMajorVersion == -1 || preludeMinorVersion == -1 || preludePatchVersion == -1 || serverMajorVersion == -1 || serverMinorVersion == -1 || serverPatchVersion == -1) {
+                throw new IllegalStateException("Not all required fields were present in server handshake packet builder!");
+            }
+
             return new ServerHandshakePacket(preludeMajorVersion, preludeMinorVersion, preludePatchVersion, serverMajorVersion, serverMinorVersion, serverPatchVersion);
         }
     }

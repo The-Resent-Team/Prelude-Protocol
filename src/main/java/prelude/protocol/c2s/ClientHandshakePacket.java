@@ -139,12 +139,12 @@ public final class ClientHandshakePacket extends C2SPacket {
 
     public static class Builder {
         private String username;
-        private byte resentMajorVersion;
-        private byte resentMinorVersion;
-        private int resentBuildInteger;
-        private ClientType clientType;
+        private byte resentMajorVersion = -1;
+        private byte resentMinorVersion = -1;
+        private int resentBuildInteger = -1;
+        private ClientType clientType = null;
         private boolean clientClaimsSelfIsRankedPlayer;
-        private String[] enabledMods;
+        private String[] enabledMods = null;
 
         private Builder() {}
 
@@ -186,6 +186,9 @@ public final class ClientHandshakePacket extends C2SPacket {
         public ClientHandshakePacket build() {
             if (username == null || username.length() > 16 || username.length() < 3)
                 throw new RuntimeException("Username must be between 3 and 16 characters");
+
+            if (resentMajorVersion == -1 || resentMinorVersion == -1 || resentBuildInteger == -1 || clientType == null || enabledMods == null)
+                throw new IllegalStateException("Not all required fields are set!");
 
             return new ClientHandshakePacket(username, resentMajorVersion, resentMinorVersion, resentBuildInteger, clientType, clientClaimsSelfIsRankedPlayer, enabledMods);
         }
