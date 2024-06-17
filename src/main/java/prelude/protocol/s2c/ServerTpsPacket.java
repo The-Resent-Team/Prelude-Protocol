@@ -76,13 +76,13 @@ public class ServerTpsPacket extends S2CPacket {
         private byte characteristic = -1;
         private short mantissa = -1;
 
-        public Builder characteristic(byte characteristic) {
-            this.characteristic = characteristic;
+        public Builder characteristic(int characteristic) {
+            this.characteristic = (byte) characteristic;
             return this;
         }
 
-        public Builder mantissa(short mantissa) {
-            this.mantissa = mantissa;
+        public Builder mantissa(int mantissa) {
+            this.mantissa = (short) mantissa;
             return this;
         }
 
