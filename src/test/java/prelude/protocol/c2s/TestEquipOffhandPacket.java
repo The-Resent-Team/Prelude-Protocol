@@ -17,11 +17,11 @@ public class TestEquipOffhandPacket {
 
         byte[] bytes = packet.toBytes();
         EquipOffhandPacket deserializedPacket =
-                EquipOffhandPacket.fromBytes(new ByteArrayInputStream(bytes));
+                EquipOffhandPacket.from(new ByteArrayInputStream(bytes));
 
         Assertions.assertEquals(packet, deserializedPacket);
 
-        ClientHandshakePacket handshakePacket = ClientHandshakePacket.fromBytes(new ByteArrayInputStream(bytes));
+        ClientHandshakePacket handshakePacket = ClientHandshakePacket.from(new ByteArrayInputStream(bytes));
         Assertions.assertNull(handshakePacket);
     }
 }

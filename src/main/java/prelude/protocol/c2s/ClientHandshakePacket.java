@@ -19,17 +19,21 @@ public final class ClientHandshakePacket extends C2SPacket {
     public final byte resentMajorVersion;
     public final byte resentMinorVersion;
 
+    // this is the integer in the signed build
+    public final int resentBuildInteger;
+
     public final ClientType clientType;
 
     // if the config option is on, servers will attempt to resync this value
     public final boolean clientClaimsSelfIsRankedPlayer;
     public final String[] enabledMods;
 
-    private ClientHandshakePacket(String username, byte resentMajorVersion, byte resentMinorVersion, ClientType clientType,
+    private ClientHandshakePacket(String username, byte resentMajorVersion, byte resentMinorVersion, int resentBuildInteger, ClientType clientType,
                                  boolean clientClaimsSelfIsRankedPlayer, String[] enabledMods) {
         this.username = username;
         this.resentMajorVersion = resentMajorVersion;
         this.resentMinorVersion = resentMinorVersion;
+        this.resentBuildInteger = resentBuildInteger;
         this.clientType = clientType;
         this.clientClaimsSelfIsRankedPlayer = clientClaimsSelfIsRankedPlayer;
         this.enabledMods = enabledMods;
@@ -78,7 +82,7 @@ public final class ClientHandshakePacket extends C2SPacket {
      * Attempts to parse a byte array into a packet
      * @return null if failed to parse, or a new instance of this packet
      * */
-    public static ClientHandshakePacket fromBytes(InputStream is) {
+    public static ClientHandshakePacket from(InputStream is) {
         try {
             if ((byte) is.read() != C2SPacket.CLIENT_HANDSHAKE_ID)
                 return null;
@@ -137,6 +141,7 @@ public final class ClientHandshakePacket extends C2SPacket {
         private String username;
         private byte resentMajorVersion;
         private byte resentMinorVersion;
+        private int resentBuildInteger;
         private ClientType clientType;
         private boolean clientClaimsSelfIsRankedPlayer;
         private String[] enabledMods;
@@ -155,6 +160,11 @@ public final class ClientHandshakePacket extends C2SPacket {
 
         public Builder resentMinorVersion(int resentMinorVersion) {
             this.resentMinorVersion = (byte) resentMinorVersion;
+            return this;
+        }
+
+        public Builder resentBuildInteger(int resentBuildInteger) {
+            this.resentBuildInteger = resentBuildInteger;
             return this;
         }
 
@@ -177,7 +187,7 @@ public final class ClientHandshakePacket extends C2SPacket {
             if (username == null || username.length() > 16 || username.length() < 3)
                 throw new RuntimeException("Username must be between 3 and 16 characters");
 
-            return new ClientHandshakePacket(username, resentMajorVersion, resentMinorVersion, clientType, clientClaimsSelfIsRankedPlayer, enabledMods);
+            return new ClientHandshakePacket(username, resentMajorVersion, resentMinorVersion, resentBuildInteger, clientType, clientClaimsSelfIsRankedPlayer, enabledMods);
         }
     }
 }

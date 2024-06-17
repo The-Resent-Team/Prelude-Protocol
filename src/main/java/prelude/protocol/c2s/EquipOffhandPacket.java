@@ -31,7 +31,7 @@ public class EquipOffhandPacket extends C2SPacket {
         return slot == that.slot;
     }
 
-    public static EquipOffhandPacket fromBytes(InputStream is) {
+    public static EquipOffhandPacket from(InputStream is) {
         try {
             if ((byte) is.read() != C2SPacket.EQUIP_OFFHAND_ID)
                 return null;

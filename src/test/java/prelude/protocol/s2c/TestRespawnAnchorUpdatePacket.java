@@ -20,7 +20,7 @@ public class TestRespawnAnchorUpdatePacket {
 
         byte[] bytes = packet.toBytes();
         RespawnAnchorUpdatePacket deserializedPacket =
-                RespawnAnchorUpdatePacket.fromBytes(new ByteArrayInputStream(bytes));
+                RespawnAnchorUpdatePacket.from(new ByteArrayInputStream(bytes));
 
         Assertions.assertEquals(packet, deserializedPacket);
     }

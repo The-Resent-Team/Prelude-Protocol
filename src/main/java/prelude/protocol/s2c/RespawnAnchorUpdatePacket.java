@@ -40,7 +40,7 @@ public class RespawnAnchorUpdatePacket extends S2CPacket {
         return charge == that.charge && x == that.x && y == that.y && z == that.z;
     }
 
-    public static RespawnAnchorUpdatePacket fromBytes(InputStream in) {
+    public static RespawnAnchorUpdatePacket from(InputStream in) {
         try {
             if ((byte) in.read() != S2CPacket.RESPAWN_ANCHOR_UPDATE_ID)
                 return null;
