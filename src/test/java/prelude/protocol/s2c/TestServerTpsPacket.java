@@ -6,6 +6,8 @@ import org.junit.platform.commons.annotation.Testable;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 @Testable
 public class TestServerTpsPacket {

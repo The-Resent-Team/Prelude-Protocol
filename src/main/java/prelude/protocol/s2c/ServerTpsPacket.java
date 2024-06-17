@@ -36,7 +36,7 @@ public class ServerTpsPacket extends S2CPacket {
         bao.write(SERVER_TPS_ID);
 
         bao.write(characteristic);
-        bao.write(mantissa);
+        StreamUtils.writeShort(mantissa, bao);
 
         return bao.toByteArray();
     }
