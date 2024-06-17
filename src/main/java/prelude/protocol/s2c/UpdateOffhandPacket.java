@@ -51,7 +51,7 @@ public class UpdateOffhandPacket extends S2CPacket {
                     .canClientDisregardThis(canClientDisregardThis)
                     .build();
         } catch (Exception e) {
-            System.err.println("Failed to parse server update offhand packet!");
+            System.err.println("Failed to parse update offhand packet!");
             e.printStackTrace();
             return null;
         }

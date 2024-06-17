@@ -8,4 +8,9 @@ public abstract class S2CPacket extends Packet {
     public static final byte UPDATE_OFFHAND_ID = 4;
     public static final byte TOTEM_USED_ID = 5;
     public static final byte WAYPOINTS_ID = 6;
+
+    @SuppressWarnings("unchecked")
+    public <E extends S2CPacket> E cast(Class<E> clazz) throws ClassCastException {
+        return (E) this;
+    }
 }
