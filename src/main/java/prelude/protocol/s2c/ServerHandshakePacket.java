@@ -28,7 +28,8 @@ public class ServerHandshakePacket extends S2CPacket {
     public byte[] toBytes() throws IOException {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
-        bao.write(S2CPacket.SERVER_HANDSHAKE_ID);
+        bao.write(SERVER_HANDSHAKE_ID);
+
         bao.write(preludeMajorVersion);
         bao.write(preludeMinorVersion);
         bao.write(preludePatchVersion);
@@ -48,7 +49,7 @@ public class ServerHandshakePacket extends S2CPacket {
 
     public static ServerHandshakePacket from(InputStream is) {
         try {
-            if (is.read() != S2CPacket.SERVER_HANDSHAKE_ID)
+            if (is.read() != SERVER_HANDSHAKE_ID)
                 return null;
 
             byte preludeMajorVersion = (byte) is.read();
@@ -119,9 +120,8 @@ public class ServerHandshakePacket extends S2CPacket {
         }
 
         public ServerHandshakePacket build() {
-            if (preludeMajorVersion == -1 || preludeMinorVersion == -1 || preludePatchVersion == -1 || serverMajorVersion == -1 || serverMinorVersion == -1 || serverPatchVersion == -1) {
-                throw new IllegalStateException("Not all required fields were present in server handshake packet builder!");
-            }
+            if (preludeMajorVersion == -1 || preludeMinorVersion == -1 || preludePatchVersion == -1 || serverMajorVersion == -1 || serverMinorVersion == -1 || serverPatchVersion == -1)
+                throw new IllegalStateException("Not all required fields are set!");
 
             return new ServerHandshakePacket(preludeMajorVersion, preludeMinorVersion, preludePatchVersion, serverMajorVersion, serverMinorVersion, serverPatchVersion);
         }

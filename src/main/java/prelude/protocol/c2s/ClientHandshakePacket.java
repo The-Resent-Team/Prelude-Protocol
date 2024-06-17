@@ -43,7 +43,7 @@ public final class ClientHandshakePacket extends C2SPacket {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
         // packet id for parsing
-        bao.write(C2SPacket.CLIENT_HANDSHAKE_ID);
+        bao.write(CLIENT_HANDSHAKE_ID);
 
         // write username
         // we can write it as a byte since we know username cant exceed 16 chars, which is well below the limit of a byte
@@ -84,7 +84,7 @@ public final class ClientHandshakePacket extends C2SPacket {
      * */
     public static ClientHandshakePacket from(InputStream is) {
         try {
-            if ((byte) is.read() != C2SPacket.CLIENT_HANDSHAKE_ID)
+            if ((byte) is.read() != CLIENT_HANDSHAKE_ID)
                 return null;
 
             String username = StreamUtils.readASCII(is.read(), is);

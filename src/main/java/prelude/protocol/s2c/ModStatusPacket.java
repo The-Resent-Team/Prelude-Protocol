@@ -22,7 +22,7 @@ public class ModStatusPacket extends S2CPacket {
     public byte[] toBytes() throws IOException {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
-        bao.write(S2CPacket.MOD_STATUS_ID);
+        bao.write(MOD_STATUS_ID);
 
         bao.write(modIdentifier.length());
         bao.write(modIdentifier.getBytes(StandardCharsets.US_ASCII));
@@ -41,7 +41,7 @@ public class ModStatusPacket extends S2CPacket {
 
     public static ModStatusPacket from(InputStream is) {
         try {
-            if (is.read() != S2CPacket.MOD_STATUS_ID)
+            if (is.read() != MOD_STATUS_ID)
                 return null;
 
             String modId = StreamUtils.readASCII(is.read(), is);

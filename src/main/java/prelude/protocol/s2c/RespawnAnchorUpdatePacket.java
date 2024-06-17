@@ -23,12 +23,12 @@ public class RespawnAnchorUpdatePacket extends S2CPacket {
     @Override
     public byte[] toBytes() throws IOException {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
-        bao.write(S2CPacket.RESPAWN_ANCHOR_UPDATE_ID);
+        bao.write(RESPAWN_ANCHOR_UPDATE_ID);
 
         bao.write(charge);
-        StreamUtils.writeInt(x, bao);
-        StreamUtils.writeInt(y, bao);
-        StreamUtils.writeInt(z, bao);
+        StreamUtils.writeVarInt(x, bao);
+        StreamUtils.writeVarInt(y, bao);
+        StreamUtils.writeVarInt(z, bao);
 
         return bao.toByteArray();
     }
@@ -42,13 +42,13 @@ public class RespawnAnchorUpdatePacket extends S2CPacket {
 
     public static RespawnAnchorUpdatePacket from(InputStream in) {
         try {
-            if ((byte) in.read() != S2CPacket.RESPAWN_ANCHOR_UPDATE_ID)
+            if ((byte) in.read() != RESPAWN_ANCHOR_UPDATE_ID)
                 return null;
 
             byte charge = (byte) in.read();
-            int x = StreamUtils.readInt(in);
-            int y = StreamUtils.readInt(in);
-            int z = StreamUtils.readInt(in);
+            int x = StreamUtils.readVarInt(in);
+            int y = StreamUtils.readVarInt(in);
+            int z = StreamUtils.readVarInt(in);
 
             return builder()
                     .charge(charge)

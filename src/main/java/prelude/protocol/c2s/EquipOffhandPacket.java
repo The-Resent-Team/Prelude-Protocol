@@ -18,7 +18,7 @@ public class EquipOffhandPacket extends C2SPacket {
     public byte[] toBytes() throws IOException {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
-        bao.write(C2SPacket.EQUIP_OFFHAND_ID);
+        bao.write(EQUIP_OFFHAND_ID);
         StreamUtils.writeShort(slot, bao);
 
         return bao.toByteArray();
@@ -33,7 +33,7 @@ public class EquipOffhandPacket extends C2SPacket {
 
     public static EquipOffhandPacket from(InputStream is) {
         try {
-            if ((byte) is.read() != C2SPacket.EQUIP_OFFHAND_ID)
+            if ((byte) is.read() != EQUIP_OFFHAND_ID)
                 return null;
 
             short slot = (short) StreamUtils.readShort(is);

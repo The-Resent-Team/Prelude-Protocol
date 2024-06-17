@@ -10,30 +10,82 @@ public class StreamUtils {
         os.write(i & 255);
     }
 
-    public static void writeInt(int i, OutputStream os) throws IOException {
-        os.write(i >> 24 & 255);
-        os.write(i >> 16 & 255);
-        os.write(i >> 8 & 255);
-        os.write(i & 255);
+    // ---------------- BEGIN COPY PASTING VARINT AND VARLONG ----------------
+
+    /*
+    * Copied from https://wiki.vg/index.php?title=Protocol#VarInt_and_VarLong
+    * */
+    private static final int SEGMENT_BITS = 0x7F;
+    private static final int CONTINUE_BIT = 0x80;
+
+    public static void writeVarInt(int value, OutputStream os) throws IOException {
+        while (true) {
+            if ((value & ~SEGMENT_BITS) == 0) {
+                os.write(value);
+                return;
+            }
+
+            os.write((value & SEGMENT_BITS) | CONTINUE_BIT);
+
+            value >>>= 7;
+        }
     }
 
-    public static void writeLong(long i, OutputStream os) throws IOException {
-        os.write((int)(i >> 56 & 255L));
-        os.write((int)(i >> 48 & 255L));
-        os.write((int)(i >> 40 & 255L));
-        os.write((int)(i >> 32 & 255L));
-        os.write((int)(i >> 24 & 255L));
-        os.write((int)(i >> 16 & 255L));
-        os.write((int)(i >> 8 & 255L));
-        os.write((int)(i & 255L));
+    public static void writeVarLong(long value, OutputStream os) throws IOException {
+        while (true) {
+            if ((value & ~((long) SEGMENT_BITS)) == 0) {
+                os.write((int) value);
+                return;
+            }
+
+            os.write((int) ((value & SEGMENT_BITS) | CONTINUE_BIT));
+
+            value >>>= 7;
+        }
     }
+
+    public static int readVarInt(InputStream is) throws IOException {
+        int value = 0;
+        int position = 0;
+        byte currentByte;
+
+        while (true) {
+            currentByte = (byte) is.read();
+            value |= (currentByte & SEGMENT_BITS) << position;
+
+            if ((currentByte & CONTINUE_BIT) == 0) break;
+
+            position += 7;
+
+            if (position >= 32) throw new RuntimeException("VarInt is too big");
+        }
+
+        return value;
+    }
+
+    public static long readVarLong(InputStream is) throws IOException {
+        long value = 0;
+        int position = 0;
+        byte currentByte;
+
+        while (true) {
+            currentByte = (byte) is.read();
+            value |= (long) (currentByte & SEGMENT_BITS) << position;
+
+            if ((currentByte & CONTINUE_BIT) == 0) break;
+
+            position += 7;
+
+            if (position >= 64) throw new RuntimeException("VarLong is too big");
+        }
+
+        return value;
+    }
+
+    // ---------------- END COPY PASTE VARINT AND VARLONG ----------------
 
     public static int readShort(InputStream is) throws IOException {
         return (is.read() << 8) | is.read();
-    }
-
-    public static int readInt(InputStream is) throws IOException {
-        return (is.read() << 24) | (is.read() << 16) | (is.read() << 8) | is.read();
     }
 
     public static String readASCII(int len, InputStream bytesIn) throws IOException {
