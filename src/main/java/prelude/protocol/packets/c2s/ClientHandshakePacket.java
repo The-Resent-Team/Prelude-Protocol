@@ -1,32 +1,37 @@
 package prelude.protocol.packets.c2s;
 
+import prelude.protocol.C2SPacketHandler;
 import prelude.protocol.StreamUtils;
 import prelude.protocol.C2SPacket;
+import prelude.protocol.InvalidPacketException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.StringJoiner;
 
 public final class ClientHandshakePacket extends C2SPacket {
     private static final String NULL_TERMINATOR = "\u0000";
 
-    public final String username;
+    private String username;
 
     // give them between 0 and 255
-    public final byte resentMajorVersion;
-    public final byte resentMinorVersion;
+    private byte resentMajorVersion;
+    private byte resentMinorVersion;
 
     // this is the integer in the signed build
-    public final int resentBuildInteger;
+    private int resentBuildInteger;
 
-    public final ClientType clientType;
+    private ClientType clientType;
 
     // if the config option is on, servers will attempt to resync this value
-    public final boolean clientClaimsSelfIsRankedPlayer;
-    public final String[] enabledMods;
+    private boolean clientClaimsSelfIsRankedPlayer;
+    private String[] enabledMods;
+
+    public ClientHandshakePacket() {}
 
     private ClientHandshakePacket(String username, byte resentMajorVersion, byte resentMinorVersion, int resentBuildInteger, ClientType clientType,
                                  boolean clientClaimsSelfIsRankedPlayer, String[] enabledMods) {
@@ -71,35 +76,39 @@ public final class ClientHandshakePacket extends C2SPacket {
         return bao.toByteArray();
     }
 
-    public ClientHandshakePacket loadData(InputStream is) {
+    public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if ((byte) is.read() != CLIENT_HANDSHAKE_ID)
-                return null;
+            if (is.read() != CLIENT_HANDSHAKE_ID)
+                throw new InvalidPacketException("Packet ID doesn't match with CLIENT_HANDSHAKE_ID (%id%)!"
+                        .replace("%id%", CLIENT_HANDSHAKE_ID + ""));
 
             String username = StreamUtils.readASCII(is.read(), is);
             byte major = (byte) is.read();
             byte minor = (byte) is.read();
-            ClientType type = ClientType.getFromByte((byte) is.read());
+            ClientType type = ClientType.from((byte) is.read());
             boolean clientClaimsSelfIsRankedPlayer = (byte) is.read() == 1;
             String enabledMods = StreamUtils.readASCII(StreamUtils.readShort(is), is);
             String[] mods = enabledMods.split(NULL_TERMINATOR);
 
             if (username.length() < 3 || username.length() > 16 || minor < 0 || major < 0 || type == null)
-                return null;
+                throw new InvalidPacketException("Constructed CLIENT_HANDSHAKE_PACKET is invalid!");
 
-            return builder()
-                    .username(username)
-                    .resentMajorVersion(major)
-                    .resentMinorVersion(minor)
-                    .clientType(type)
-                    .clientClaimsSelfIsRankedPlayer(clientClaimsSelfIsRankedPlayer)
-                    .enabledMods(mods)
-                    .build();
+            this.username = username;
+            this.resentMajorVersion = major;
+            this.resentMinorVersion = minor;
+            this.clientType = type;
+            this.clientClaimsSelfIsRankedPlayer = clientClaimsSelfIsRankedPlayer;
+            this.enabledMods = mods;
         } catch (Exception e) {
-            System.err.println("Failed to parse client handshake packet!");
-            e.printStackTrace();
-            return null;
+            if (e instanceof InvalidPacketException)
+                throw (InvalidPacketException) e;
+            throw new InvalidPacketException("Failed to parse CLIENT_HANDSHAKE_PACKET!", e);
         }
+    }
+
+    @Override
+    public void processSelf(C2SPacketHandler handler) {
+        handler.handleClientHandshake(this);
     }
 
     @Override
@@ -123,7 +132,7 @@ public final class ClientHandshakePacket extends C2SPacket {
             this.value = (byte) value;
         }
 
-        public static ClientType getFromByte(byte b) {
+        public static ClientType from(byte b) {
             for (ClientType type : ClientType.values()) {
                 if (type.value == b)
                     return type;
@@ -188,5 +197,33 @@ public final class ClientHandshakePacket extends C2SPacket {
 
             return new ClientHandshakePacket(username, resentMajorVersion, resentMinorVersion, resentBuildInteger, clientType, clientClaimsSelfIsRankedPlayer, enabledMods);
         }
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public byte getResentMajorVersion() {
+        return resentMajorVersion;
+    }
+
+    public byte getResentMinorVersion() {
+        return resentMinorVersion;
+    }
+
+    public int getResentBuildInteger() {
+        return resentBuildInteger;
+    }
+
+    public ClientType getClientType() {
+        return clientType;
+    }
+
+    public boolean doesClientClaimSelfIsRankedPlayer() {
+        return clientClaimsSelfIsRankedPlayer;
+    }
+
+    public String[] getEnabledMods() {
+        return Arrays.copyOf(enabledMods, enabledMods.length);
     }
 }

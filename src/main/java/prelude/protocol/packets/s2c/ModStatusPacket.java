@@ -1,6 +1,8 @@
 package prelude.protocol.packets.s2c;
 
+import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
+import prelude.protocol.S2CPacketHandler;
 import prelude.protocol.StreamUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -10,8 +12,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class ModStatusPacket extends S2CPacket {
-    public final String modIdentifier;
-    public final ModStatus modStatus;
+    private String modIdentifier;
+    private ModStatus modStatus;
+
+    public ModStatusPacket() {}
 
     private ModStatusPacket(String modIdentifier, ModStatus modStatus) {
         this.modIdentifier = modIdentifier;
@@ -33,23 +37,30 @@ public class ModStatusPacket extends S2CPacket {
     }
 
     @Override
-    public ModStatusPacket loadData(InputStream is) {
+    public void loadData(InputStream is) throws InvalidPacketException {
         try {
             if (is.read() != MOD_STATUS_ID)
-                return null;
+                throw new InvalidPacketException("Packet ID doesn't match with MOD_STATUS_ID (%id%)!"
+                        .replace("%id%", MOD_STATUS_ID + ""));
 
             String modId = StreamUtils.readASCII(is.read(), is);
             ModStatus modStatus = ModStatus.from((byte) is.read());
 
-            return builder()
-                    .modIdentifier(modId)
-                    .modStatus(modStatus)
-                    .build();
+            if (modStatus == null)
+                throw new InvalidPacketException("Constructed MOD_STATUS_PACKET has an illegal ModStatus!");
+
+            this.modIdentifier = modId;
+            this.modStatus = modStatus;
         } catch (Exception e) {
-            System.err.println("Failed to parse mod status packet!");
-            e.printStackTrace();
-            return null;
+            if (e instanceof InvalidPacketException)
+                throw (InvalidPacketException) e;
+            throw new InvalidPacketException("Failed to parse MOD_STATUS_PACKET!", e);
         }
+    }
+
+    @Override
+    public void processSelf(S2CPacketHandler handler) {
+        handler.handleModStatus(this);
     }
 
     @Override
@@ -104,5 +115,13 @@ public class ModStatusPacket extends S2CPacket {
             }
             return null;
         }
+    }
+
+    public String getModIdentifier() {
+        return modIdentifier;
+    }
+
+    public ModStatus getModStatus() {
+        return modStatus;
     }
 }

@@ -1,21 +1,20 @@
 package prelude.protocol.packets.s2c;
 
+import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
+import prelude.protocol.S2CPacketHandler;
 import prelude.protocol.StreamUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class WaypointsPacket extends S2CPacket {
-    private static final String NULL_TERMINATOR = "\u0000";
+    private static final String SPLIT = "\u0000" + "\u8301" + "\u9281";
 
-    public final Waypoint[] waypoints;
+    private Waypoint[] waypoints;
+
+    public WaypointsPacket() {}
 
     private WaypointsPacket(Waypoint[] waypoints) {
         this.waypoints = waypoints;
@@ -37,39 +36,44 @@ public class WaypointsPacket extends S2CPacket {
             StreamUtils.writeVarInt(waypoint.z, bao);
 
             if (i != waypoints.length - 1)
-                bao.write(NULL_TERMINATOR.getBytes(StandardCharsets.US_ASCII));
+                bao.write(SPLIT.getBytes(StandardCharsets.US_ASCII));
         }
 
         return bao.toByteArray();
     }
 
     @Override
-    public WaypointsPacket loadData(InputStream is) {
+    public void loadData(InputStream is) throws InvalidPacketException {
         try {
             if (is.read() != WAYPOINTS_ID)
-                return null;
+                throw new InvalidPacketException("Packet ID doesn't match with WAY (%id%)!"
+                        .replace("%id%", RESPAWN_ANCHOR_UPDATE_ID + ""));
 
             byte[] waypointsDataByteArray = is.readAllBytes();
             String waypointsString = new String(waypointsDataByteArray, StandardCharsets.US_ASCII);
-            String[] waypointsData = waypointsString.split(NULL_TERMINATOR);
+            String[] waypointsData = waypointsString.split(SPLIT);
 
             List<Waypoint> waypointList = new ArrayList<>();
-            for (int i = 0; i < waypointsData.length; i++) {
-                String name = StreamUtils.readASCII(StreamUtils.readShort(is), is);
-                int x = StreamUtils.readVarInt(is);
-                int y = StreamUtils.readVarInt(is);
-                int z = StreamUtils.readVarInt(is);
+            for (String waypointsDatum : waypointsData) {
+                ByteArrayInputStream bis = new ByteArrayInputStream(waypointsDatum.getBytes(StandardCharsets.US_ASCII));
+                String name = StreamUtils.readASCII(StreamUtils.readShort(bis), bis);
+                int x = StreamUtils.readVarInt(bis);
+                int y = StreamUtils.readVarInt(bis);
+                int z = StreamUtils.readVarInt(bis);
                 waypointList.add(new Waypoint(name, x, y, z));
             }
 
-            return builder()
-                    .addWaypoints(waypointList)
-                    .build();
+            this.waypoints = waypointList.toArray(new Waypoint[0]);
         } catch (Exception e) {
-            System.err.println("Failed to parse waypoints packet!");
-            e.printStackTrace();
-            return null;
+            if (e instanceof InvalidPacketException)
+                throw (InvalidPacketException) e;
+            throw new InvalidPacketException("Failed to parse WAYPOINTS_PACKET!", e);
         }
+    }
+
+    @Override
+    public void processSelf(S2CPacketHandler handler) {
+        handler.handleWaypoints(this);
     }
 
     @Override
@@ -109,5 +113,9 @@ public class WaypointsPacket extends S2CPacket {
     }
 
     public record Waypoint(String name, int x, int y, int z) {
+    }
+
+    public Waypoint[] getWaypoints() {
+        return waypoints;
     }
 }

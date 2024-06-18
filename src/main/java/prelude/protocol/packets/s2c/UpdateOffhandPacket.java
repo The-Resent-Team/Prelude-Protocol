@@ -1,6 +1,8 @@
 package prelude.protocol.packets.s2c;
 
+import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
+import prelude.protocol.S2CPacketHandler;
 import prelude.protocol.StreamUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -10,8 +12,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class UpdateOffhandPacket extends S2CPacket {
-    public final boolean canClientDisregardThis;
-    public final String serializedItem;
+    private boolean canClientDisregardThis;
+    private String serializedItem;
+
+    public UpdateOffhandPacket() {}
 
     private UpdateOffhandPacket(boolean canClientDisregardThis, String serializedItem) {
         this.canClientDisregardThis = canClientDisregardThis;
@@ -32,23 +36,30 @@ public class UpdateOffhandPacket extends S2CPacket {
     }
 
     @Override
-    public UpdateOffhandPacket loadData(InputStream is) {
+    public void loadData(InputStream is) throws InvalidPacketException {
         try {
             if (is.read() != UPDATE_OFFHAND_ID)
-                return null;
+                throw new InvalidPacketException("Packet ID doesn't match with TOTEM_USED_ID (%id%)!"
+                        .replace("%id%", TOTEM_USED_ID + ""));
 
             boolean canClientDisregardThis = is.read() != 0;
             String serializedItem = StreamUtils.readASCII(StreamUtils.readShort(is), is);
 
-            return builder()
-                    .serializedItem(serializedItem)
-                    .canClientDisregardThis(canClientDisregardThis)
-                    .build();
+            if (!serializedItem.startsWith("ItemStack{") || !serializedItem.endsWith("}"))
+                throw new InvalidPacketException("Constructed UPDATE_OFFHAND_PACKET has an invalid serialized item!");
+
+            this.canClientDisregardThis = canClientDisregardThis;
+            this.serializedItem = serializedItem;
         } catch (Exception e) {
-            System.err.println("Failed to parse update offhand packet!");
-            e.printStackTrace();
-            return null;
+            if (e instanceof InvalidPacketException)
+                throw (InvalidPacketException) e;
+            throw new InvalidPacketException("Failed to parse UPDATE_OFFHAND_PACKET!", e);
         }
+    }
+
+    @Override
+    public void processSelf(S2CPacketHandler handler) {
+        handler.handleOffhandUpdate(this);
     }
 
     @Override
@@ -84,5 +95,13 @@ public class UpdateOffhandPacket extends S2CPacket {
 
             return new UpdateOffhandPacket(canClientDisregardThis, serializedItem);
         }
+    }
+
+    public boolean isCanClientDisregardThis() {
+        return canClientDisregardThis;
+    }
+
+    public String getSerializedItem() {
+        return serializedItem;
     }
 }

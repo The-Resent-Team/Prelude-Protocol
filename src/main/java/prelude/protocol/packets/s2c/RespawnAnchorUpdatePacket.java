@@ -1,6 +1,8 @@
 package prelude.protocol.packets.s2c;
 
+import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
+import prelude.protocol.S2CPacketHandler;
 import prelude.protocol.StreamUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -8,10 +10,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class RespawnAnchorUpdatePacket extends S2CPacket {
-    public final byte charge;
-    public final int x;
-    public final int y;
-    public final int z;
+    private byte charge;
+    private int x;
+    private int y;
+    private int z;
+
+    public RespawnAnchorUpdatePacket() {}
 
     private RespawnAnchorUpdatePacket(byte charge, int x, int y, int z) {
         this.charge = charge;
@@ -34,27 +38,36 @@ public class RespawnAnchorUpdatePacket extends S2CPacket {
     }
 
     @Override
-    public RespawnAnchorUpdatePacket loadData(InputStream in) {
+    public void loadData(InputStream in) throws InvalidPacketException {
         try {
             if ((byte) in.read() != RESPAWN_ANCHOR_UPDATE_ID)
-                return null;
+                throw new InvalidPacketException("Packet ID doesn't match with RESPAWN_ANCHOR_UPDATE_ID (%id%)!"
+                        .replace("%id%", RESPAWN_ANCHOR_UPDATE_ID + ""));
 
+            // charge is guaranteed to be bound within 0-5 in a valid packet
             byte charge = (byte) in.read();
             int x = StreamUtils.readVarInt(in);
             int y = StreamUtils.readVarInt(in);
             int z = StreamUtils.readVarInt(in);
 
-            return builder()
-                    .charge(charge)
-                    .x(x)
-                    .y(y)
-                    .z(z)
-                    .build();
+            if (charge > 5 || charge < 0)
+                throw new InvalidPacketException("Constructed RESPAWN_ANCHOR_UPDATE_PACKET has an invalid charge (%c%)!"
+                        .replace("%c%", charge + ""));
+
+            this.charge = charge;
+            this.x = x;
+            this.y = y;
+            this.z = z;
         } catch (Exception e) {
-            System.err.println("Failed to parse respawn anchor update packet!");
-            e.printStackTrace();
-            return null;
+            if (e instanceof InvalidPacketException)
+                throw (InvalidPacketException) e;
+            throw new InvalidPacketException("Failed to parse RESPAWN_ANCHOR_UPDATE_PACKET packet!", e);
         }
+    }
+
+    @Override
+    public void processSelf(S2CPacketHandler handler) {
+        handler.handleRespawnAnchorUpdate(this);
     }
 
     @Override
@@ -102,5 +115,21 @@ public class RespawnAnchorUpdatePacket extends S2CPacket {
 
             return new RespawnAnchorUpdatePacket(charge, x, y, z);
         }
+    }
+
+    public byte getCharge() {
+        return charge;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getZ() {
+        return z;
     }
 }

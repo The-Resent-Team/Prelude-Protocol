@@ -1,6 +1,8 @@
 package prelude.protocol.packets.s2c;
 
+import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
+import prelude.protocol.S2CPacketHandler;
 import prelude.protocol.StreamUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -22,8 +24,10 @@ import java.io.InputStream;
 * */
 public class ServerTpsPacket extends S2CPacket {
     // we will just assume that the characteristic does reach over 127 (max value of a java byte)
-    public final byte characteristic;
-    public final short mantissa;
+    private byte characteristic;
+    private short mantissa;
+
+    public ServerTpsPacket() {}
 
     private ServerTpsPacket(byte characteristic, short mantissa) {
         this.characteristic = characteristic;
@@ -42,23 +46,29 @@ public class ServerTpsPacket extends S2CPacket {
     }
 
     @Override
-    public ServerTpsPacket loadData(InputStream is) {
+    public void loadData(InputStream is) throws InvalidPacketException {
         try {
             if (is.read() != SERVER_TPS_ID)
-                return null;
+                throw new InvalidPacketException("Packet ID doesn't match with SERVER_TPS_ID (%id%)!"
+                        .replace("%id%", SERVER_TPS_ID + ""));
 
             byte characteristic = (byte) is.read();
             short mantissa = (short) StreamUtils.readShort(is);
 
-            return builder()
-                    .characteristic(characteristic)
-                    .mantissa(mantissa)
-                    .build();
+            // how the actual hell would you get negative tps
+            if (characteristic < 0 || mantissa < 0)
+                throw new InvalidPacketException("Constructed SERVER_TPS_PACKET is invalid!");
+
+            this.characteristic = characteristic;
+            this.mantissa = mantissa;
         } catch (Exception e) {
-            System.err.println("Failed to parse server tps packet!");
-            e.printStackTrace();
-            return null;
+            throw new InvalidPacketException("Failed to parse SERVER_TPS_PACKET!", e);
         }
+    }
+
+    @Override
+    public void processSelf(S2CPacketHandler handler) {
+        handler.handleServerTps(this);
     }
 
     @Override
@@ -92,5 +102,13 @@ public class ServerTpsPacket extends S2CPacket {
 
             return new ServerTpsPacket(characteristic, mantissa);
         }
+    }
+
+    public byte getCharacteristic() {
+        return characteristic;
+    }
+
+    public short getMantissa() {
+        return mantissa;
     }
 }

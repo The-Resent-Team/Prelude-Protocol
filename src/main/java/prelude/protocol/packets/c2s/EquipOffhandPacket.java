@@ -1,6 +1,8 @@
 package prelude.protocol.packets.c2s;
 
 import prelude.protocol.C2SPacket;
+import prelude.protocol.C2SPacketHandler;
+import prelude.protocol.InvalidPacketException;
 import prelude.protocol.StreamUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -8,7 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class EquipOffhandPacket extends C2SPacket {
-    public final short slot;
+    private short slot;
+
+    public EquipOffhandPacket() {}
 
     private EquipOffhandPacket(short slot) {
         this.slot = slot;
@@ -29,10 +33,11 @@ public class EquipOffhandPacket extends C2SPacket {
     * to try to cause damage to the server running prelude
     * we must sanitize all input to this to prevent damage
     * */
-    public EquipOffhandPacket loadData(InputStream is) {
+    public void loadData(InputStream is) throws InvalidPacketException {
         try {
             if ((byte) is.read() != EQUIP_OFFHAND_ID)
-                return null;
+                throw new InvalidPacketException("Packet ID doesn't match with EQUIP_OFFHAND_ID (%id%)!"
+                        .replace("%id%", EQUIP_OFFHAND_ID + ""));
 
             short slot = (short) StreamUtils.readShort(is);
 
@@ -40,16 +45,19 @@ public class EquipOffhandPacket extends C2SPacket {
             // slot id from here without hard coding it
             // we must let the bukkit implementation check this
             if (slot < 0)
-                return null;
+                throw new InvalidPacketException("Constructed EQUIP_OFFHAND_PACKET has a negative slot!");
 
-            return builder()
-                    .slot(slot)
-                    .build();
+            this.slot = slot;
         } catch (Exception e) {
-            System.err.println("Failed to parse equip offhand packet!");
-            e.printStackTrace();
-            return null;
+            if (e instanceof InvalidPacketException)
+                throw (InvalidPacketException) e;
+            throw new InvalidPacketException("Failed to parse EQUIP_OFFHAND_PACKET!", e);
         }
+    }
+
+    @Override
+    public void processSelf(C2SPacketHandler handler) {
+        handler.handleEquipOffhand(this);
     }
 
     @Override
@@ -79,5 +87,9 @@ public class EquipOffhandPacket extends C2SPacket {
 
             return new EquipOffhandPacket(slot);
         }
+    }
+
+    public short getSlot() {
+        return slot;
     }
 }
