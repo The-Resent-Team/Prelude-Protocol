@@ -49,9 +49,14 @@ public class WaypointsPacket extends S2CPacket {
                 throw new InvalidPacketException("Packet ID doesn't match with WAY (%id%)!"
                         .replace("%id%", RESPAWN_ANCHOR_UPDATE_ID + ""));
 
-            byte[] waypointsDataByteArray = is.readAllBytes();
-            String waypointsString = new String(waypointsDataByteArray, StandardCharsets.US_ASCII);
-            String[] waypointsData = waypointsString.split(SPLIT);
+            StringBuilder waypointsString = new StringBuilder();
+
+            int b;
+            while ((b = is.read()) != -1) {
+                waypointsString.append((char) b);
+            }
+
+            String[] waypointsData = waypointsString.toString().split(SPLIT);
 
             List<Waypoint> waypointList = new ArrayList<>();
             for (String waypointsDatum : waypointsData) {
@@ -79,8 +84,9 @@ public class WaypointsPacket extends S2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof WaypointsPacket that)) return false;
-        return Objects.deepEquals(waypoints, that.waypoints);
+        if (!(o instanceof WaypointsPacket)) return false;
+        WaypointsPacket that = (WaypointsPacket) o;
+        return Arrays.equals(this.waypoints, that.waypoints);
     }
 
     public static Builder builder() {
@@ -112,7 +118,31 @@ public class WaypointsPacket extends S2CPacket {
         }
     }
 
-    public record Waypoint(String name, int x, int y, int z) {
+    public static class Waypoint {
+        public final String name;
+        public final int x;
+        public final int y;
+        public final int z;
+
+        public Waypoint(String name, int x, int y, int z) {
+            this.name = name;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Waypoint)) return false;
+            Waypoint waypoint = (Waypoint) o;
+            return x == waypoint.x && y == waypoint.y && z == waypoint.z && Objects.equals(name, waypoint.name);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(name, x, y, z);
+        }
     }
 
     public Waypoint[] getWaypoints() {

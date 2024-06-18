@@ -14,26 +14,31 @@ public class TestStreamUtils {
     @Test
     public void testASCII() throws IOException {
         {
-            String expected = "1234567890abc".repeat(20);
+            StringBuilder expected = new StringBuilder();
+            for (int i = 0; i < 20; i++)
+                expected.append("1234567890abc");
+
             ByteArrayOutputStream bao = new ByteArrayOutputStream();
             StreamUtils.writeShort(expected.length(), bao);
-            bao.write(expected.getBytes(StandardCharsets.US_ASCII));
+            bao.write(expected.toString().getBytes(StandardCharsets.US_ASCII));
 
             ByteArrayInputStream is = new ByteArrayInputStream(bao.toByteArray());
             String message = StreamUtils.readASCII(StreamUtils.readShort(is), is);
 
-            Assertions.assertEquals(expected, message);
+            Assertions.assertEquals(expected.toString(), message);
         }
 
         {
-            String expected = "1234567890abc".repeat(2);
+            StringBuilder expected = new StringBuilder();
+            for (int i = 0; i < 2; i++)
+                expected.append("1234567890abc");
             ByteArrayOutputStream bao = new ByteArrayOutputStream();
             bao.write(expected.length());
-            bao.write(expected.getBytes(StandardCharsets.US_ASCII));
+            bao.write(expected.toString().getBytes(StandardCharsets.US_ASCII));
 
             ByteArrayInputStream is = new ByteArrayInputStream(bao.toByteArray());
             String message = StreamUtils.readASCII(is.read(), is);
-            Assertions.assertEquals(expected, message);
+            Assertions.assertEquals(expected.toString(), message);
         }
     }
 }

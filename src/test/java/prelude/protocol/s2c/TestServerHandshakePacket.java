@@ -33,7 +33,7 @@ public class TestServerHandshakePacket {
         try {
             Optional<S2CPacket> optional = S2CPacket.parsePacket(bytes);
 
-            if (optional.isEmpty())
+            if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
             if (optional.get() instanceof ServerHandshakePacket)

@@ -66,7 +66,8 @@ public class ModStatusPacket extends S2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ModStatusPacket that)) return false;
+        if (!(o instanceof ModStatusPacket)) return false;
+        ModStatusPacket that = (ModStatusPacket) o;
         return Objects.equals(modIdentifier, that.modIdentifier) && modStatus == that.modStatus;
     }
 

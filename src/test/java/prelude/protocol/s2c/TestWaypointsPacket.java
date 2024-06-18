@@ -26,13 +26,13 @@ public class TestWaypointsPacket {
                 .build();
 
         Assertions.assertEquals(packet.getWaypoints().length, 1);
-        Assertions.assertEquals(packet.getWaypoints()[0].name(), "spawn");
+        Assertions.assertEquals(packet.getWaypoints()[0].name, "spawn");
 
         byte[] bytes = packet.toBytes();
         try {
             Optional<S2CPacket> optional = S2CPacket.parsePacket(bytes);
 
-            if (optional.isEmpty())
+            if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
             if (optional.get() instanceof WaypointsPacket)

@@ -114,7 +114,8 @@ public final class ClientHandshakePacket extends C2SPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ClientHandshakePacket that)) return false;
+        if (!(o instanceof ClientHandshakePacket)) return false;
+        ClientHandshakePacket that = (ClientHandshakePacket) o;
         return resentMajorVersion == that.resentMajorVersion && resentMinorVersion == that.resentMinorVersion && clientClaimsSelfIsRankedPlayer == that.clientClaimsSelfIsRankedPlayer && Objects.equals(username, that.username) && clientType == that.clientType && Objects.deepEquals(enabledMods, that.enabledMods);
     }
 

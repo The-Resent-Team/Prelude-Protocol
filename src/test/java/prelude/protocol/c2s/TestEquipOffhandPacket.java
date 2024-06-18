@@ -27,7 +27,7 @@ public class TestEquipOffhandPacket {
         try {
             Optional<C2SPacket> optional = C2SPacket.parsePacket(bytes);
 
-            if (optional.isEmpty())
+            if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
             if (optional.get() instanceof EquipOffhandPacket)

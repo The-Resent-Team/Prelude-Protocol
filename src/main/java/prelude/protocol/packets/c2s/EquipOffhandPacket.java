@@ -63,7 +63,8 @@ public class EquipOffhandPacket extends C2SPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof EquipOffhandPacket that)) return false;
+        if (!(o instanceof EquipOffhandPacket)) return false;
+        EquipOffhandPacket that = (EquipOffhandPacket) o;
         return slot == that.slot;
     }
 

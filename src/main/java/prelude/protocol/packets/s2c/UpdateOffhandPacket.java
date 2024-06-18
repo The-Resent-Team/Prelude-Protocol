@@ -65,7 +65,8 @@ public class UpdateOffhandPacket extends S2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UpdateOffhandPacket that)) return false;
+        if (!(o instanceof UpdateOffhandPacket)) return false;
+        UpdateOffhandPacket that = (UpdateOffhandPacket) o;
         return canClientDisregardThis == that.canClientDisregardThis && Objects.equals(serializedItem, that.serializedItem);
     }
 

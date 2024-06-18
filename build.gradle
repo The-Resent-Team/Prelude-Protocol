@@ -10,6 +10,9 @@ repositories {
 }
 
 dependencies {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 

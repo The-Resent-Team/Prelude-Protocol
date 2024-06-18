@@ -82,7 +82,8 @@ public class ServerHandshakePacket extends S2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ServerHandshakePacket that)) return false;
+        if (!(o instanceof ServerHandshakePacket)) return false;
+        ServerHandshakePacket that = (ServerHandshakePacket) o;
         return preludeMajorVersion == that.preludeMajorVersion && preludeMinorVersion == that.preludeMinorVersion && preludePatchVersion == that.preludePatchVersion && serverMajorVersion == that.serverMajorVersion && serverMinorVersion == that.serverMinorVersion && serverPatchVersion == that.serverPatchVersion;
     }
 

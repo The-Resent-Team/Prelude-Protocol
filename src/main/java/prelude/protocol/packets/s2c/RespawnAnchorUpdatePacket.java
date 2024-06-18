@@ -73,7 +73,8 @@ public class RespawnAnchorUpdatePacket extends S2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof RespawnAnchorUpdatePacket that)) return false;
+        if (!(o instanceof RespawnAnchorUpdatePacket)) return false;
+        RespawnAnchorUpdatePacket that = (RespawnAnchorUpdatePacket) o;
         return charge == that.charge && x == that.x && y == that.y && z == that.z;
     }
 

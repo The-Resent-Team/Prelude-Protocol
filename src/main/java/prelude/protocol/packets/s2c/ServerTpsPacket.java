@@ -76,7 +76,8 @@ public class ServerTpsPacket extends S2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ServerTpsPacket that)) return false;
+        if (!(o instanceof ServerTpsPacket)) return false;
+        ServerTpsPacket that = (ServerTpsPacket) o;
         return characteristic == that.characteristic && mantissa == that.mantissa;
     }
 
