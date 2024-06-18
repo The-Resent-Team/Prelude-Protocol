@@ -5,7 +5,7 @@ import prelude.protocol.packets.s2c.*;
 /*
 * Extended by ResentS2CPacketHandler on the client
 * */
-public abstract class S2CPacketHandler extends PacketHandler {
+public abstract class S2CPacketHandler {
     public abstract void handleServerHandshake(ServerHandshakePacket packet);
 
     public abstract void handleModStatus(ModStatusPacket packet);
