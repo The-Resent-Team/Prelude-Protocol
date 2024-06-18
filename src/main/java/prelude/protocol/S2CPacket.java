@@ -1,6 +1,13 @@
 package prelude.protocol;
 
+import prelude.protocol.s2c.ServerHandshakePacket;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class S2CPacket extends Packet {
+    public static final Map<Byte, Class<? extends S2CPacket>> packets = new HashMap<>();
+
     public static final byte SERVER_HANDSHAKE_ID = 0;
     public static final byte MOD_STATUS_ID = 1;
     public static final byte RESPAWN_ANCHOR_UPDATE_ID = 2;

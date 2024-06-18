@@ -31,6 +31,11 @@ public class EquipOffhandPacket extends C2SPacket {
         return slot == that.slot;
     }
 
+    /*
+    * Note: This is the only packet that could be abused
+    * to try to cause damage to the server running prelude
+    * we must sanitize all input to this to prevent damage
+    * */
     public static EquipOffhandPacket from(InputStream is) {
         try {
             if ((byte) is.read() != EQUIP_OFFHAND_ID)
@@ -38,6 +43,9 @@ public class EquipOffhandPacket extends C2SPacket {
 
             short slot = (short) StreamUtils.readShort(is);
 
+            // There is no reliable way to determine the max
+            // slot id from here without hard coding it
+            // we must let the bukkit implementation check this
             if (slot < 0)
                 return null;
 
