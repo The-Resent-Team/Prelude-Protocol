@@ -1,4 +1,4 @@
-package prelude.protocol.s2c;
+package prelude.protocol.packets.s2c;
 
 import prelude.protocol.S2CPacket;
 
@@ -12,11 +12,7 @@ public class TotemUsedPacket extends S2CPacket {
     }
 
     @Override
-    public boolean equals(Object packet) {
-        return packet instanceof TotemUsedPacket;
-    }
-
-    public static TotemUsedPacket from(InputStream is) {
+    public TotemUsedPacket loadData(InputStream is) {
         try {
             if (is.read() != TOTEM_USED_ID)
                 return null;
@@ -27,5 +23,10 @@ public class TotemUsedPacket extends S2CPacket {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public boolean equals(Object packet) {
+        return packet instanceof TotemUsedPacket;
     }
 }

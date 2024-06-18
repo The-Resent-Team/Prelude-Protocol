@@ -1,4 +1,4 @@
-package prelude.protocol.s2c;
+package prelude.protocol.packets.s2c;
 
 import prelude.protocol.S2CPacket;
 import prelude.protocol.StreamUtils;
@@ -34,13 +34,7 @@ public class RespawnAnchorUpdatePacket extends S2CPacket {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof RespawnAnchorUpdatePacket that)) return false;
-        return charge == that.charge && x == that.x && y == that.y && z == that.z;
-    }
-
-    public static RespawnAnchorUpdatePacket from(InputStream in) {
+    public RespawnAnchorUpdatePacket loadData(InputStream in) {
         try {
             if ((byte) in.read() != RESPAWN_ANCHOR_UPDATE_ID)
                 return null;
@@ -61,6 +55,13 @@ public class RespawnAnchorUpdatePacket extends S2CPacket {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RespawnAnchorUpdatePacket that)) return false;
+        return charge == that.charge && x == that.x && y == that.y && z == that.z;
     }
 
     public static Builder builder() {

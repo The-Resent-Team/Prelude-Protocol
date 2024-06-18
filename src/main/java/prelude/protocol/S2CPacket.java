@@ -1,7 +1,6 @@
 package prelude.protocol;
 
-import prelude.protocol.s2c.ServerHandshakePacket;
-
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,8 +15,6 @@ public abstract class S2CPacket extends Packet {
     public static final byte TOTEM_USED_ID = 5;
     public static final byte WAYPOINTS_ID = 6;
 
-    @SuppressWarnings("unchecked")
-    public <E extends S2CPacket> E cast(Class<E> clazz) throws ClassCastException {
-        return (E) this;
-    }
+    @Override
+    public abstract S2CPacket loadData(InputStream is);
 }

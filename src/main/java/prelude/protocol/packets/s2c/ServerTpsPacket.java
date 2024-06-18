@@ -1,11 +1,11 @@
-package prelude.protocol.s2c;
+package prelude.protocol.packets.s2c;
 
 import prelude.protocol.S2CPacket;
 import prelude.protocol.StreamUtils;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /*
 * The Server TPS is stored as double in the actual
@@ -42,14 +42,7 @@ public class ServerTpsPacket extends S2CPacket {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ServerTpsPacket that)) return false;
-        return characteristic == that.characteristic && mantissa == that.mantissa;
-    }
-
-
-    public static ServerTpsPacket from(ByteArrayInputStream is) {
+    public ServerTpsPacket loadData(InputStream is) {
         try {
             if (is.read() != SERVER_TPS_ID)
                 return null;
@@ -66,6 +59,13 @@ public class ServerTpsPacket extends S2CPacket {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ServerTpsPacket that)) return false;
+        return characteristic == that.characteristic && mantissa == that.mantissa;
     }
 
     public static Builder builder() {

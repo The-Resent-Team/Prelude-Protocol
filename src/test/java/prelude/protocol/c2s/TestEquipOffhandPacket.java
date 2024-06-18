@@ -3,6 +3,8 @@ package prelude.protocol.c2s;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
+import prelude.protocol.packets.c2s.ClientHandshakePacket;
+import prelude.protocol.packets.c2s.EquipOffhandPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

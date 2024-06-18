@@ -1,4 +1,4 @@
-package prelude.protocol.s2c;
+package prelude.protocol.packets.s2c;
 
 import prelude.protocol.S2CPacket;
 import prelude.protocol.StreamUtils;
@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,8 +28,10 @@ public class WaypointsPacket extends S2CPacket {
 
         for (int i = 0; i < waypoints.length; i++) {
             Waypoint waypoint = waypoints[i];
+
             StreamUtils.writeShort(waypoint.name.length(), bao);
             bao.write(waypoint.name.getBytes(StandardCharsets.US_ASCII));
+
             StreamUtils.writeVarInt(waypoint.x, bao);
             StreamUtils.writeVarInt(waypoint.y, bao);
             StreamUtils.writeVarInt(waypoint.z, bao);
@@ -41,24 +44,39 @@ public class WaypointsPacket extends S2CPacket {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof WaypointsPacket that)) return false;
-        return Objects.deepEquals(waypoints, that.waypoints);
-    }
-
-    public static WaypointsPacket from(InputStream is) {
+    public WaypointsPacket loadData(InputStream is) {
         try {
             if (is.read() != WAYPOINTS_ID)
                 return null;
 
-            byte[] waypointsData = is.readAllBytes();
+            byte[] waypointsDataByteArray = is.readAllBytes();
+            String waypointsString = new String(waypointsDataByteArray, StandardCharsets.US_ASCII);
+            String[] waypointsData = waypointsString.split(NULL_TERMINATOR);
 
+            List<Waypoint> waypointList = new ArrayList<>();
+            for (int i = 0; i < waypointsData.length; i++) {
+                String name = StreamUtils.readASCII(StreamUtils.readShort(is), is);
+                int x = StreamUtils.readVarInt(is);
+                int y = StreamUtils.readVarInt(is);
+                int z = StreamUtils.readVarInt(is);
+                waypointList.add(new Waypoint(name, x, y, z));
+            }
+
+            return builder()
+                    .addWaypoints(waypointList)
+                    .build();
         } catch (Exception e) {
-            System.err.println("Failed to parse server tps packet!");
+            System.err.println("Failed to parse waypoints packet!");
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof WaypointsPacket that)) return false;
+        return Objects.deepEquals(waypoints, that.waypoints);
     }
 
     public static Builder builder() {
@@ -77,7 +95,7 @@ public class WaypointsPacket extends S2CPacket {
             return this;
         }
 
-        public Builder addWaypoints(List<Waypoint> waypoints) {
+        public Builder addWaypoints(Collection<Waypoint> waypoints) {
             if (this.waypoints == null) {
                 this.waypoints = new ArrayList<>();
             }
@@ -91,8 +109,5 @@ public class WaypointsPacket extends S2CPacket {
     }
 
     public record Waypoint(String name, int x, int y, int z) {
-        public String serialize() {
-
-        }
     }
 }

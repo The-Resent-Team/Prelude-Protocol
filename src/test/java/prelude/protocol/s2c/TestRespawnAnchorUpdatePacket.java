@@ -3,6 +3,7 @@ package prelude.protocol.s2c;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
+import prelude.protocol.packets.s2c.RespawnAnchorUpdatePacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package prelude.protocol.s2c;
+package prelude.protocol.packets.s2c;
 
 import prelude.protocol.S2CPacket;
 
@@ -40,14 +40,10 @@ public class ServerHandshakePacket extends S2CPacket {
         return bao.toByteArray();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ServerHandshakePacket that)) return false;
-        return preludeMajorVersion == that.preludeMajorVersion && preludeMinorVersion == that.preludeMinorVersion && preludePatchVersion == that.preludePatchVersion && serverMajorVersion == that.serverMajorVersion && serverMinorVersion == that.serverMinorVersion && serverPatchVersion == that.serverPatchVersion;
-    }
 
-    public static ServerHandshakePacket from(InputStream is) {
+
+    @Override
+    public ServerHandshakePacket loadData(InputStream is) {
         try {
             if (is.read() != SERVER_HANDSHAKE_ID)
                 return null;
@@ -72,6 +68,13 @@ public class ServerHandshakePacket extends S2CPacket {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ServerHandshakePacket that)) return false;
+        return preludeMajorVersion == that.preludeMajorVersion && preludeMinorVersion == that.preludeMinorVersion && preludePatchVersion == that.preludePatchVersion && serverMajorVersion == that.serverMajorVersion && serverMinorVersion == that.serverMinorVersion && serverPatchVersion == that.serverPatchVersion;
     }
 
     public static Builder builder() {

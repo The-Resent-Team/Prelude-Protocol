@@ -1,4 +1,4 @@
-package prelude.protocol.s2c;
+package prelude.protocol.packets.s2c;
 
 import prelude.protocol.S2CPacket;
 import prelude.protocol.StreamUtils;
@@ -32,13 +32,7 @@ public class UpdateOffhandPacket extends S2CPacket {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UpdateOffhandPacket that)) return false;
-        return canClientDisregardThis == that.canClientDisregardThis && Objects.equals(serializedItem, that.serializedItem);
-    }
-
-    public static UpdateOffhandPacket from(InputStream is) {
+    public UpdateOffhandPacket loadData(InputStream is) {
         try {
             if (is.read() != UPDATE_OFFHAND_ID)
                 return null;
@@ -55,6 +49,13 @@ public class UpdateOffhandPacket extends S2CPacket {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UpdateOffhandPacket that)) return false;
+        return canClientDisregardThis == that.canClientDisregardThis && Objects.equals(serializedItem, that.serializedItem);
     }
 
     public static Builder builder() {

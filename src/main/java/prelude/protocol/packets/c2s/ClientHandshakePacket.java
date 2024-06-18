@@ -1,4 +1,4 @@
-package prelude.protocol.c2s;
+package prelude.protocol.packets.c2s;
 
 import prelude.protocol.StreamUtils;
 import prelude.protocol.C2SPacket;
@@ -71,18 +71,7 @@ public final class ClientHandshakePacket extends C2SPacket {
         return bao.toByteArray();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ClientHandshakePacket that)) return false;
-        return resentMajorVersion == that.resentMajorVersion && resentMinorVersion == that.resentMinorVersion && clientClaimsSelfIsRankedPlayer == that.clientClaimsSelfIsRankedPlayer && Objects.equals(username, that.username) && clientType == that.clientType && Objects.deepEquals(enabledMods, that.enabledMods);
-    }
-
-    /**+
-     * Attempts to parse a byte array into a packet
-     * @return null if failed to parse, or a new instance of this packet
-     * */
-    public static ClientHandshakePacket from(InputStream is) {
+    public ClientHandshakePacket loadData(InputStream is) {
         try {
             if ((byte) is.read() != CLIENT_HANDSHAKE_ID)
                 return null;
@@ -111,6 +100,13 @@ public final class ClientHandshakePacket extends C2SPacket {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ClientHandshakePacket that)) return false;
+        return resentMajorVersion == that.resentMajorVersion && resentMinorVersion == that.resentMinorVersion && clientClaimsSelfIsRankedPlayer == that.clientClaimsSelfIsRankedPlayer && Objects.equals(username, that.username) && clientType == that.clientType && Objects.deepEquals(enabledMods, that.enabledMods);
     }
 
     public static Builder builder() {

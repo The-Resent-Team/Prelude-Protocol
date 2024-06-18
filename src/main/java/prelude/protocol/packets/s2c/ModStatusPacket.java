@@ -1,4 +1,4 @@
-package prelude.protocol.s2c;
+package prelude.protocol.packets.s2c;
 
 import prelude.protocol.S2CPacket;
 import prelude.protocol.StreamUtils;
@@ -33,13 +33,7 @@ public class ModStatusPacket extends S2CPacket {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ModStatusPacket that)) return false;
-        return Objects.equals(modIdentifier, that.modIdentifier) && modStatus == that.modStatus;
-    }
-
-    public static ModStatusPacket from(InputStream is) {
+    public ModStatusPacket loadData(InputStream is) {
         try {
             if (is.read() != MOD_STATUS_ID)
                 return null;
@@ -56,6 +50,13 @@ public class ModStatusPacket extends S2CPacket {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ModStatusPacket that)) return false;
+        return Objects.equals(modIdentifier, that.modIdentifier) && modStatus == that.modStatus;
     }
 
     public static Builder builder() {
