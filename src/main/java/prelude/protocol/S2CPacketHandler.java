@@ -6,31 +6,17 @@ import prelude.protocol.packets.s2c.*;
 * Extended by ResentS2CPacketHandler on the client
 * */
 public abstract class S2CPacketHandler extends PacketHandler {
-    public void handleServerHandshake(ServerHandshakePacket packet) {
-        throw new UnsupportedOperationException();
-    }
+    public abstract void handleServerHandshake(ServerHandshakePacket packet);
 
-    public void handleModStatus(ModStatusPacket packet) {
-        throw new UnsupportedOperationException();
-    }
+    public abstract void handleModStatus(ModStatusPacket packet);
 
-    public void handleRespawnAnchorUpdate(RespawnAnchorUpdatePacket packet) {
-        throw new UnsupportedOperationException();
-    }
+    public abstract void handleRespawnAnchorUpdate(RespawnAnchorUpdatePacket packet);
 
-    public void handleServerTps(ServerTpsPacket packet) {
-        throw new UnsupportedOperationException();
-    }
+    public abstract void handleServerTps(ServerTpsPacket packet);
 
-    public void handleOffhandUpdate(UpdateOffhandPacket packet) {
-        throw new UnsupportedOperationException();
-    }
+    public abstract void handleOffhandUpdate(UpdateOffhandPacket packet);
 
-    public void handleTotemUsed(TotemUsedPacket packet) {
-        throw new UnsupportedOperationException();
-    }
+    public abstract void handleTotemUsed(TotemUsedPacket packet);
 
-    public void handleWaypoints(WaypointsPacket packet) {
-        throw new UnsupportedOperationException();
-    }
+    public abstract void handleWaypoints(WaypointsPacket packet);
 }

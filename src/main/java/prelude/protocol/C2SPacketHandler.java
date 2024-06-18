@@ -7,11 +7,7 @@ import prelude.protocol.packets.c2s.EquipOffhandPacket;
 * Extended by BukkitC2SPacketHandler on the plugin
 * */
 public abstract class C2SPacketHandler extends PacketHandler {
-    public void handleClientHandshake(ClientHandshakePacket packet) {
-        throw new UnsupportedOperationException();
-    }
+    public abstract void handleClientHandshake(ClientHandshakePacket packet);
 
-    public void handleEquipOffhand(EquipOffhandPacket packet) {
-        throw new UnsupportedOperationException();
-    }
+    public abstract void handleEquipOffhand(EquipOffhandPacket packet);
 }
