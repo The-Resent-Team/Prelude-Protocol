@@ -21,9 +21,9 @@ public class TotemUsedPacket extends S2CPacket {
             if (is.read() != TOTEM_USED_ID)
                 throw new InvalidPacketException("Packet ID doesn't match with TOTEM_USED_ID (%id%)!"
                         .replace("%id%", TOTEM_USED_ID + ""));
+        } catch (InvalidPacketException e) {
+            throw e;
         } catch (Exception e) {
-            if (e instanceof InvalidPacketException)
-                throw (InvalidPacketException) e;
             throw new InvalidPacketException("Failed to parse TOTEM_USED_PACKET!", e);
         }
     }

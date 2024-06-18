@@ -67,9 +67,9 @@ public class ServerHandshakePacket extends S2CPacket {
             this.serverMajorVersion = serverMajorVersion;
             this.serverMinorVersion = serverMinorVersion;
             this.serverPatchVersion = serverPatchVersion;
+        } catch (InvalidPacketException e) {
+            throw e;
         } catch (Exception e) {
-            if (e instanceof InvalidPacketException)
-                throw (InvalidPacketException) e;
             throw new InvalidPacketException("Failed to parse SERVER_HANDSHAKE_PACKET!", e);
         }
     }

@@ -61,6 +61,8 @@ public class ServerTpsPacket extends S2CPacket {
 
             this.characteristic = characteristic;
             this.mantissa = mantissa;
+        } catch (InvalidPacketException e) {
+            throw e;
         } catch (Exception e) {
             throw new InvalidPacketException("Failed to parse SERVER_TPS_PACKET!", e);
         }

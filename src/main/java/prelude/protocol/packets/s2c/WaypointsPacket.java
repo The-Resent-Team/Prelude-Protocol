@@ -64,9 +64,9 @@ public class WaypointsPacket extends S2CPacket {
             }
 
             this.waypoints = waypointList.toArray(new Waypoint[0]);
+        } catch (InvalidPacketException e) {
+            throw e;
         } catch (Exception e) {
-            if (e instanceof InvalidPacketException)
-                throw (InvalidPacketException) e;
             throw new InvalidPacketException("Failed to parse WAYPOINTS_PACKET!", e);
         }
     }

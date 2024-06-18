@@ -51,9 +51,9 @@ public class ModStatusPacket extends S2CPacket {
 
             this.modIdentifier = modId;
             this.modStatus = modStatus;
+        } catch (InvalidPacketException e) {
+            throw e;
         } catch (Exception e) {
-            if (e instanceof InvalidPacketException)
-                throw (InvalidPacketException) e;
             throw new InvalidPacketException("Failed to parse MOD_STATUS_PACKET!", e);
         }
     }

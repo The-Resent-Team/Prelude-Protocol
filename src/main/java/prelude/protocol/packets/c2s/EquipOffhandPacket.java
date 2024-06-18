@@ -48,9 +48,9 @@ public class EquipOffhandPacket extends C2SPacket {
                 throw new InvalidPacketException("Constructed EQUIP_OFFHAND_PACKET has a negative slot!");
 
             this.slot = slot;
+        } catch (InvalidPacketException e) {
+            throw e;
         } catch (Exception e) {
-            if (e instanceof InvalidPacketException)
-                throw (InvalidPacketException) e;
             throw new InvalidPacketException("Failed to parse EQUIP_OFFHAND_PACKET!", e);
         }
     }

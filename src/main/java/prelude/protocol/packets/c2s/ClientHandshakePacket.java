@@ -99,9 +99,9 @@ public final class ClientHandshakePacket extends C2SPacket {
             this.clientType = type;
             this.clientClaimsSelfIsRankedPlayer = clientClaimsSelfIsRankedPlayer;
             this.enabledMods = mods;
+        } catch (InvalidPacketException e) {
+            throw e;
         } catch (Exception e) {
-            if (e instanceof InvalidPacketException)
-                throw (InvalidPacketException) e;
             throw new InvalidPacketException("Failed to parse CLIENT_HANDSHAKE_PACKET!", e);
         }
     }

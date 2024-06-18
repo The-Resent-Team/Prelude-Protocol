@@ -50,9 +50,9 @@ public class UpdateOffhandPacket extends S2CPacket {
 
             this.canClientDisregardThis = canClientDisregardThis;
             this.serializedItem = serializedItem;
+        } catch (InvalidPacketException e) {
+            throw e;
         } catch (Exception e) {
-            if (e instanceof InvalidPacketException)
-                throw (InvalidPacketException) e;
             throw new InvalidPacketException("Failed to parse UPDATE_OFFHAND_PACKET!", e);
         }
     }
