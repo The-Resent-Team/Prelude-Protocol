@@ -7,39 +7,36 @@ import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
 import prelude.protocol.TestS2CPacketHandler;
 import prelude.protocol.packets.c2s.EquipOffhandPacket;
-import prelude.protocol.packets.s2c.ModStatusPacket;
-import prelude.protocol.packets.s2c.RespawnAnchorUpdatePacket;
+import prelude.protocol.packets.s2c.ServerTpsPacket;
+import prelude.protocol.packets.s2c.TotemUsedPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Optional;
 
+import static prelude.protocol.S2CPacket.TOTEM_USED_ID;
+
 @Testable
-public class TestRespawnAnchorUpdatePacket {
+public class TestTotemUsedPacket {
     @Test
-    public void testRespawnAnchorUpdatePacket() throws IOException {
+    public void testTotemUsedPacket() throws IOException {
+        Assertions.assertEquals(TOTEM_USED_ID, new TotemUsedPacket().toBytes()[0]);
+
         S2CPacket.trySetHandler(new TestS2CPacketHandler());
 
-        RespawnAnchorUpdatePacket packet = RespawnAnchorUpdatePacket.builder()
-                .charge(4)
-                .x(-203)
-                .y(23)
-                .z(2100291722)
-                .build();
-
-        byte[] bytes = packet.toBytes();
+        byte[] bytes = { TOTEM_USED_ID };
         try {
             Optional<S2CPacket> optional = S2CPacket.parsePacket(bytes);
 
             if (optional.isEmpty())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof RespawnAnchorUpdatePacket)
-                Assertions.assertEquals(RespawnAnchorUpdatePacket.class, optional.get().getClass());
+            if (optional.get() instanceof TotemUsedPacket)
+                Assertions.assertEquals(TotemUsedPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            RespawnAnchorUpdatePacket deserialized = (RespawnAnchorUpdatePacket) optional.get();
-            Assertions.assertEquals(packet, deserialized);
+            TotemUsedPacket deserialized = (TotemUsedPacket) optional.get();
+            Assertions.assertArrayEquals(bytes, deserialized.toBytes());
 
             EquipOffhandPacket invalidPacket = new EquipOffhandPacket();
             try {
