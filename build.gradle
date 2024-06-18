@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'me.napoleon'
+group = 'prelude.protocol'
 version = '1.0-SNAPSHOT'
 
 repositories {
