@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class WaypointsPacket extends S2CPacket {
-    private static final String SPLIT = "\u0000" + "\u8301" + "\u9281";
+    private static final String SPLIT = "\u0000\u8301\u9281";
 
     private Waypoint[] waypoints;
 
