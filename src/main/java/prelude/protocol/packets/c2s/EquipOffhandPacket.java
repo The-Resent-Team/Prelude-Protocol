@@ -11,11 +11,13 @@ import java.io.InputStream;
 
 public class EquipOffhandPacket extends C2SPacket {
     private short slot;
+    private UUID recipient;
 
     public EquipOffhandPacket() {}
 
-    private EquipOffhandPacket(short slot) {
+    private EquipOffhandPacket(short slot, UUID recipient) {
         this.slot = slot;
+        this.recipient = recipient;
     }
 
     @Override
@@ -92,5 +94,10 @@ public class EquipOffhandPacket extends C2SPacket {
 
     public short getSlot() {
         return slot;
+    }
+
+    @Override
+    public UUID getRecipient() {
+        return recipient;
     }
 }
