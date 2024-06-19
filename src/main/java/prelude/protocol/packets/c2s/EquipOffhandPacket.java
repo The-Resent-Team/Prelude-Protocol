@@ -76,6 +76,7 @@ public class EquipOffhandPacket extends C2SPacket {
 
     public static class Builder {
         private short slot = -1;
+        private UUID recipient = null;
 
         private Builder() {}
 
@@ -84,11 +85,18 @@ public class EquipOffhandPacket extends C2SPacket {
             return this;
         }
 
+        public Builder recipient(UUID recipient) {
+            this.recipient = recipient;
+            return this;
+        }
+
         public EquipOffhandPacket build() {
             if (slot == -1)
-                throw new IllegalStateException("Not all required fields are set!");
+                throw new IllegalStateException("Slot must be set!");
+            if (recipient == null)
+                throw new IllegalStateException("Recipient must be set!");
 
-            return new EquipOffhandPacket(slot);
+            return new EquipOffhandPacket(slot, recipient);
         }
     }
 
