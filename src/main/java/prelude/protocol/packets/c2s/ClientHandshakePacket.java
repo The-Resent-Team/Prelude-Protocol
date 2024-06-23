@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.StringJoiner;
 
 public final class ClientHandshakePacket extends C2SPacket {
     private static final String NULL_TERMINATOR = "\u0000";
@@ -66,9 +65,9 @@ public final class ClientHandshakePacket extends C2SPacket {
         bao.write(clientClaimsSelfIsRankedPlayer ? 1 : 0);
 
         // write all enabled mods
-        StringJoiner sb = new StringJoiner(NULL_TERMINATOR);
+        StringBuilder sb = new StringBuilder();
         for (String mod : enabledMods)
-            sb.add(mod);
+            sb.append(mod).append(NULL_TERMINATOR);
 
         StreamUtils.writeShort(sb.length(), bao);
         bao.write(sb.toString().getBytes(StandardCharsets.US_ASCII));
