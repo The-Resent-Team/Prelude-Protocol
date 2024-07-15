@@ -35,15 +35,9 @@ public abstract class C2SPacket extends Packet<C2SPacketHandler> {
     private static final Map<Class<? extends C2SPacket>, Integer> C2S_PACKET_TO_ID = new HashMap<>();
 
     static {
-        int curId = 0;
-        C2S_ID_TO_PACKET.put(curId++, ClientHandshakeC2SPacket.class);
-        C2S_PACKET_TO_ID.put(ClientHandshakeC2SPacket.class, curId);
-
-        C2S_ID_TO_PACKET.put(curId++, EquipOffhandC2SPacket.class);
-        C2S_PACKET_TO_ID.put(EquipOffhandC2SPacket.class, curId);
-
-        C2S_ID_TO_PACKET.put(curId++, ClientSyncResponseC2SPacket.class);
-        C2S_PACKET_TO_ID.put(ClientSyncResponseC2SPacket.class, curId);
+        registerC2SPacket(ClientHandshakeC2SPacket.class);
+        registerC2SPacket(EquipOffhandC2SPacket.class);
+        registerC2SPacket(ClientSyncResponseC2SPacket.class);
     }
 
     protected C2SPacket() {
@@ -75,8 +69,8 @@ public abstract class C2SPacket extends Packet<C2SPacketHandler> {
         if (bytes.length < 1)
             return Optional.empty();
 
-        byte id = bytes[0];
-        Class<? extends C2SPacket> clazz = C2S_ID_TO_PACKET.get(id & 0xFF);
+        int id = bytes[0] & 0xFF;
+        Class<? extends C2SPacket> clazz = C2S_ID_TO_PACKET.get(id);
         if (clazz == null)
             throw new InvalidPacketException("Invalid packet id for C2SPacket ids!");
 
@@ -86,5 +80,10 @@ public abstract class C2SPacket extends Packet<C2SPacketHandler> {
 
         packet.loadData(new ByteArrayInputStream(bytes));
         return Optional.of(packet);
+    }
+
+    static void registerC2SPacket(Class<? extends C2SPacket> clazz) {
+        C2S_ID_TO_PACKET.put(C2S_ID_TO_PACKET.size(), clazz);
+        C2S_PACKET_TO_ID.put(clazz, C2S_PACKET_TO_ID.size());
     }
 }

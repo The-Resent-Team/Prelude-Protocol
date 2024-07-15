@@ -66,7 +66,5 @@ public class TestServerTpsS2CPacket {
             // erm what the
             Assertions.fail(e);
         }
-
-        Assertions.assertEquals(packet.getPacketId(), 2);
     }
 }

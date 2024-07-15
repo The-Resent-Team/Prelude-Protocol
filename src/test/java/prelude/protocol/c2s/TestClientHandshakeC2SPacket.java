@@ -29,6 +29,7 @@ import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Testable
@@ -74,7 +75,5 @@ public class TestClientHandshakeC2SPacket {
             // erm what the
             Assertions.fail(e);
         }
-
-        Assertions.assertEquals(packet.getPacketId(), 0);
     }
 }

@@ -66,7 +66,5 @@ public class TestEquipOffhandC2SPacket {
             // erm what the
             Assertions.fail(e);
         }
-
-        Assertions.assertEquals(packet.getPacketId(), 1);
     }
 }

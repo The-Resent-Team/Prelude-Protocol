@@ -33,27 +33,12 @@ public abstract class S2CPacket extends Packet<S2CPacketHandler> {
     private static final Map<Class<? extends S2CPacket>, Integer> S2C_PACKET_TO_ID = new HashMap<>();
 
     static {
-        int curId = 0;
-        S2C_ID_TO_PACKET.put(curId++, ServerHandshakeS2CPacket.class);
-        S2C_PACKET_TO_ID.put(ServerHandshakeS2CPacket.class, curId);
-
-        S2C_ID_TO_PACKET.put(curId++, ModStatusS2CPacket.class);
-        S2C_PACKET_TO_ID.put(ModStatusS2CPacket.class, curId);
-
-        S2C_ID_TO_PACKET.put(curId++, ServerTpsS2CPacket.class);
-        S2C_PACKET_TO_ID.put(ServerHandshakeS2CPacket.class, curId);
-
-        S2C_ID_TO_PACKET.put(curId++, UpdateOffhandS2CPacket.class);
-        S2C_PACKET_TO_ID.put(UpdateOffhandS2CPacket.class, curId);
-
-        S2C_ID_TO_PACKET.put(curId++, ServerTpsS2CPacket.class);
-        S2C_PACKET_TO_ID.put(ServerTpsS2CPacket.class, curId);
-
-        S2C_ID_TO_PACKET.put(curId++, TotemUsedS2CPacket.class);
-        S2C_PACKET_TO_ID.put(TotemUsedS2CPacket.class, curId);
-
-        S2C_ID_TO_PACKET.put(curId++, SetWaypointsS2CPacket.class);
-        S2C_PACKET_TO_ID.put(SetWaypointsS2CPacket.class, curId);
+        registerS2CPacket(ServerHandshakeS2CPacket.class);
+        registerS2CPacket(ModStatusS2CPacket.class);
+        registerS2CPacket(ServerTpsS2CPacket.class);
+        registerS2CPacket(UpdateOffhandS2CPacket.class);
+        registerS2CPacket(TotemUsedS2CPacket.class);
+        registerS2CPacket(SetWaypointsS2CPacket.class);
     }
 
     protected S2CPacket() {
@@ -96,5 +81,10 @@ public abstract class S2CPacket extends Packet<S2CPacketHandler> {
 
         packet.loadData(new ByteArrayInputStream(bytes));
         return Optional.of(packet);
+    }
+
+    static void registerS2CPacket(Class<? extends S2CPacket> clazz) {
+        S2C_ID_TO_PACKET.put(S2C_ID_TO_PACKET.size(), clazz);
+        S2C_PACKET_TO_ID.put(clazz, S2C_PACKET_TO_ID.size());
     }
 }
