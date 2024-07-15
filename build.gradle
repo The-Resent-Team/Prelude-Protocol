@@ -22,7 +22,30 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
 }
 
+task generateJavadoc(type: Javadoc) {
+    sourceSets.main.java.srcDirs.each { dir ->
+        source(dir)
+    }
+    classpath += configurations.compileClasspath
+    options.addStringOption('Xdoclint:none', '-quiet')
+    destinationDir = file("$buildDir/docs/javadoc")
+}
+
+task javadocJar(type: Jar, dependsOn: generateJavadoc) {
+    dependsOn generateJavadoc
+    archiveFileName = "${rootProject.name}-${project.name.capitalize()}-javadoc.jar"
+    from generateJavadoc.destinationDir
+}
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
 publishing {
+    apply plugin: 'signing'
+
     repositories {
         maven {
             name = "GitHubPackages"
@@ -37,6 +60,10 @@ publishing {
         gpr(MavenPublication) {
             from(components.java)
         }
+    }
+
+    signing {
+        sign configurations.archives
     }
 }
 
