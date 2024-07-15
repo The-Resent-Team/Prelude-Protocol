@@ -40,14 +40,14 @@ import java.io.InputStream;
 * raw 8 byte double is far worse than encoding 3 bytes)
 * 3) these assumptions make it easier for the client
 * */
-public class ServerTpsPacket extends S2CPacket {
+public class ServerTpsS2CPacket extends S2CPacket {
     // we will just assume that the characteristic does reach over 127 (max value of a java byte)
     private byte characteristic;
     private short mantissa;
 
-    public ServerTpsPacket() {}
+    public ServerTpsS2CPacket() {}
 
-    private ServerTpsPacket(byte characteristic, short mantissa) {
+    private ServerTpsS2CPacket(byte characteristic, short mantissa) {
         this.characteristic = characteristic;
         this.mantissa = mantissa;
     }
@@ -55,7 +55,7 @@ public class ServerTpsPacket extends S2CPacket {
     @Override
     public byte[] toBytes() throws IOException {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
-        bao.write(SERVER_TPS_ID);
+        bao.write(packetId);
 
         bao.write(characteristic);
         StreamUtils.writeShort(mantissa, bao);
@@ -66,9 +66,9 @@ public class ServerTpsPacket extends S2CPacket {
     @Override
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if (is.read() != SERVER_TPS_ID)
+            if (is.read() != packetId)
                 throw new InvalidPacketException("Packet ID doesn't match with SERVER_TPS_ID (%id%)!"
-                        .replace("%id%", SERVER_TPS_ID + ""));
+                        .replace("%id%", packetId + ""));
 
             byte characteristic = (byte) is.read();
             short mantissa = (short) StreamUtils.readShort(is);
@@ -94,8 +94,8 @@ public class ServerTpsPacket extends S2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ServerTpsPacket)) return false;
-        ServerTpsPacket that = (ServerTpsPacket) o;
+        if (!(o instanceof ServerTpsS2CPacket)) return false;
+        ServerTpsS2CPacket that = (ServerTpsS2CPacket) o;
         return characteristic == that.characteristic && mantissa == that.mantissa;
     }
 
@@ -117,11 +117,11 @@ public class ServerTpsPacket extends S2CPacket {
             return this;
         }
 
-        public ServerTpsPacket build() {
+        public ServerTpsS2CPacket build() {
             if (characteristic == -1 || mantissa == -1)
                 throw new IllegalStateException("Not all required fields are set!");
 
-            return new ServerTpsPacket(characteristic, mantissa);
+            return new ServerTpsS2CPacket(characteristic, mantissa);
         }
     }
 

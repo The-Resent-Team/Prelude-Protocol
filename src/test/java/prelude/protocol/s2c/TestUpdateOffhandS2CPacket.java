@@ -24,22 +24,23 @@ import org.junit.platform.commons.annotation.Testable;
 import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
 import prelude.protocol.TestS2CPacketHandler;
-import prelude.protocol.packets.c2s.EquipOffhandPacket;
-import prelude.protocol.packets.s2c.ServerTpsPacket;
+import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
+import prelude.protocol.packets.s2c.UpdateOffhandS2CPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Optional;
 
 @Testable
-public class TestServerTpsPacket {
+public class TestUpdateOffhandS2CPacket {
     @Test
-    public void testServerTpsPacket() throws IOException {
-        ServerTpsPacket notPossiblePacket = ServerTpsPacket.builder().characteristic(124).mantissa(Short.MAX_VALUE).build();
-        ServerTpsPacket packet = ServerTpsPacket.builder().characteristic(19).mantissa(19372).build();
-        Assertions.assertNotEquals(notPossiblePacket, packet);
-
+    public void testUpdateOffhandPacket() throws IOException {
         S2CPacket.trySetHandler(new TestS2CPacketHandler());
+
+        UpdateOffhandS2CPacket packet = UpdateOffhandS2CPacket.builder()
+                .canClientDisregardThis(false)
+                .serializedItem("ItemStack{DISPENSER x 35}")
+                .build();
 
         byte[] bytes = packet.toBytes();
         try {
@@ -48,14 +49,14 @@ public class TestServerTpsPacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof ServerTpsPacket)
-                Assertions.assertEquals(ServerTpsPacket.class, optional.get().getClass());
+            if (optional.get() instanceof UpdateOffhandS2CPacket)
+                Assertions.assertEquals(UpdateOffhandS2CPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            ServerTpsPacket deserialized = (ServerTpsPacket) optional.get();
+            UpdateOffhandS2CPacket deserialized = (UpdateOffhandS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
-            EquipOffhandPacket invalidPacket = new EquipOffhandPacket();
+            EquipOffhandC2SPacket invalidPacket = new EquipOffhandC2SPacket();
             try {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");
@@ -66,5 +67,7 @@ public class TestServerTpsPacket {
             // erm what the
             Assertions.fail(e);
         }
+
+        Assertions.assertEquals(packet.getPacketId(), 5);
     }
 }

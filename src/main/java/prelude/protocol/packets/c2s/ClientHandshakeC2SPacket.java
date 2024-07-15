@@ -30,14 +30,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Objects;
 
-public final class ClientHandshakePacket extends C2SPacket {
+public final class ClientHandshakeC2SPacket extends C2SPacket {
     private static final String NULL_TERMINATOR = "\u0000";
 
     private String username;
 
-    // give them between 0 and 255
-    private byte resentMajorVersion;
-    private byte resentMinorVersion;
+    private int resentMajorVersion;
+    private int resentMinorVersion;
 
     // this is the integer in the signed build
     private int resentBuildInteger;
@@ -48,10 +47,10 @@ public final class ClientHandshakePacket extends C2SPacket {
     private boolean clientClaimsSelfIsRankedPlayer;
     private String[] enabledMods;
 
-    public ClientHandshakePacket() {}
+    public ClientHandshakeC2SPacket() {}
 
-    private ClientHandshakePacket(String username, byte resentMajorVersion, byte resentMinorVersion, int resentBuildInteger, ClientType clientType,
-                                 boolean clientClaimsSelfIsRankedPlayer, String[] enabledMods) {
+    private ClientHandshakeC2SPacket(String username, byte resentMajorVersion, byte resentMinorVersion, int resentBuildInteger, ClientType clientType,
+                                     boolean clientClaimsSelfIsRankedPlayer, String[] enabledMods) {
         this.username = username;
         this.resentMajorVersion = resentMajorVersion;
         this.resentMinorVersion = resentMinorVersion;
@@ -65,7 +64,7 @@ public final class ClientHandshakePacket extends C2SPacket {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
         // packet id for parsing
-        bao.write(CLIENT_HANDSHAKE_ID);
+        bao.write(packetId);
 
         // write username
         // we can write it as a byte since we know username cant exceed 16 chars, which is well below the limit of a byte
@@ -95,15 +94,15 @@ public final class ClientHandshakePacket extends C2SPacket {
 
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if (is.read() != CLIENT_HANDSHAKE_ID)
+            if (is.read() != packetId)
                 throw new InvalidPacketException("Packet ID doesn't match with CLIENT_HANDSHAKE_ID (%id%)!"
-                        .replace("%id%", CLIENT_HANDSHAKE_ID + ""));
+                        .replace("%id%", packetId + ""));
 
             String username = StreamUtils.readASCII(is.read(), is);
-            byte major = (byte) is.read();
-            byte minor = (byte) is.read();
-            ClientType type = ClientType.from((byte) is.read());
-            boolean clientClaimsSelfIsRankedPlayer = (byte) is.read() == 1;
+            int major = is.read();
+            int minor = is.read();
+            ClientType type = ClientType.from(is.read());
+            boolean clientClaimsSelfIsRankedPlayer = is.read() == 1;
             String enabledMods = StreamUtils.readASCII(StreamUtils.readShort(is), is);
             String[] mods = enabledMods.split(NULL_TERMINATOR);
 
@@ -131,8 +130,8 @@ public final class ClientHandshakePacket extends C2SPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ClientHandshakePacket)) return false;
-        ClientHandshakePacket that = (ClientHandshakePacket) o;
+        if (!(o instanceof ClientHandshakeC2SPacket)) return false;
+        ClientHandshakeC2SPacket that = (ClientHandshakeC2SPacket) o;
         return resentMajorVersion == that.resentMajorVersion && resentMinorVersion == that.resentMinorVersion && clientClaimsSelfIsRankedPlayer == that.clientClaimsSelfIsRankedPlayer && Objects.equals(username, that.username) && clientType == that.clientType && Objects.deepEquals(enabledMods, that.enabledMods);
     }
 
@@ -145,12 +144,12 @@ public final class ClientHandshakePacket extends C2SPacket {
         BETA(1),
         DEV(2);
 
-        final byte value;
+        final int value;
         ClientType(int value) {
-            this.value = (byte) value;
+            this.value = value;
         }
 
-        public static ClientType from(byte b) {
+        public static ClientType from(int b) {
             for (ClientType type : ClientType.values()) {
                 if (type.value == b)
                     return type;
@@ -206,14 +205,14 @@ public final class ClientHandshakePacket extends C2SPacket {
             return this;
         }
 
-        public ClientHandshakePacket build() {
+        public ClientHandshakeC2SPacket build() {
             if (username == null || username.length() > 16 || username.length() < 3)
                 throw new RuntimeException("Username must be between 3 and 16 characters");
 
             if (resentMajorVersion == -1 || resentMinorVersion == -1 || resentBuildInteger == -1 || clientType == null || enabledMods == null)
                 throw new IllegalStateException("Not all required fields are set!");
 
-            return new ClientHandshakePacket(username, resentMajorVersion, resentMinorVersion, resentBuildInteger, clientType, clientClaimsSelfIsRankedPlayer, enabledMods);
+            return new ClientHandshakeC2SPacket(username, resentMajorVersion, resentMinorVersion, resentBuildInteger, clientType, clientClaimsSelfIsRankedPlayer, enabledMods);
         }
     }
 
@@ -221,11 +220,11 @@ public final class ClientHandshakePacket extends C2SPacket {
         return username;
     }
 
-    public byte getResentMajorVersion() {
+    public int getResentMajorVersion() {
         return resentMajorVersion;
     }
 
-    public byte getResentMinorVersion() {
+    public int getResentMinorVersion() {
         return resentMinorVersion;
     }
 

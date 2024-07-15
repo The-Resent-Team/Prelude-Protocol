@@ -18,8 +18,9 @@
 
 package prelude.protocol;
 
-import prelude.protocol.packets.c2s.ClientHandshakePacket;
-import prelude.protocol.packets.c2s.EquipOffhandPacket;
+import prelude.protocol.packets.c2s.ClientHandshakeC2SPacket;
+import prelude.protocol.packets.c2s.ClientSyncResponseC2SPacket;
+import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -28,15 +29,25 @@ import java.util.Map;
 import java.util.Optional;
 
 public abstract class C2SPacket extends Packet<C2SPacketHandler> {
-    public static final Map<Byte, Class<? extends C2SPacket>> packets = new HashMap<>();
     public static C2SPacketHandler handler = null;
 
-    public static final byte CLIENT_HANDSHAKE_ID = 0;
-    public static final byte EQUIP_OFFHAND_ID = 1;
+    private static final Map<Integer, Class<? extends C2SPacket>> C2S_ID_TO_PACKET = new HashMap<>();
+    private static final Map<Class<? extends C2SPacket>, Integer> C2S_PACKET_TO_ID = new HashMap<>();
 
     static {
-        packets.put(CLIENT_HANDSHAKE_ID, ClientHandshakePacket.class);
-        packets.put(EQUIP_OFFHAND_ID, EquipOffhandPacket.class);
+        int curId = 0;
+        C2S_ID_TO_PACKET.put(curId++, ClientHandshakeC2SPacket.class);
+        C2S_PACKET_TO_ID.put(ClientHandshakeC2SPacket.class, curId);
+
+        C2S_ID_TO_PACKET.put(curId++, EquipOffhandC2SPacket.class);
+        C2S_PACKET_TO_ID.put(EquipOffhandC2SPacket.class, curId);
+
+        C2S_ID_TO_PACKET.put(curId++, ClientSyncResponseC2SPacket.class);
+        C2S_PACKET_TO_ID.put(ClientSyncResponseC2SPacket.class, curId);
+    }
+
+    protected C2SPacket() {
+        this.packetId = C2S_PACKET_TO_ID.get(this.getClass());
     }
 
     public static void setHandler(C2SPacketHandler newHandler) {
@@ -65,9 +76,9 @@ public abstract class C2SPacket extends Packet<C2SPacketHandler> {
             return Optional.empty();
 
         byte id = bytes[0];
-        Class<? extends C2SPacket> clazz = packets.get(id);
+        Class<? extends C2SPacket> clazz = C2S_ID_TO_PACKET.get(id & 0xFF);
         if (clazz == null)
-            throw new InvalidPacketException("Invalid packet id for S2CPacket ids!");
+            throw new InvalidPacketException("Invalid packet id for C2SPacket ids!");
 
         // it's deprecated however it's the only way it works with teavm iirc
         @SuppressWarnings("deprecation")

@@ -21,30 +21,24 @@ package prelude.protocol.s2c;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
-import prelude.protocol.InvalidPacketException;
-import prelude.protocol.S2CPacket;
-import prelude.protocol.TestS2CPacketHandler;
-import prelude.protocol.packets.c2s.EquipOffhandPacket;
-import prelude.protocol.packets.s2c.UpdateOffhandPacket;
-import prelude.protocol.packets.s2c.WaypointsPacket;
+import prelude.protocol.*;
+import prelude.protocol.packets.c2s.ClientHandshakeC2SPacket;
+import prelude.protocol.packets.s2c.ModStatusS2CPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Optional;
 
 @Testable
-public class TestWaypointsPacket {
+public class TestModStatusS2CPacket {
     @Test
-    public void testWaypointsPacket() throws IOException {
+    public void testModStatusPacket() throws IOException {
         S2CPacket.trySetHandler(new TestS2CPacketHandler());
 
-        WaypointsPacket packet = WaypointsPacket.builder()
-                .addWaypoint(new WaypointsPacket.Waypoint("spawn", 0, 75, 0))
+        ModStatusS2CPacket packet = ModStatusS2CPacket.builder()
+                .modIdentifier("offhand")
+                .modStatus(ModStatusS2CPacket.ModStatus.SUPPORTED)
                 .build();
-
-        Assertions.assertEquals(packet.getWaypoints().length, 1);
-        Assertions.assertEquals(packet.getWaypoints()[0].name, "spawn");
 
         byte[] bytes = packet.toBytes();
         try {
@@ -53,14 +47,14 @@ public class TestWaypointsPacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof WaypointsPacket)
-                Assertions.assertEquals(WaypointsPacket.class, optional.get().getClass());
+            if (optional.get() instanceof ModStatusS2CPacket)
+                Assertions.assertEquals(ModStatusS2CPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            WaypointsPacket deserialized = (WaypointsPacket) optional.get();
+            ModStatusS2CPacket deserialized = (ModStatusS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
-            EquipOffhandPacket invalidPacket = new EquipOffhandPacket();
+            ClientHandshakeC2SPacket invalidPacket = new ClientHandshakeC2SPacket();
             try {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");
@@ -71,5 +65,7 @@ public class TestWaypointsPacket {
             // erm what the
             Assertions.fail(e);
         }
+
+        Assertions.assertEquals(packet.getPacketId(), 1);
     }
 }

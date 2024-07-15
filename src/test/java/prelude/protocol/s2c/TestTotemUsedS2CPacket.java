@@ -24,39 +24,36 @@ import org.junit.platform.commons.annotation.Testable;
 import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
 import prelude.protocol.TestS2CPacketHandler;
-import prelude.protocol.packets.c2s.EquipOffhandPacket;
-import prelude.protocol.packets.s2c.ServerTpsPacket;
-import prelude.protocol.packets.s2c.TotemUsedPacket;
+import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
+import prelude.protocol.packets.s2c.TotemUsedS2CPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Optional;
 
-import static prelude.protocol.S2CPacket.TOTEM_USED_ID;
-
 @Testable
-public class TestTotemUsedPacket {
+public class TestTotemUsedS2CPacket {
     @Test
     public void testTotemUsedPacket() throws IOException {
-        Assertions.assertEquals(TOTEM_USED_ID, new TotemUsedPacket().toBytes()[0]);
+        Assertions.assertEquals(4, new TotemUsedS2CPacket().toBytes()[0]);
 
         S2CPacket.trySetHandler(new TestS2CPacketHandler());
 
-        byte[] bytes = { TOTEM_USED_ID };
+        byte[] bytes = { 4 };
         try {
             Optional<S2CPacket> optional = S2CPacket.parsePacket(bytes);
 
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof TotemUsedPacket)
-                Assertions.assertEquals(TotemUsedPacket.class, optional.get().getClass());
+            if (optional.get() instanceof TotemUsedS2CPacket)
+                Assertions.assertEquals(TotemUsedS2CPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            TotemUsedPacket deserialized = (TotemUsedPacket) optional.get();
+            TotemUsedS2CPacket deserialized = (TotemUsedS2CPacket) optional.get();
             Assertions.assertArrayEquals(bytes, deserialized.toBytes());
 
-            EquipOffhandPacket invalidPacket = new EquipOffhandPacket();
+            EquipOffhandC2SPacket invalidPacket = new EquipOffhandC2SPacket();
             try {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");

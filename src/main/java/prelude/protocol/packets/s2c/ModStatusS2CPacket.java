@@ -29,13 +29,13 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-public class ModStatusPacket extends S2CPacket {
+public class ModStatusS2CPacket extends S2CPacket {
     private String modIdentifier;
     private ModStatus modStatus;
 
-    public ModStatusPacket() {}
+    public ModStatusS2CPacket() {}
 
-    private ModStatusPacket(String modIdentifier, ModStatus modStatus) {
+    private ModStatusS2CPacket(String modIdentifier, ModStatus modStatus) {
         this.modIdentifier = modIdentifier;
         this.modStatus = modStatus;
     }
@@ -44,7 +44,7 @@ public class ModStatusPacket extends S2CPacket {
     public byte[] toBytes() throws IOException {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
-        bao.write(MOD_STATUS_ID);
+        bao.write(packetId);
 
         bao.write(modIdentifier.length());
         bao.write(modIdentifier.getBytes(StandardCharsets.US_ASCII));
@@ -57,9 +57,9 @@ public class ModStatusPacket extends S2CPacket {
     @Override
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if (is.read() != MOD_STATUS_ID)
+            if (is.read() != packetId)
                 throw new InvalidPacketException("Packet ID doesn't match with MOD_STATUS_ID (%id%)!"
-                        .replace("%id%", MOD_STATUS_ID + ""));
+                        .replace("%id%", packetId + ""));
 
             String modId = StreamUtils.readASCII(is.read(), is);
             ModStatus modStatus = ModStatus.from((byte) is.read());
@@ -84,8 +84,8 @@ public class ModStatusPacket extends S2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ModStatusPacket)) return false;
-        ModStatusPacket that = (ModStatusPacket) o;
+        if (!(o instanceof ModStatusS2CPacket)) return false;
+        ModStatusS2CPacket that = (ModStatusS2CPacket) o;
         return Objects.equals(modIdentifier, that.modIdentifier) && modStatus == that.modStatus;
     }
 
@@ -109,11 +109,11 @@ public class ModStatusPacket extends S2CPacket {
             return this;
         }
 
-        public ModStatusPacket build() {
+        public ModStatusS2CPacket build() {
             if (modIdentifier == null || modStatus == null)
                 throw new IllegalStateException("Not all required fields are set!");
 
-            return new ModStatusPacket(modIdentifier, modStatus);
+            return new ModStatusS2CPacket(modIdentifier, modStatus);
         }
     }
 

@@ -26,18 +26,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ServerHandshakePacket extends S2CPacket {
-    private byte preludeMajorVersion;
-    private byte preludeMinorVersion;
-    private byte preludePatchVersion;
+public class ServerHandshakeS2CPacket extends S2CPacket {
+    private int preludeMajorVersion;
+    private int preludeMinorVersion;
+    private int preludePatchVersion;
 
-    private byte serverMajorVersion;
-    private byte serverMinorVersion;
-    private byte serverPatchVersion;
+    private int serverMajorVersion;
+    private int serverMinorVersion;
+    private int serverPatchVersion;
 
-    public ServerHandshakePacket() {}
+    public ServerHandshakeS2CPacket() {}
 
-    public ServerHandshakePacket(byte preludeMajorVersion, byte preludeMinorVersion, byte preludePatchVersion, byte serverMajorVersion, byte serverMinorVersion, byte serverPatchVersion) {
+    public ServerHandshakeS2CPacket(int preludeMajorVersion, int preludeMinorVersion, int preludePatchVersion, int serverMajorVersion, int serverMinorVersion, int serverPatchVersion) {
         this.preludeMajorVersion = preludeMajorVersion;
         this.preludeMinorVersion = preludeMinorVersion;
         this.preludePatchVersion = preludePatchVersion;
@@ -50,7 +50,7 @@ public class ServerHandshakePacket extends S2CPacket {
     public byte[] toBytes() throws IOException {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
-        bao.write(SERVER_HANDSHAKE_ID);
+        bao.write(packetId);
 
         bao.write(preludeMajorVersion);
         bao.write(preludeMinorVersion);
@@ -65,16 +65,16 @@ public class ServerHandshakePacket extends S2CPacket {
     @Override
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if (is.read() != SERVER_HANDSHAKE_ID)
+            if (is.read() != packetId)
                 throw new InvalidPacketException("Packet ID doesn't match with SERVER_HANDSHAKE_ID (%id%)!"
-                        .replace("%id%", SERVER_HANDSHAKE_ID + ""));
+                        .replace("%id%", packetId + ""));
 
-            byte preludeMajorVersion = (byte) is.read();
-            byte preludeMinorVersion = (byte) is.read();
-            byte preludePatchVersion = (byte) is.read();
-            byte serverMajorVersion = (byte) is.read();
-            byte serverMinorVersion = (byte) is.read();
-            byte serverPatchVersion = (byte) is.read();
+            int preludeMajorVersion = is.read();
+            int preludeMinorVersion = is.read();
+            int preludePatchVersion = is.read();
+            int serverMajorVersion = is.read();
+            int serverMinorVersion = is.read();
+            int serverPatchVersion = is.read();
 
             if (preludeMajorVersion < 0 || preludeMinorVersion < 0 || preludePatchVersion < 0 || serverMajorVersion < 0 || serverMinorVersion < 0 || serverPatchVersion < 0)
                 throw new InvalidPacketException("Constructed SERVER_HANDSHAKE_PACKET is invalid!");
@@ -100,8 +100,8 @@ public class ServerHandshakePacket extends S2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ServerHandshakePacket)) return false;
-        ServerHandshakePacket that = (ServerHandshakePacket) o;
+        if (!(o instanceof ServerHandshakeS2CPacket)) return false;
+        ServerHandshakeS2CPacket that = (ServerHandshakeS2CPacket) o;
         return preludeMajorVersion == that.preludeMajorVersion && preludeMinorVersion == that.preludeMinorVersion && preludePatchVersion == that.preludePatchVersion && serverMajorVersion == that.serverMajorVersion && serverMinorVersion == that.serverMinorVersion && serverPatchVersion == that.serverPatchVersion;
     }
 
@@ -150,35 +150,35 @@ public class ServerHandshakePacket extends S2CPacket {
             return this;
         }
 
-        public ServerHandshakePacket build() {
+        public ServerHandshakeS2CPacket build() {
             if (preludeMajorVersion == -1 || preludeMinorVersion == -1 || preludePatchVersion == -1 || serverMajorVersion == -1 || serverMinorVersion == -1 || serverPatchVersion == -1)
                 throw new IllegalStateException("Not all required fields are set!");
 
-            return new ServerHandshakePacket(preludeMajorVersion, preludeMinorVersion, preludePatchVersion, serverMajorVersion, serverMinorVersion, serverPatchVersion);
+            return new ServerHandshakeS2CPacket(preludeMajorVersion, preludeMinorVersion, preludePatchVersion, serverMajorVersion, serverMinorVersion, serverPatchVersion);
         }
     }
 
-    public byte getPreludeMajorVersion() {
+    public int getPreludeMajorVersion() {
         return preludeMajorVersion;
     }
 
-    public byte getPreludeMinorVersion() {
+    public int getPreludeMinorVersion() {
         return preludeMinorVersion;
     }
 
-    public byte getPreludePatchVersion() {
+    public int getPreludePatchVersion() {
         return preludePatchVersion;
     }
 
-    public byte getServerMajorVersion() {
+    public int getServerMajorVersion() {
         return serverMajorVersion;
     }
 
-    public byte getServerMinorVersion() {
+    public int getServerMinorVersion() {
         return serverMinorVersion;
     }
 
-    public byte getServerPatchVersion() {
+    public int getServerPatchVersion() {
         return serverPatchVersion;
     }
 }

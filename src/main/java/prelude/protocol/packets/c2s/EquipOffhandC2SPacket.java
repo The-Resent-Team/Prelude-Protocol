@@ -27,12 +27,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class EquipOffhandPacket extends C2SPacket {
+public class EquipOffhandC2SPacket extends C2SPacket {
     private short slot;
 
-    public EquipOffhandPacket() {}
+    public EquipOffhandC2SPacket() {}
 
-    private EquipOffhandPacket(short slot) {
+    private EquipOffhandC2SPacket(short slot) {
         this.slot = slot;
     }
 
@@ -40,7 +40,7 @@ public class EquipOffhandPacket extends C2SPacket {
     public byte[] toBytes() throws IOException {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
-        bao.write(EQUIP_OFFHAND_ID);
+        bao.write(packetId);
         StreamUtils.writeShort(slot, bao);
 
         return bao.toByteArray();
@@ -53,9 +53,9 @@ public class EquipOffhandPacket extends C2SPacket {
     * */
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if ((byte) is.read() != EQUIP_OFFHAND_ID)
+            if (is.read() != packetId)
                 throw new InvalidPacketException("Packet ID doesn't match with EQUIP_OFFHAND_ID (%id%)!"
-                        .replace("%id%", EQUIP_OFFHAND_ID + ""));
+                        .replace("%id%", packetId + ""));
 
             short slot = (short) StreamUtils.readShort(is);
 
@@ -81,8 +81,8 @@ public class EquipOffhandPacket extends C2SPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof EquipOffhandPacket)) return false;
-        EquipOffhandPacket that = (EquipOffhandPacket) o;
+        if (!(o instanceof EquipOffhandC2SPacket)) return false;
+        EquipOffhandC2SPacket that = (EquipOffhandC2SPacket) o;
         return slot == that.slot;
     }
 
@@ -100,11 +100,11 @@ public class EquipOffhandPacket extends C2SPacket {
             return this;
         }
 
-        public EquipOffhandPacket build() {
+        public EquipOffhandC2SPacket build() {
             if (slot == -1)
                 throw new IllegalStateException("Not all required fields are set!");
 
-            return new EquipOffhandPacket(slot);
+            return new EquipOffhandC2SPacket(slot);
         }
     }
 

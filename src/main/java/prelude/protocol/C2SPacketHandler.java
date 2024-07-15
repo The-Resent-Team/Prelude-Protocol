@@ -18,14 +18,14 @@
 
 package prelude.protocol;
 
-import prelude.protocol.packets.c2s.ClientHandshakePacket;
-import prelude.protocol.packets.c2s.EquipOffhandPacket;
+import prelude.protocol.packets.c2s.ClientHandshakeC2SPacket;
+import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
 
 /*
 * Extended by BukkitC2SPacketHandler on the plugin
 * */
 public abstract class C2SPacketHandler {
-    public abstract void handleClientHandshake(ClientHandshakePacket packet);
+    public abstract void handleClientHandshake(ClientHandshakeC2SPacket packet);
 
-    public abstract void handleEquipOffhand(EquipOffhandPacket packet);
+    public abstract void handleEquipOffhand(EquipOffhandC2SPacket packet);
 }

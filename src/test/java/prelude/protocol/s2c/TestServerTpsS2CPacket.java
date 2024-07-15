@@ -16,46 +16,46 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol.c2s;
+package prelude.protocol.s2c;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
-import prelude.protocol.C2SPacket;
 import prelude.protocol.InvalidPacketException;
-import prelude.protocol.TestC2SPacketHandler;
-import prelude.protocol.packets.c2s.ClientHandshakePacket;
-import prelude.protocol.packets.c2s.EquipOffhandPacket;
+import prelude.protocol.S2CPacket;
+import prelude.protocol.TestS2CPacketHandler;
+import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
+import prelude.protocol.packets.s2c.ServerTpsS2CPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Optional;
 
 @Testable
-public class TestEquipOffhandPacket {
+public class TestServerTpsS2CPacket {
     @Test
-    public void testEquipOffhandPacket() throws IOException {
-        C2SPacket.trySetHandler(new TestC2SPacketHandler());
+    public void testServerTpsPacket() throws IOException {
+        ServerTpsS2CPacket notPossiblePacket = ServerTpsS2CPacket.builder().characteristic(124).mantissa(Short.MAX_VALUE).build();
+        ServerTpsS2CPacket packet = ServerTpsS2CPacket.builder().characteristic(19).mantissa(19372).build();
+        Assertions.assertNotEquals(notPossiblePacket, packet);
 
-        EquipOffhandPacket packet = EquipOffhandPacket.builder()
-                .slot((short) 25)
-                .build();
+        S2CPacket.trySetHandler(new TestS2CPacketHandler());
 
         byte[] bytes = packet.toBytes();
         try {
-            Optional<C2SPacket> optional = C2SPacket.parsePacket(bytes);
+            Optional<S2CPacket> optional = S2CPacket.parsePacket(bytes);
 
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof EquipOffhandPacket)
-                Assertions.assertEquals(EquipOffhandPacket.class, optional.get().getClass());
+            if (optional.get() instanceof ServerTpsS2CPacket)
+                Assertions.assertEquals(ServerTpsS2CPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            EquipOffhandPacket deserialized = (EquipOffhandPacket) optional.get();
+            ServerTpsS2CPacket deserialized = (ServerTpsS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
-            ClientHandshakePacket invalidPacket = new ClientHandshakePacket();
+            EquipOffhandC2SPacket invalidPacket = new EquipOffhandC2SPacket();
             try {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");
@@ -66,5 +66,7 @@ public class TestEquipOffhandPacket {
             // erm what the
             Assertions.fail(e);
         }
+
+        Assertions.assertEquals(packet.getPacketId(), 2);
     }
 }

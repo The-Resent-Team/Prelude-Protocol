@@ -25,20 +25,20 @@ import prelude.protocol.S2CPacketHandler;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class TotemUsedPacket extends S2CPacket {
-    public TotemUsedPacket() {}
+public class TotemUsedS2CPacket extends S2CPacket {
+    public TotemUsedS2CPacket() {}
 
     @Override
     public byte[] toBytes() throws IOException {
-        return new byte[] { TOTEM_USED_ID };
+        return new byte[] {(byte) packetId};
     }
 
     @Override
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if (is.read() != TOTEM_USED_ID)
+            if (is.read() != packetId)
                 throw new InvalidPacketException("Packet ID doesn't match with TOTEM_USED_ID (%id%)!"
-                        .replace("%id%", TOTEM_USED_ID + ""));
+                        .replace("%id%", packetId + ""));
         } catch (InvalidPacketException e) {
             throw e;
         } catch (Exception e) {
@@ -53,6 +53,6 @@ public class TotemUsedPacket extends S2CPacket {
 
     @Override
     public boolean equals(Object packet) {
-        return packet instanceof TotemUsedPacket;
+        return packet instanceof TotemUsedS2CPacket;
     }
 }

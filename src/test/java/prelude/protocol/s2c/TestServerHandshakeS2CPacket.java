@@ -24,25 +24,26 @@ import org.junit.platform.commons.annotation.Testable;
 import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
 import prelude.protocol.TestS2CPacketHandler;
-import prelude.protocol.packets.c2s.EquipOffhandPacket;
-import prelude.protocol.packets.s2c.ModStatusPacket;
-import prelude.protocol.packets.s2c.RespawnAnchorUpdatePacket;
+import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
+import prelude.protocol.packets.s2c.ServerHandshakeS2CPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Optional;
 
 @Testable
-public class TestRespawnAnchorUpdatePacket {
+public class TestServerHandshakeS2CPacket {
     @Test
-    public void testRespawnAnchorUpdatePacket() throws IOException {
+    public void testServerHandshakePacket() throws IOException {
         S2CPacket.trySetHandler(new TestS2CPacketHandler());
 
-        RespawnAnchorUpdatePacket packet = RespawnAnchorUpdatePacket.builder()
-                .charge(4)
-                .x(-203)
-                .y(23)
-                .z(2100291722)
+        ServerHandshakeS2CPacket packet = ServerHandshakeS2CPacket.builder()
+                .preludeMajorVersion(1)
+                .preludeMinorVersion(0)
+                .preludePatchVersion(0)
+                .serverMajorVersion(1)
+                .serverMinorVersion(8)
+                .serverPatchVersion(8)
                 .build();
 
         byte[] bytes = packet.toBytes();
@@ -52,14 +53,14 @@ public class TestRespawnAnchorUpdatePacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof RespawnAnchorUpdatePacket)
-                Assertions.assertEquals(RespawnAnchorUpdatePacket.class, optional.get().getClass());
+            if (optional.get() instanceof ServerHandshakeS2CPacket)
+                Assertions.assertEquals(ServerHandshakeS2CPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            RespawnAnchorUpdatePacket deserialized = (RespawnAnchorUpdatePacket) optional.get();
+            ServerHandshakeS2CPacket deserialized = (ServerHandshakeS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
-            EquipOffhandPacket invalidPacket = new EquipOffhandPacket();
+            EquipOffhandC2SPacket invalidPacket = new EquipOffhandC2SPacket();
             try {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");
@@ -70,5 +71,7 @@ public class TestRespawnAnchorUpdatePacket {
             // erm what the
             Assertions.fail(e);
         }
+
+        Assertions.assertEquals(packet.getPacketId(), 0);
     }
 }

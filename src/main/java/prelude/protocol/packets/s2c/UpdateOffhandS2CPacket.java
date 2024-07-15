@@ -29,13 +29,13 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-public class UpdateOffhandPacket extends S2CPacket {
+public class UpdateOffhandS2CPacket extends S2CPacket {
     private boolean canClientDisregardThis;
     private String serializedItem;
 
-    public UpdateOffhandPacket() {}
+    public UpdateOffhandS2CPacket() {}
 
-    private UpdateOffhandPacket(boolean canClientDisregardThis, String serializedItem) {
+    private UpdateOffhandS2CPacket(boolean canClientDisregardThis, String serializedItem) {
         this.canClientDisregardThis = canClientDisregardThis;
         this.serializedItem = serializedItem;
     }
@@ -43,7 +43,7 @@ public class UpdateOffhandPacket extends S2CPacket {
     @Override
     public byte[] toBytes() throws IOException {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
-        bao.write(UPDATE_OFFHAND_ID);
+        bao.write(packetId);
 
         bao.write(canClientDisregardThis ? 1 : 0);
 
@@ -56,9 +56,9 @@ public class UpdateOffhandPacket extends S2CPacket {
     @Override
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if (is.read() != UPDATE_OFFHAND_ID)
+            if (is.read() != packetId)
                 throw new InvalidPacketException("Packet ID doesn't match with TOTEM_USED_ID (%id%)!"
-                        .replace("%id%", TOTEM_USED_ID + ""));
+                        .replace("%id%", packetId + ""));
 
             boolean canClientDisregardThis = is.read() != 0;
             String serializedItem = StreamUtils.readASCII(StreamUtils.readShort(is), is);
@@ -83,8 +83,8 @@ public class UpdateOffhandPacket extends S2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UpdateOffhandPacket)) return false;
-        UpdateOffhandPacket that = (UpdateOffhandPacket) o;
+        if (!(o instanceof UpdateOffhandS2CPacket)) return false;
+        UpdateOffhandS2CPacket that = (UpdateOffhandS2CPacket) o;
         return canClientDisregardThis == that.canClientDisregardThis && Objects.equals(serializedItem, that.serializedItem);
     }
 
@@ -108,11 +108,11 @@ public class UpdateOffhandPacket extends S2CPacket {
             return this;
         }
 
-        public UpdateOffhandPacket build() {
+        public UpdateOffhandS2CPacket build() {
             if (serializedItem == null)
                 throw new IllegalStateException("Not all required fields are set!");
 
-            return new UpdateOffhandPacket(canClientDisregardThis, serializedItem);
+            return new UpdateOffhandS2CPacket(canClientDisregardThis, serializedItem);
         }
     }
 

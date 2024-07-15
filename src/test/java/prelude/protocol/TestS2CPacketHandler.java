@@ -21,31 +21,27 @@ package prelude.protocol;
 import prelude.protocol.packets.s2c.*;
 
 public class TestS2CPacketHandler extends S2CPacketHandler {
-    public void handleServerHandshake(ServerHandshakePacket packet) {
+    public void handleServerHandshake(ServerHandshakeS2CPacket packet) {
         System.out.println("Handshake received");
     }
 
-    public void handleModStatus(ModStatusPacket packet) {
+    public void handleModStatus(ModStatusS2CPacket packet) {
         System.out.println("Mod status received");
     }
 
-    public void handleRespawnAnchorUpdate(RespawnAnchorUpdatePacket packet) {
-        System.out.println("Respawn anchor update received");
-    }
-
-    public void handleServerTps(ServerTpsPacket packet) {
+    public void handleServerTps(ServerTpsS2CPacket packet) {
         System.out.println("Server tps received");
     }
 
-    public void handleOffhandUpdate(UpdateOffhandPacket packet) {
+    public void handleOffhandUpdate(UpdateOffhandS2CPacket packet) {
         System.out.println("Update offhand received");
     }
 
-    public void handleTotemUsed(TotemUsedPacket packet) {
+    public void handleTotemUsed(TotemUsedS2CPacket packet) {
         System.out.println("Totem used received");
     }
 
-    public void handleWaypoints(WaypointsPacket packet) {
+    public void handleWaypoints(SetWaypointsS2CPacket packet) {
         System.out.println("Waypoints received");
     }
 }

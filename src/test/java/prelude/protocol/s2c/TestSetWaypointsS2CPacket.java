@@ -24,24 +24,25 @@ import org.junit.platform.commons.annotation.Testable;
 import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
 import prelude.protocol.TestS2CPacketHandler;
-import prelude.protocol.packets.c2s.EquipOffhandPacket;
-import prelude.protocol.packets.s2c.RespawnAnchorUpdatePacket;
-import prelude.protocol.packets.s2c.UpdateOffhandPacket;
+import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
+import prelude.protocol.packets.s2c.SetWaypointsS2CPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Optional;
 
 @Testable
-public class TestUpdateOffhandPacket {
+public class TestSetWaypointsS2CPacket {
     @Test
-    public void testUpdateOffhandPacket() throws IOException {
+    public void testWaypointsPacket() throws IOException {
         S2CPacket.trySetHandler(new TestS2CPacketHandler());
 
-        UpdateOffhandPacket packet = UpdateOffhandPacket.builder()
-                .canClientDisregardThis(false)
-                .serializedItem("ItemStack{DISPENSER x 35}")
+        SetWaypointsS2CPacket packet = SetWaypointsS2CPacket.builder()
+                .addWaypoint(new SetWaypointsS2CPacket.Waypoint("spawn", 0, 75, 0))
                 .build();
+
+        Assertions.assertEquals(packet.getWaypoints().length, 1);
+        Assertions.assertEquals(packet.getWaypoints()[0].name, "spawn");
 
         byte[] bytes = packet.toBytes();
         try {
@@ -50,14 +51,14 @@ public class TestUpdateOffhandPacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof UpdateOffhandPacket)
-                Assertions.assertEquals(UpdateOffhandPacket.class, optional.get().getClass());
+            if (optional.get() instanceof SetWaypointsS2CPacket)
+                Assertions.assertEquals(SetWaypointsS2CPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            UpdateOffhandPacket deserialized = (UpdateOffhandPacket) optional.get();
+            SetWaypointsS2CPacket deserialized = (SetWaypointsS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
-            EquipOffhandPacket invalidPacket = new EquipOffhandPacket();
+            EquipOffhandC2SPacket invalidPacket = new EquipOffhandC2SPacket();
             try {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");
@@ -68,5 +69,7 @@ public class TestUpdateOffhandPacket {
             // erm what the
             Assertions.fail(e);
         }
+
+        Assertions.assertEquals(packet.getPacketId(), 3);
     }
 }

@@ -18,15 +18,15 @@
 
 package prelude.protocol;
 
-import prelude.protocol.packets.c2s.ClientHandshakePacket;
-import prelude.protocol.packets.c2s.EquipOffhandPacket;
+import prelude.protocol.packets.c2s.ClientHandshakeC2SPacket;
+import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
 
 public class TestC2SPacketHandler extends C2SPacketHandler {
-    public void handleClientHandshake(ClientHandshakePacket packet) {
+    public void handleClientHandshake(ClientHandshakeC2SPacket packet) {
         System.out.println("Client handshake received");
     }
 
-    public void handleEquipOffhand(EquipOffhandPacket packet) {
+    public void handleEquipOffhand(EquipOffhandC2SPacket packet) {
         System.out.println("Equip offhand received");
     }
 }

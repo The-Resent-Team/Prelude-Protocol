@@ -27,21 +27,21 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class WaypointsPacket extends S2CPacket {
+public class SetWaypointsS2CPacket extends S2CPacket {
     private static final String SPLIT = "\u0000\u8301\u9281";
 
     private Waypoint[] waypoints;
 
-    public WaypointsPacket() {}
+    public SetWaypointsS2CPacket() {}
 
-    private WaypointsPacket(Waypoint[] waypoints) {
+    private SetWaypointsS2CPacket(Waypoint[] waypoints) {
         this.waypoints = waypoints;
     }
 
     @Override
     public byte[] toBytes() throws IOException {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
-        bao.write(WAYPOINTS_ID);
+        bao.write(packetId);
 
         for (int i = 0; i < waypoints.length; i++) {
             Waypoint waypoint = waypoints[i];
@@ -63,9 +63,9 @@ public class WaypointsPacket extends S2CPacket {
     @Override
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if (is.read() != WAYPOINTS_ID)
+            if (is.read() != packetId)
                 throw new InvalidPacketException("Packet ID doesn't match with WAY (%id%)!"
-                        .replace("%id%", RESPAWN_ANCHOR_UPDATE_ID + ""));
+                        .replace("%id%", packetId + ""));
 
             StringBuilder waypointsString = new StringBuilder();
 
@@ -102,8 +102,8 @@ public class WaypointsPacket extends S2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof WaypointsPacket)) return false;
-        WaypointsPacket that = (WaypointsPacket) o;
+        if (!(o instanceof SetWaypointsS2CPacket)) return false;
+        SetWaypointsS2CPacket that = (SetWaypointsS2CPacket) o;
         return Arrays.equals(this.waypoints, that.waypoints);
     }
 
@@ -131,8 +131,8 @@ public class WaypointsPacket extends S2CPacket {
             return this;
         }
 
-        public WaypointsPacket build() {
-            return new WaypointsPacket(waypoints.toArray(new Waypoint[0]));
+        public SetWaypointsS2CPacket build() {
+            return new SetWaypointsS2CPacket(waypoints.toArray(new Waypoint[0]));
         }
     }
 

@@ -27,25 +27,37 @@ import java.util.Map;
 import java.util.Optional;
 
 public abstract class S2CPacket extends Packet<S2CPacketHandler> {
-    public static final Map<Byte, Class<? extends S2CPacket>> packets = new HashMap<>();
     public static S2CPacketHandler handler = null;
 
-    public static final byte SERVER_HANDSHAKE_ID = 0;
-    public static final byte MOD_STATUS_ID = 1;
-    public static final byte RESPAWN_ANCHOR_UPDATE_ID = 2;
-    public static final byte SERVER_TPS_ID = 3;
-    public static final byte UPDATE_OFFHAND_ID = 4;
-    public static final byte TOTEM_USED_ID = 5;
-    public static final byte WAYPOINTS_ID = 6;
+    private static final Map<Integer, Class<? extends S2CPacket>> S2C_ID_TO_PACKET = new HashMap<>();
+    private static final Map<Class<? extends S2CPacket>, Integer> S2C_PACKET_TO_ID = new HashMap<>();
 
     static {
-        packets.put(SERVER_HANDSHAKE_ID, ServerHandshakePacket.class);
-        packets.put(MOD_STATUS_ID, ModStatusPacket.class);
-        packets.put(RESPAWN_ANCHOR_UPDATE_ID, RespawnAnchorUpdatePacket.class);
-        packets.put(SERVER_TPS_ID, ServerTpsPacket.class);
-        packets.put(UPDATE_OFFHAND_ID, UpdateOffhandPacket.class);
-        packets.put(TOTEM_USED_ID, TotemUsedPacket.class);
-        packets.put(WAYPOINTS_ID, WaypointsPacket.class);
+        int curId = 0;
+        S2C_ID_TO_PACKET.put(curId++, ServerHandshakeS2CPacket.class);
+        S2C_PACKET_TO_ID.put(ServerHandshakeS2CPacket.class, curId);
+
+        S2C_ID_TO_PACKET.put(curId++, ModStatusS2CPacket.class);
+        S2C_PACKET_TO_ID.put(ModStatusS2CPacket.class, curId);
+
+        S2C_ID_TO_PACKET.put(curId++, ServerTpsS2CPacket.class);
+        S2C_PACKET_TO_ID.put(ServerHandshakeS2CPacket.class, curId);
+
+        S2C_ID_TO_PACKET.put(curId++, UpdateOffhandS2CPacket.class);
+        S2C_PACKET_TO_ID.put(UpdateOffhandS2CPacket.class, curId);
+
+        S2C_ID_TO_PACKET.put(curId++, ServerTpsS2CPacket.class);
+        S2C_PACKET_TO_ID.put(ServerTpsS2CPacket.class, curId);
+
+        S2C_ID_TO_PACKET.put(curId++, TotemUsedS2CPacket.class);
+        S2C_PACKET_TO_ID.put(TotemUsedS2CPacket.class, curId);
+
+        S2C_ID_TO_PACKET.put(curId++, SetWaypointsS2CPacket.class);
+        S2C_PACKET_TO_ID.put(SetWaypointsS2CPacket.class, curId);
+    }
+
+    protected S2CPacket() {
+        this.packetId = S2C_PACKET_TO_ID.get(this.getClass());
     }
 
     public static void setHandler(S2CPacketHandler newHandler) {
@@ -74,7 +86,7 @@ public abstract class S2CPacket extends Packet<S2CPacketHandler> {
             return Optional.empty();
 
         byte id = bytes[0];
-        Class<? extends S2CPacket> clazz = packets.get(id);
+        Class<? extends S2CPacket> clazz = S2C_ID_TO_PACKET.get(id & 0xFF);
         if (clazz == null)
             throw new InvalidPacketException("Invalid packet id for S2CPacket ids!");
 
