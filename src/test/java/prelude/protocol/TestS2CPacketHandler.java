@@ -50,4 +50,9 @@ public class TestS2CPacketHandler implements S2CPacketHandler {
     public void handleWaypoints(SetWaypointsS2CPacket packet) {
         System.out.println("Waypoints received");
     }
+
+    @Override
+    public void handleSyncRequest(ServerSyncRequestS2CPacket packet) {
+        System.out.println("Sync request received");
+    }
 }

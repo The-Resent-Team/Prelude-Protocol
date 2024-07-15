@@ -39,6 +39,7 @@ public abstract class S2CPacket extends Packet<S2CPacketHandler> {
         registerS2CPacket(UpdateOffhandS2CPacket.class);
         registerS2CPacket(TotemUsedS2CPacket.class);
         registerS2CPacket(SetWaypointsS2CPacket.class);
+        registerS2CPacket(ServerSyncRequestS2CPacket.class);
     }
 
     protected S2CPacket() {

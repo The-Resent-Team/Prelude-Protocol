@@ -16,24 +16,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol.packets.c2s;
+package prelude.protocol.packets.s2c;
 
-import prelude.protocol.C2SPacket;
-import prelude.protocol.C2SPacketHandler;
 import prelude.protocol.InvalidPacketException;
+import prelude.protocol.S2CPacket;
+import prelude.protocol.S2CPacketHandler;
 import prelude.protocol.StreamUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
 
-public class ClientSyncResponseC2SPacket extends C2SPacket {
+public class ServerSyncRequestS2CPacket extends S2CPacket {
     private int syncId;
 
-    public ClientSyncResponseC2SPacket() {}
+    public ServerSyncRequestS2CPacket() {
 
-    public ClientSyncResponseC2SPacket(int syncId) {
+    }
+
+    public ServerSyncRequestS2CPacket(int syncId) {
         this.syncId = syncId;
     }
 
@@ -42,7 +43,6 @@ public class ClientSyncResponseC2SPacket extends C2SPacket {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
         bao.write(packetId);
-
         StreamUtils.writeVarInt(syncId, bao);
 
         return bao.toByteArray();
@@ -51,8 +51,8 @@ public class ClientSyncResponseC2SPacket extends C2SPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ClientSyncResponseC2SPacket)) return false;
-        ClientSyncResponseC2SPacket that = (ClientSyncResponseC2SPacket) o;
+        if (!(o instanceof ServerSyncRequestS2CPacket)) return false;
+        ServerSyncRequestS2CPacket that = (ServerSyncRequestS2CPacket) o;
         return syncId == that.syncId;
     }
 
@@ -60,20 +60,20 @@ public class ClientSyncResponseC2SPacket extends C2SPacket {
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
             if (is.read() != packetId)
-                throw new InvalidPacketException("Packet ID doesn't match with CLIENT_SYNC_RESPONSE_ID (%id%)!"
+                throw new InvalidPacketException("Packet ID doesn't match with SERVER_SYNC_REQUEST_ID (%id%)!"
                         .replace("%id%", packetId + ""));
 
             this.syncId = StreamUtils.readVarInt(is);
         } catch (InvalidPacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse CLIENT_SYNC_RESPONSE_PACKET!", e);
+            throw new InvalidPacketException("Failed to parse SERVER_SYNC_REQUEST_PACKET!", e);
         }
     }
 
     @Override
-    public void processSelf(C2SPacketHandler handler) {
-        handler.handleClientSyncResponse(this);
+    public void processSelf(S2CPacketHandler handler) {
+        handler.handleSyncRequest(this);
     }
 
     public static Builder builder() {
@@ -88,8 +88,8 @@ public class ClientSyncResponseC2SPacket extends C2SPacket {
             return this;
         }
 
-        public ClientSyncResponseC2SPacket build() {
-            return new ClientSyncResponseC2SPacket(syncId);
+        public ServerSyncRequestS2CPacket build() {
+            return new ServerSyncRequestS2CPacket(syncId);
         }
     }
 

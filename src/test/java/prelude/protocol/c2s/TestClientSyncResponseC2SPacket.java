@@ -24,29 +24,21 @@ import org.junit.platform.commons.annotation.Testable;
 import prelude.protocol.C2SPacket;
 import prelude.protocol.InvalidPacketException;
 import prelude.protocol.TestC2SPacketHandler;
-import prelude.protocol.packets.c2s.ClientHandshakeC2SPacket;
+import prelude.protocol.packets.c2s.ClientSyncResponseC2SPacket;
 import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Optional;
 
 @Testable
-public class TestClientHandshakeC2SPacket {
+public class TestClientSyncResponseC2SPacket {
     @Test
     public void testClientHandshakePacket() throws IOException {
         C2SPacket.trySetHandler(new TestC2SPacketHandler());
 
-        ClientHandshakeC2SPacket packet = ClientHandshakeC2SPacket.builder()
-                .username("cire3")
-                .resentMajorVersion(5)
-                .resentMinorVersion(0)
-                .resentBuildInteger(500)
-                .clientType(ClientHandshakeC2SPacket.ClientType.DEV)
-                .clientClaimsSelfIsRankedPlayer(true)
-                .enabledMods(new String[]{"preva1l_is_cool", "freelook", "tps"})
-                .build();
+        ClientSyncResponseC2SPacket packet = ClientSyncResponseC2SPacket.builder()
+                .syncId(Integer.MAX_VALUE).build();
 
         byte[] bytes = packet.toBytes();
 
@@ -56,13 +48,12 @@ public class TestClientHandshakeC2SPacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof ClientHandshakeC2SPacket)
-                Assertions.assertEquals(ClientHandshakeC2SPacket.class, optional.get().getClass());
+            if (optional.get() instanceof ClientSyncResponseC2SPacket)
+                Assertions.assertEquals(ClientSyncResponseC2SPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            ClientHandshakeC2SPacket deserialized = (ClientHandshakeC2SPacket) optional.get();
+            ClientSyncResponseC2SPacket deserialized = (ClientSyncResponseC2SPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
-            Assertions.assertArrayEquals(packet.getEnabledMods(), deserialized.getEnabledMods());
 
             EquipOffhandC2SPacket invalidPacket = new EquipOffhandC2SPacket();
             try {

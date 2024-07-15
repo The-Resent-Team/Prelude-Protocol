@@ -35,4 +35,6 @@ public interface S2CPacketHandler {
     void handleTotemUsed(TotemUsedS2CPacket packet);
 
     void handleWaypoints(SetWaypointsS2CPacket packet);
+
+    void handleSyncRequest(ServerSyncRequestS2CPacket packet);
 }

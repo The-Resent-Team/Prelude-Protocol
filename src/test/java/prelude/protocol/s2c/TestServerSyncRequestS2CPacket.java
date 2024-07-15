@@ -16,55 +16,41 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol.c2s;
+package prelude.protocol.s2c;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
-import prelude.protocol.C2SPacket;
 import prelude.protocol.InvalidPacketException;
-import prelude.protocol.TestC2SPacketHandler;
+import prelude.protocol.S2CPacket;
 import prelude.protocol.packets.c2s.ClientHandshakeC2SPacket;
-import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
+import prelude.protocol.packets.s2c.ServerSyncRequestS2CPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Optional;
 
 @Testable
-public class TestClientHandshakeC2SPacket {
+public class TestServerSyncRequestS2CPacket {
     @Test
-    public void testClientHandshakePacket() throws IOException {
-        C2SPacket.trySetHandler(new TestC2SPacketHandler());
-
-        ClientHandshakeC2SPacket packet = ClientHandshakeC2SPacket.builder()
-                .username("cire3")
-                .resentMajorVersion(5)
-                .resentMinorVersion(0)
-                .resentBuildInteger(500)
-                .clientType(ClientHandshakeC2SPacket.ClientType.DEV)
-                .clientClaimsSelfIsRankedPlayer(true)
-                .enabledMods(new String[]{"preva1l_is_cool", "freelook", "tps"})
-                .build();
+    public void testServerSyncRequestS2CPacket() throws IOException {
+        ServerSyncRequestS2CPacket packet = ServerSyncRequestS2CPacket.builder().syncId(Integer.MAX_VALUE).build();
 
         byte[] bytes = packet.toBytes();
-
         try {
-            Optional<C2SPacket> optional = C2SPacket.parsePacket(bytes);
+            Optional<S2CPacket> optional = S2CPacket.parsePacket(bytes);
 
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof ClientHandshakeC2SPacket)
-                Assertions.assertEquals(ClientHandshakeC2SPacket.class, optional.get().getClass());
+            if (optional.get() instanceof ServerSyncRequestS2CPacket)
+                Assertions.assertEquals(ServerSyncRequestS2CPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            ClientHandshakeC2SPacket deserialized = (ClientHandshakeC2SPacket) optional.get();
+            ServerSyncRequestS2CPacket deserialized = (ServerSyncRequestS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
-            Assertions.assertArrayEquals(packet.getEnabledMods(), deserialized.getEnabledMods());
 
-            EquipOffhandC2SPacket invalidPacket = new EquipOffhandC2SPacket();
+            ClientHandshakeC2SPacket invalidPacket = new ClientHandshakeC2SPacket();
             try {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");
