@@ -23,16 +23,16 @@ import prelude.protocol.packets.s2c.*;
 /*
 * Extended by ResentS2CPacketHandler on the client
 * */
-public abstract class S2CPacketHandler {
-    public abstract void handleServerHandshake(ServerHandshakeS2CPacket packet);
+public interface S2CPacketHandler {
+    void handleServerHandshake(ServerHandshakeS2CPacket packet);
 
-    public abstract void handleModStatus(ModStatusS2CPacket packet);
+    void handleModStatus(ModStatusS2CPacket packet);
 
-    public abstract void handleServerTps(ServerTpsS2CPacket packet);
+    void handleServerTps(ServerTpsS2CPacket packet);
 
-    public abstract void handleOffhandUpdate(UpdateOffhandS2CPacket packet);
+    void handleOffhandUpdate(UpdateOffhandS2CPacket packet);
 
-    public abstract void handleTotemUsed(TotemUsedS2CPacket packet);
+    void handleTotemUsed(TotemUsedS2CPacket packet);
 
-    public abstract void handleWaypoints(SetWaypointsS2CPacket packet);
+    void handleWaypoints(SetWaypointsS2CPacket packet);
 }

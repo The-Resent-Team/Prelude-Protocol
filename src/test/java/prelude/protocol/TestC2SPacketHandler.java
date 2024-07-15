@@ -19,14 +19,22 @@
 package prelude.protocol;
 
 import prelude.protocol.packets.c2s.ClientHandshakeC2SPacket;
+import prelude.protocol.packets.c2s.ClientSyncResponseC2SPacket;
 import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
 
-public class TestC2SPacketHandler extends C2SPacketHandler {
+public class TestC2SPacketHandler implements C2SPacketHandler {
+    @Override
     public void handleClientHandshake(ClientHandshakeC2SPacket packet) {
         System.out.println("Client handshake received");
     }
 
+    @Override
     public void handleEquipOffhand(EquipOffhandC2SPacket packet) {
         System.out.println("Equip offhand received");
+    }
+
+    @Override
+    public void handleClientSyncResponse(ClientSyncResponseC2SPacket packet) {
+        System.out.println("Client sync response received");
     }
 }
