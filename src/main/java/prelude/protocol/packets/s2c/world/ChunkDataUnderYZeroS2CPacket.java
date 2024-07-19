@@ -21,7 +21,10 @@ package prelude.protocol.packets.s2c.world;
 import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
 import prelude.protocol.S2CPacketHandler;
+import prelude.protocol.StreamUtils;
+import prelude.protocol.packets.s2c.world.impl.PreludeUndergroundChunk;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -29,13 +32,13 @@ public class ChunkDataUnderYZeroS2CPacket extends S2CPacket {
     private int chunkCoordX;
     private int chunkCoordY;
     private boolean isChunkPreChunk;
-    private UndergroundChunk chunk;
+    private PreludeUndergroundChunk chunk;
 
     public ChunkDataUnderYZeroS2CPacket() {
 
     }
 
-    private ChunkDataUnderYZeroS2CPacket(int chunkCoordX, int chunkCoordY, UndergroundChunk chunk, boolean isChunkPreChunk) {
+    private ChunkDataUnderYZeroS2CPacket(int chunkCoordX, int chunkCoordY, PreludeUndergroundChunk chunk, boolean isChunkPreChunk) {
         this.chunkCoordX = chunkCoordX;
         this.chunkCoordY = chunkCoordY;
         this.chunk = chunk;
@@ -44,7 +47,17 @@ public class ChunkDataUnderYZeroS2CPacket extends S2CPacket {
 
     @Override
     public byte[] toBytes() throws IOException {
-        return new byte[0];
+        ByteArrayOutputStream bao = new ByteArrayOutputStream();
+
+        bao.write(packetId);
+
+        StreamUtils.writeVarInt(chunkCoordX, bao);
+        StreamUtils.writeVarInt(chunkCoordY, bao);
+
+        bao.write(isChunkPreChunk ? 1 : 0);
+        chunk.write(bao);
+
+        return bao.toByteArray();
     }
 
     @Override
@@ -67,10 +80,6 @@ public class ChunkDataUnderYZeroS2CPacket extends S2CPacket {
     }
 
     public static class Builder {
-        // TODO
-    }
-
-    public static class UndergroundChunk {
         // TODO
     }
 }

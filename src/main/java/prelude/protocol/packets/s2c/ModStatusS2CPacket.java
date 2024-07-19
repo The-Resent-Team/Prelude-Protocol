@@ -18,14 +18,12 @@
 
 package prelude.protocol.packets.s2c;
 
-import prelude.protocol.InvalidPacketException;
-import prelude.protocol.S2CPacket;
-import prelude.protocol.S2CPacketHandler;
-import prelude.protocol.StreamUtils;
+import prelude.protocol.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
@@ -49,7 +47,7 @@ public class ModStatusS2CPacket extends S2CPacket {
         bao.write(modIdentifier.length());
         bao.write(modIdentifier.getBytes(StandardCharsets.US_ASCII));
 
-        bao.write(modStatus.value);
+        modStatus.write(bao);
 
         return bao.toByteArray();
     }
@@ -115,7 +113,7 @@ public class ModStatusS2CPacket extends S2CPacket {
         }
     }
 
-    public enum ModStatus {
+    public enum ModStatus implements WriteableObject {
         SUPPORTED(0),
         DISABLE(1);
 
@@ -131,6 +129,11 @@ public class ModStatusS2CPacket extends S2CPacket {
                     return modStatus;
             }
             return null;
+        }
+
+        @Override
+        public void write(OutputStream out) throws IOException {
+            out.write(value);
         }
     }
 

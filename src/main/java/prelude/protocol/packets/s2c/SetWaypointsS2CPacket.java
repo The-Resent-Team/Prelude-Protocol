@@ -18,10 +18,7 @@
 
 package prelude.protocol.packets.s2c;
 
-import prelude.protocol.InvalidPacketException;
-import prelude.protocol.S2CPacket;
-import prelude.protocol.S2CPacketHandler;
-import prelude.protocol.StreamUtils;
+import prelude.protocol.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -46,12 +43,7 @@ public class SetWaypointsS2CPacket extends S2CPacket {
         for (int i = 0; i < waypoints.length; i++) {
             Waypoint waypoint = waypoints[i];
 
-            StreamUtils.writeShort(waypoint.name.length(), bao);
-            bao.write(waypoint.name.getBytes(StandardCharsets.US_ASCII));
-
-            StreamUtils.writeVarInt(waypoint.x, bao);
-            StreamUtils.writeVarInt(waypoint.y, bao);
-            StreamUtils.writeVarInt(waypoint.z, bao);
+            waypoint.write(bao);
 
             if (i != waypoints.length - 1)
                 bao.write(SPLIT.getBytes(StandardCharsets.US_ASCII));
@@ -134,7 +126,7 @@ public class SetWaypointsS2CPacket extends S2CPacket {
         }
     }
 
-    public static class Waypoint {
+    public static class Waypoint implements WriteableObject {
         public final String name;
         public final int x;
         public final int y;
@@ -158,6 +150,16 @@ public class SetWaypointsS2CPacket extends S2CPacket {
         @Override
         public int hashCode() {
             return Objects.hash(name, x, y, z);
+        }
+
+        @Override
+        public void write(OutputStream out) throws IOException {
+            StreamUtils.writeShort(name.length(), out);
+            out.write(name.getBytes(StandardCharsets.US_ASCII));
+
+            StreamUtils.writeVarInt(x, out);
+            StreamUtils.writeVarInt(y, out);
+            StreamUtils.writeVarInt(z, out);
         }
     }
 

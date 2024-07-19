@@ -21,10 +21,12 @@ package prelude.protocol.packets.c2s;
 import prelude.protocol.C2SPacket;
 import prelude.protocol.C2SPacketHandler;
 import prelude.protocol.InvalidPacketException;
+import prelude.protocol.WriteableObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 public class InteractWithOffhandC2SPacket extends C2SPacket {
     private InteractType interactType;
@@ -40,7 +42,7 @@ public class InteractWithOffhandC2SPacket extends C2SPacket {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
         bao.write(packetId);
-        bao.write(interactType.value);
+        interactType.write(bao);
 
         return bao.toByteArray();
     }
@@ -71,7 +73,7 @@ public class InteractWithOffhandC2SPacket extends C2SPacket {
 
     }
 
-    public enum InteractType {
+    public enum InteractType implements WriteableObject {
         HOLD_INTERACT(0),
         BEGIN_INTERACT(1),
         END_INTERACT(2);
@@ -88,6 +90,11 @@ public class InteractWithOffhandC2SPacket extends C2SPacket {
                 }
             }
             return null;
+        }
+
+        @Override
+        public void write(OutputStream out) throws IOException {
+            out.write(value);
         }
     }
 }
