@@ -28,19 +28,17 @@ import java.io.InputStream;
 public class ChunkDataUnderYZeroS2CPacket extends S2CPacket {
     private int chunkCoordX;
     private int chunkCoordY;
-    private int chunkDataSize;
-    private byte[] chunkData;
     private boolean isChunkPreChunk;
+    private UndergroundChunk chunk;
 
     public ChunkDataUnderYZeroS2CPacket() {
 
     }
 
-    private ChunkDataUnderYZeroS2CPacket(int chunkCoordX, int chunkCoordY, int chunkDataSize, byte[] chunkData, boolean isChunkPreChunk) {
+    private ChunkDataUnderYZeroS2CPacket(int chunkCoordX, int chunkCoordY, UndergroundChunk chunk, boolean isChunkPreChunk) {
         this.chunkCoordX = chunkCoordX;
         this.chunkCoordY = chunkCoordY;
-        this.chunkDataSize = chunkDataSize;
-        this.chunkData = chunkData;
+        this.chunk = chunk;
         this.isChunkPreChunk = isChunkPreChunk;
     }
 
@@ -69,6 +67,10 @@ public class ChunkDataUnderYZeroS2CPacket extends S2CPacket {
     }
 
     public static class Builder {
+        // TODO
+    }
 
+    public static class UndergroundChunk {
+        // TODO
     }
 }
