@@ -21,5 +21,5 @@ package prelude.protocol.packets.s2c.world.impl;
 import prelude.protocol.Version;
 
 public class PreludeBlockTypes {
-    public static final PreludeBlockType VOID_AIR = new PreludeBlockType(Version.V1_13, "void_air", -999, null);
+    public static final PreludeBlockType VOID_AIR = PreludeBlockType.ofModern(Version.V1_13, "void_air");
 }

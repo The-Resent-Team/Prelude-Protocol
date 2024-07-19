@@ -18,21 +18,54 @@
 
 package prelude.protocol.packets.s2c.world.impl;
 
+import prelude.protocol.StreamUtils;
+import prelude.protocol.Version;
 import prelude.protocol.WriteableObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 public class PreludeBiome implements WriteableObject {
-//    public static final PreludeBiome DRIP_STONE_CAVES;
+    public final Version version;
+    public final String biomeName;
+    public final int biomeId;
+
+    public static PreludeBiome ofModern(Version version, String biomeName) {
+        return new PreludeBiome(version, biomeName, -999);
+    }
+
+    public static PreludeBiome ofLegacy(Version version, int biomeId) {
+        return new PreludeBiome(version, "", biomeId);
+    }
+
+    private PreludeBiome(Version version, String biomeName, int biomeId) {
+        this.version = version;
+        this.biomeName = biomeName;
+        this.biomeId = biomeId;
+    }
 
     @Override
     public void write(OutputStream out) throws IOException {
+        version.write(out);
 
+        if (version.usesStringIds) {
+            out.write(biomeName.length());
+            out.write(biomeName.getBytes(StandardCharsets.US_ASCII));
+        } else {
+            out.write(biomeId);
+        }
     }
 
-    public static PreludeBiome deserialize(InputStream is) {
-        return null;
+    public static PreludeBiome deserialize(InputStream is) throws IOException {
+        Version version = Version.deserialize(is);
+
+        if (version.usesStringIds) {
+            String biomeName = StreamUtils.readASCII(is.read(), is);
+            return ofModern(version, biomeName);
+        } else {
+            return ofLegacy(version, is.read());
+        }
     }
 }

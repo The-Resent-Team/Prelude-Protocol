@@ -32,7 +32,15 @@ public class PreludeBlockType implements WriteableObject {
     public final int blockId;
     public final PreludeBlockStatePreFlattening state;
 
-    public PreludeBlockType(Version version, String blockName, int blockId, PreludeBlockStatePreFlattening state) {
+    public static PreludeBlockType ofModern(Version version, String blockName) {
+        return new PreludeBlockType(version, blockName, -999, null);
+    }
+
+    public static PreludeBlockType ofLegacy(Version version, int blockId, PreludeBlockStatePreFlattening state) {
+        return new PreludeBlockType(version, "", blockId, state);
+    }
+
+    private PreludeBlockType(Version version, String blockName, int blockId, PreludeBlockStatePreFlattening state) {
         this.version = version;
         this.blockName = blockName;
         this.blockId = blockId;

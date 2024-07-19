@@ -24,7 +24,6 @@ import prelude.protocol.WriteableObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
 
 public class PreludeUndergroundChunk implements WriteableObject {
     private static final int X_MASK = 0b00000000000011111;
