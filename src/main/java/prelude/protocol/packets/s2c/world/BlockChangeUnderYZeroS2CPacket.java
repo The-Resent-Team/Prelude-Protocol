@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol.packets.s2c;
+package prelude.protocol.packets.s2c.world;
 
 import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
@@ -25,34 +25,24 @@ import prelude.protocol.S2CPacketHandler;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class TotemUsedS2CPacket extends S2CPacket {
-    public TotemUsedS2CPacket() {}
-
+public class BlockChangeUnderYZeroS2CPacket extends S2CPacket {
     @Override
     public byte[] toBytes() throws IOException {
-        return new byte[] {(byte) packetId};
-    }
-
-    @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
-        try {
-            if (is.read() != packetId)
-                throw new InvalidPacketException("Packet ID doesn't match with TOTEM_USED_ID (%id%)!"
-                        .replace("%id%", packetId + ""));
-        } catch (InvalidPacketException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse TOTEM_USED_PACKET!", e);
-        }
-    }
-
-    @Override
-    public void processSelf(S2CPacketHandler handler) {
-        handler.handleTotemUsed(this);
+        return new byte[0];
     }
 
     @Override
     public boolean equals(Object packet) {
-        return packet instanceof TotemUsedS2CPacket;
+        return false;
+    }
+
+    @Override
+    public void loadData(InputStream is) throws InvalidPacketException {
+
+    }
+
+    @Override
+    public void processSelf(S2CPacketHandler handler) {
+
     }
 }

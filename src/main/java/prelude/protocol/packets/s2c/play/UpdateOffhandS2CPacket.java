@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol.packets.s2c;
+package prelude.protocol.packets.s2c.play;
 
 import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
@@ -56,9 +56,7 @@ public class UpdateOffhandS2CPacket extends S2CPacket {
     @Override
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if (is.read() != packetId)
-                throw new InvalidPacketException("Packet ID doesn't match with TOTEM_USED_ID (%id%)!"
-                        .replace("%id%", packetId + ""));
+            this.validateOrThrow("UPDATE_OFFHAND_ID", is);
 
             boolean canClientDisregardThis = is.read() != 0;
             String serializedItem = StreamUtils.readASCII(StreamUtils.readShort(is), is);

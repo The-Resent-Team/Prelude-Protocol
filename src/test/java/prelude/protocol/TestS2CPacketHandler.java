@@ -19,6 +19,9 @@
 package prelude.protocol;
 
 import prelude.protocol.packets.s2c.*;
+import prelude.protocol.packets.s2c.play.ServerTpsS2CPacket;
+import prelude.protocol.packets.s2c.play.TotemUsedS2CPacket;
+import prelude.protocol.packets.s2c.play.UpdateOffhandS2CPacket;
 
 public class TestS2CPacketHandler implements S2CPacketHandler {
     @Override

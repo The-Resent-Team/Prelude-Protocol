@@ -53,9 +53,7 @@ public class EquipOffhandC2SPacket extends C2SPacket {
     * */
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if (is.read() != packetId)
-                throw new InvalidPacketException("Packet ID doesn't match with EQUIP_OFFHAND_ID (%id%)!"
-                        .replace("%id%", packetId + ""));
+            this.validateOrThrow("EQUIP_OFFHAND_ID", is);
 
             short slot = (short) StreamUtils.readShort(is);
 

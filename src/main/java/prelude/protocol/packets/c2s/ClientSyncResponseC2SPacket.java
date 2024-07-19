@@ -26,14 +26,13 @@ import prelude.protocol.StreamUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
 
 public class ClientSyncResponseC2SPacket extends C2SPacket {
     private int syncId;
 
     public ClientSyncResponseC2SPacket() {}
 
-    public ClientSyncResponseC2SPacket(int syncId) {
+    private ClientSyncResponseC2SPacket(int syncId) {
         this.syncId = syncId;
     }
 
@@ -59,9 +58,7 @@ public class ClientSyncResponseC2SPacket extends C2SPacket {
     @Override
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if (is.read() != packetId)
-                throw new InvalidPacketException("Packet ID doesn't match with CLIENT_SYNC_RESPONSE_ID (%id%)!"
-                        .replace("%id%", packetId + ""));
+            this.validateOrThrow("CLIENT_SYNC_RESPONSE_ID", is);
 
             this.syncId = StreamUtils.readVarInt(is);
         } catch (InvalidPacketException e) {

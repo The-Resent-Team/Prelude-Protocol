@@ -16,26 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol.packets.s2c;
+package prelude.protocol.packets.c2s;
 
+import prelude.protocol.C2SPacket;
+import prelude.protocol.C2SPacketHandler;
 import prelude.protocol.InvalidPacketException;
-import prelude.protocol.S2CPacket;
-import prelude.protocol.S2CPacketHandler;
-import prelude.protocol.StreamUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ServerSyncRequestS2CPacket extends S2CPacket {
-    private int syncId;
+public class InteractWithOffhandC2SPacket extends C2SPacket {
+    private InteractType interactType;
 
-    public ServerSyncRequestS2CPacket() {
+    public InteractWithOffhandC2SPacket() {}
 
-    }
-
-    private ServerSyncRequestS2CPacket(int syncId) {
-        this.syncId = syncId;
+    private InteractWithOffhandC2SPacket(InteractType interactType) {
+        this.interactType = interactType;
     }
 
     @Override
@@ -43,55 +40,54 @@ public class ServerSyncRequestS2CPacket extends S2CPacket {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
         bao.write(packetId);
-        StreamUtils.writeVarInt(syncId, bao);
+        bao.write(interactType.value);
 
         return bao.toByteArray();
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ServerSyncRequestS2CPacket)) return false;
-        ServerSyncRequestS2CPacket that = (ServerSyncRequestS2CPacket) o;
-        return syncId == that.syncId;
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof InteractWithOffhandC2SPacket)) return false;
+        InteractWithOffhandC2SPacket that = (InteractWithOffhandC2SPacket) object;
+        return interactType == that.interactType;
     }
 
     @Override
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            this.validateOrThrow("SERVER_SYNC_REQUEST_ID", is);
+            this.validateOrThrow("INTERACT_WITH_OFFHAND_ID", is);
 
-            this.syncId = StreamUtils.readVarInt(is);
+            this.interactType = InteractType.of(is.read());
         } catch (InvalidPacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse SERVER_SYNC_REQUEST_PACKET!", e);
+            throw new InvalidPacketException("Failed to parse CLIENT_SYNC_RESPONSE_PACKET!", e);
         }
     }
 
     @Override
-    public void processSelf(S2CPacketHandler handler) {
-        handler.handleSyncRequest(this);
+    public void processSelf(C2SPacketHandler handler) {
+
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
+    public enum InteractType {
+        HOLD_INTERACT(0),
+        BEGIN_INTERACT(1),
+        END_INTERACT(2);
 
-    public static class Builder {
-        private int syncId;
-
-        public Builder syncId(int syncId) {
-            this.syncId = syncId;
-            return this;
+        public final int value;
+        InteractType(int value) {
+            this.value = value;
         }
 
-        public ServerSyncRequestS2CPacket build() {
-            return new ServerSyncRequestS2CPacket(syncId);
+        public static InteractType of(int value) {
+            for (InteractType type : values()) {
+                if (type.value == value) {
+                    return type;
+                }
+            }
+            return null;
         }
-    }
-
-    public int getSyncId() {
-        return syncId;
     }
 }

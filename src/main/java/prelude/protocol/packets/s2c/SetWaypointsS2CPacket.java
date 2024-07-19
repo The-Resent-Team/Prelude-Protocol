@@ -63,9 +63,7 @@ public class SetWaypointsS2CPacket extends S2CPacket {
     @Override
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if (is.read() != packetId)
-                throw new InvalidPacketException("Packet ID doesn't match with WAY (%id%)!"
-                        .replace("%id%", packetId + ""));
+            this.validateOrThrow("SET_WAYPOINTS_ID", is);
 
             StringBuilder waypointsString = new StringBuilder();
 

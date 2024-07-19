@@ -25,7 +25,7 @@ import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
 import prelude.protocol.TestS2CPacketHandler;
 import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
-import prelude.protocol.packets.s2c.TotemUsedS2CPacket;
+import prelude.protocol.packets.s2c.play.TotemUsedS2CPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

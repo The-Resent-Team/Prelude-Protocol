@@ -16,28 +16,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol;
+package prelude.protocol.packets.s2c.world;
 
-import prelude.protocol.packets.s2c.*;
-import prelude.protocol.packets.s2c.play.ServerTpsS2CPacket;
-import prelude.protocol.packets.s2c.play.TotemUsedS2CPacket;
-import prelude.protocol.packets.s2c.play.UpdateOffhandS2CPacket;
+import prelude.protocol.InvalidPacketException;
+import prelude.protocol.S2CPacket;
+import prelude.protocol.S2CPacketHandler;
 
-/*
-* Extended by ResentS2CPacketHandler on the client
-* */
-public interface S2CPacketHandler {
-    void handleServerHandshake(ServerHandshakeS2CPacket packet);
+import java.io.IOException;
+import java.io.InputStream;
 
-    void handleModStatus(ModStatusS2CPacket packet);
+public class MultiBlockChangeUnderYZeroS2CPacket extends S2CPacket {
+    @Override
+    public byte[] toBytes() throws IOException {
+        return new byte[0];
+    }
 
-    void handleServerTps(ServerTpsS2CPacket packet);
+    @Override
+    public boolean equals(Object packet) {
+        return false;
+    }
 
-    void handleOffhandUpdate(UpdateOffhandS2CPacket packet);
+    @Override
+    public void loadData(InputStream is) throws InvalidPacketException {
 
-    void handleTotemUsed(TotemUsedS2CPacket packet);
+    }
 
-    void handleWaypoints(SetWaypointsS2CPacket packet);
+    @Override
+    public void processSelf(S2CPacketHandler handler) {
 
-    void handleSyncRequest(ServerSyncRequestS2CPacket packet);
+    }
 }

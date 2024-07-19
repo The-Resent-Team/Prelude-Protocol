@@ -37,7 +37,7 @@ public class ServerHandshakeS2CPacket extends S2CPacket {
 
     public ServerHandshakeS2CPacket() {}
 
-    public ServerHandshakeS2CPacket(int preludeMajorVersion, int preludeMinorVersion, int preludePatchVersion, int serverMajorVersion, int serverMinorVersion, int serverPatchVersion) {
+    private ServerHandshakeS2CPacket(int preludeMajorVersion, int preludeMinorVersion, int preludePatchVersion, int serverMajorVersion, int serverMinorVersion, int serverPatchVersion) {
         this.preludeMajorVersion = preludeMajorVersion;
         this.preludeMinorVersion = preludeMinorVersion;
         this.preludePatchVersion = preludePatchVersion;
@@ -65,9 +65,7 @@ public class ServerHandshakeS2CPacket extends S2CPacket {
     @Override
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if (is.read() != packetId)
-                throw new InvalidPacketException("Packet ID doesn't match with SERVER_HANDSHAKE_ID (%id%)!"
-                        .replace("%id%", packetId + ""));
+            this.validateOrThrow("SERVER_HANDSHAKE_ID", is);
 
             int preludeMajorVersion = is.read();
             int preludeMinorVersion = is.read();
@@ -110,43 +108,43 @@ public class ServerHandshakeS2CPacket extends S2CPacket {
     }
 
     public static class Builder {
-        private byte preludeMajorVersion = -1;
-        private byte preludeMinorVersion = -1;
-        private byte preludePatchVersion = -1;
+        private int preludeMajorVersion = -1;
+        private int preludeMinorVersion = -1;
+        private int preludePatchVersion = -1;
 
-        private byte serverMajorVersion = -1;
-        private byte serverMinorVersion = -1;
-        private byte serverPatchVersion = -1;
+        private int serverMajorVersion = -1;
+        private int serverMinorVersion = -1;
+        private int serverPatchVersion = -1;
 
         private Builder() {}
 
         public Builder preludeMajorVersion(int preludeMajorVersion) {
-            this.preludeMajorVersion = (byte) preludeMajorVersion;
+            this.preludeMajorVersion = (int) preludeMajorVersion;
             return this;
         }
 
         public Builder preludeMinorVersion(int preludeMinorVersion) {
-            this.preludeMinorVersion = (byte) preludeMinorVersion;
+            this.preludeMinorVersion = (int) preludeMinorVersion;
             return this;
         }
 
         public Builder preludePatchVersion(int preludePatchVersion) {
-            this.preludePatchVersion = (byte) preludePatchVersion;
+            this.preludePatchVersion = (int) preludePatchVersion;
             return this;
         }
 
         public Builder serverMajorVersion(int serverMajorVersion) {
-            this.serverMajorVersion = (byte) serverMajorVersion;
+            this.serverMajorVersion = (int) serverMajorVersion;
             return this;
         }
 
         public Builder serverMinorVersion(int serverMinorVersion) {
-            this.serverMinorVersion = (byte) serverMinorVersion;
+            this.serverMinorVersion = (int) serverMinorVersion;
             return this;
         }
 
         public Builder serverPatchVersion(int serverPatchVersion) {
-            this.serverPatchVersion = (byte) serverPatchVersion;
+            this.serverPatchVersion = (int) serverPatchVersion;
             return this;
         }
 

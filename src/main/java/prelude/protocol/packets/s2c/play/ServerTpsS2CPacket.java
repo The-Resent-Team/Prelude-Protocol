@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol.packets.s2c;
+package prelude.protocol.packets.s2c.play;
 
 import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
@@ -31,7 +31,7 @@ import java.io.InputStream;
 * The Server TPS is stored as double in the actual
 * bukkit server code, and in this packet we assume
 * that the characteristic of the TPS does not
-* exceed 127 (it really shouldn't).
+* exceed 255 (it really shouldn't).
 * We also make the assumption that the mantissa of
 * the tps does not need more than 16 bits / 2 bytes
 * to encode. These assumptions are made because
@@ -41,13 +41,13 @@ import java.io.InputStream;
 * 3) these assumptions make it easier for the client
 * */
 public class ServerTpsS2CPacket extends S2CPacket {
-    // we will just assume that the characteristic does reach over 127 (max value of a java byte)
-    private byte characteristic;
+    // we will just assume that the characteristic does reach over 255
+    private int characteristic;
     private short mantissa;
 
     public ServerTpsS2CPacket() {}
 
-    private ServerTpsS2CPacket(byte characteristic, short mantissa) {
+    private ServerTpsS2CPacket(int characteristic, short mantissa) {
         this.characteristic = characteristic;
         this.mantissa = mantissa;
     }
@@ -66,11 +66,9 @@ public class ServerTpsS2CPacket extends S2CPacket {
     @Override
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if (is.read() != packetId)
-                throw new InvalidPacketException("Packet ID doesn't match with SERVER_TPS_ID (%id%)!"
-                        .replace("%id%", packetId + ""));
+            this.validateOrThrow("SERVER_TPS_ID", is);
 
-            byte characteristic = (byte) is.read();
+            int characteristic = (int) is.read();
             short mantissa = (short) StreamUtils.readShort(is);
 
             // how the actual hell would you get negative tps
@@ -104,11 +102,11 @@ public class ServerTpsS2CPacket extends S2CPacket {
     }
 
     public static class Builder {
-        private byte characteristic = -1;
+        private int characteristic = -1;
         private short mantissa = -1;
 
         public Builder characteristic(int characteristic) {
-            this.characteristic = (byte) characteristic;
+            this.characteristic = (int) characteristic;
             return this;
         }
 
@@ -125,7 +123,7 @@ public class ServerTpsS2CPacket extends S2CPacket {
         }
     }
 
-    public byte getCharacteristic() {
+    public int getCharacteristic() {
         return characteristic;
     }
 

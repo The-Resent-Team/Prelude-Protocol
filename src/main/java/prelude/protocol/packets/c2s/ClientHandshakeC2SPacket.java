@@ -94,9 +94,7 @@ public final class ClientHandshakeC2SPacket extends C2SPacket {
 
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if (is.read() != packetId)
-                throw new InvalidPacketException("Packet ID doesn't match with CLIENT_HANDSHAKE_ID (%id%)!"
-                        .replace("%id%", packetId + ""));
+            this.validateOrThrow("CLIENT_HANDSHAKE_ID", is);
 
             String username = StreamUtils.readASCII(is.read(), is);
             int major = is.read();

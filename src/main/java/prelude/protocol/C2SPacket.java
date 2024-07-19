@@ -21,6 +21,7 @@ package prelude.protocol;
 import prelude.protocol.packets.c2s.ClientHandshakeC2SPacket;
 import prelude.protocol.packets.c2s.ClientSyncResponseC2SPacket;
 import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
+import prelude.protocol.packets.c2s.InteractWithOffhandC2SPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -38,6 +39,7 @@ public abstract class C2SPacket extends Packet<C2SPacketHandler> {
         registerC2SPacket(ClientHandshakeC2SPacket.class);
         registerC2SPacket(EquipOffhandC2SPacket.class);
         registerC2SPacket(ClientSyncResponseC2SPacket.class);
+        registerC2SPacket(InteractWithOffhandC2SPacket.class);
     }
 
     protected C2SPacket() {

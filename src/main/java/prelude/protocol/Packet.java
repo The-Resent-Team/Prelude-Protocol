@@ -32,4 +32,11 @@ public abstract class Packet<E> {
     public int getPacketId() {
         return packetId;
     }
+
+    protected void validateOrThrow(String packetIdAsString, InputStream is) throws IOException, InvalidPacketException {
+        if (is.read() != packetId)
+            throw new InvalidPacketException("Packet ID doesn't match with %packet_id_as_string% (%id%)!"
+                    .replace("%id%", packetId + "")
+                    .replace("%packet_id_as_string%", packetIdAsString));
+    }
 }

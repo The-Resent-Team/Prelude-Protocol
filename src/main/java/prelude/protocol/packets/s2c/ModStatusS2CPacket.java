@@ -57,9 +57,7 @@ public class ModStatusS2CPacket extends S2CPacket {
     @Override
     public void loadData(InputStream is) throws InvalidPacketException {
         try {
-            if (is.read() != packetId)
-                throw new InvalidPacketException("Packet ID doesn't match with MOD_STATUS_ID (%id%)!"
-                        .replace("%id%", packetId + ""));
+            this.validateOrThrow("MOD_STATUS_ID", is);
 
             String modId = StreamUtils.readASCII(is.read(), is);
             ModStatus modStatus = ModStatus.from((byte) is.read());
@@ -121,10 +119,10 @@ public class ModStatusS2CPacket extends S2CPacket {
         SUPPORTED(0),
         DISABLE(1);
 
-        public final byte value;
+        public final int value;
 
         ModStatus(int value) {
-            this.value = (byte) value;
+            this.value = (int) value;
         }
 
         public static ModStatus from(byte value) {
