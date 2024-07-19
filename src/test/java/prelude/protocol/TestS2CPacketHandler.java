@@ -22,6 +22,7 @@ import prelude.protocol.packets.s2c.*;
 import prelude.protocol.packets.s2c.play.ServerTpsS2CPacket;
 import prelude.protocol.packets.s2c.play.TotemUsedS2CPacket;
 import prelude.protocol.packets.s2c.play.UpdateOffhandS2CPacket;
+import prelude.protocol.packets.s2c.world.ChunkDataUnderYZeroS2CPacket;
 
 public class TestS2CPacketHandler implements S2CPacketHandler {
     @Override
@@ -57,5 +58,10 @@ public class TestS2CPacketHandler implements S2CPacketHandler {
     @Override
     public void handleSyncRequest(ServerSyncRequestS2CPacket packet) {
         System.out.println("Sync request received");
+    }
+
+    @Override
+    public void handleChunkDataUnderYZero(ChunkDataUnderYZeroS2CPacket packet) {
+        System.out.println("Chunk data under Y zero received");
     }
 }

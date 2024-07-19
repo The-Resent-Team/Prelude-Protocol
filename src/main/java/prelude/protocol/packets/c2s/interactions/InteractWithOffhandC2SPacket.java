@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol.packets.c2s;
+package prelude.protocol.packets.c2s.interactions;
 
 import prelude.protocol.C2SPacket;
 import prelude.protocol.C2SPacketHandler;
@@ -70,13 +70,29 @@ public class InteractWithOffhandC2SPacket extends C2SPacket {
 
     @Override
     public void processSelf(C2SPacketHandler handler) {
+        handler.handleInteractWithOffhand(this);
+    }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private InteractType interactType;
+
+        public Builder interactType(InteractType interactType) {
+            this.interactType = interactType;
+            return this;
+        }
+
+        public InteractWithOffhandC2SPacket build() {
+            return new InteractWithOffhandC2SPacket(interactType);
+        }
     }
 
     public enum InteractType implements WriteableObject {
-        HOLD_INTERACT(0),
-        BEGIN_INTERACT(1),
-        END_INTERACT(2);
+        BEGIN_INTERACT(0),
+        END_INTERACT(1);
 
         public final int value;
         InteractType(int value) {

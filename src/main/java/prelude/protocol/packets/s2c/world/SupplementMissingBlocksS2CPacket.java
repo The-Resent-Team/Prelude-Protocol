@@ -16,27 +16,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol.packets.s2c.world.impl;
+package prelude.protocol.packets.s2c.world;
 
-import prelude.protocol.WriteableObject;
+import prelude.protocol.InvalidPacketException;
+import prelude.protocol.S2CPacket;
+import prelude.protocol.S2CPacketHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
-public class PreludeBlockStatePreFlattening implements WriteableObject {
-    public final int subId;
-
-    public PreludeBlockStatePreFlattening(final int subId) {
-        this.subId = subId;
+public class SupplementMissingBlocksS2CPacket extends S2CPacket {
+    @Override
+    public byte[] toBytes() throws IOException {
+        return new byte[0];
     }
 
     @Override
-    public void write(OutputStream out) throws IOException {
-        out.write(subId);
+    public boolean equals(Object packet) {
+        return false;
     }
 
-    public static PreludeBlockStatePreFlattening deserialize(InputStream is) throws IOException {
-        return new PreludeBlockStatePreFlattening(is.read());
+    @Override
+    public void loadData(InputStream is) throws InvalidPacketException {
+
+    }
+
+    @Override
+    public void processSelf(S2CPacketHandler handler) {
+
     }
 }

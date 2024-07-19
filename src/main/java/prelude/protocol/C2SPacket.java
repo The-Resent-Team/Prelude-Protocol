@@ -21,7 +21,9 @@ package prelude.protocol;
 import prelude.protocol.packets.c2s.ClientHandshakeC2SPacket;
 import prelude.protocol.packets.c2s.ClientSyncResponseC2SPacket;
 import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
-import prelude.protocol.packets.c2s.InteractWithOffhandC2SPacket;
+import prelude.protocol.packets.c2s.interactions.AttemptPlaceAboveGroundC2SPacket;
+import prelude.protocol.packets.c2s.interactions.AttemptPlaceBelowGroundC2SPacket;
+import prelude.protocol.packets.c2s.interactions.InteractWithOffhandC2SPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -40,6 +42,8 @@ public abstract class C2SPacket extends Packet<C2SPacketHandler> {
         registerC2SPacket(EquipOffhandC2SPacket.class);
         registerC2SPacket(ClientSyncResponseC2SPacket.class);
         registerC2SPacket(InteractWithOffhandC2SPacket.class);
+        registerC2SPacket(AttemptPlaceAboveGroundC2SPacket.class);
+        registerC2SPacket(AttemptPlaceBelowGroundC2SPacket.class);
     }
 
     protected C2SPacket() {

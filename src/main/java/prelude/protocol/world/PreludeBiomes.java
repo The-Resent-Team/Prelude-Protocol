@@ -16,10 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol.packets.s2c.world.impl;
+package prelude.protocol.world;
 
-import static prelude.protocol.packets.s2c.world.impl.PreludeBiome.ofLegacy;
-import static prelude.protocol.packets.s2c.world.impl.PreludeBiome.ofModern;
+import static prelude.protocol.world.PreludeBiome.ofLegacy;
+import static prelude.protocol.world.PreludeBiome.ofModern;
 
 import static prelude.protocol.Version.*;
 
@@ -109,6 +109,39 @@ public class PreludeBiomes {
      * Mesa Plateau
      * */
     public static final PreludeBiome MESA_CLEAR_ROCK = ofLegacy(V1_8, 0x27);
+
+
+    public static final PreludeBiome WARM_OCEAN = ofModern(V1_13, "warm_ocean");
+    /**+
+     * Removed in 1.18-21w43a (why??)
+     * */
+    public static final PreludeBiome DEEP_WARM_OCEAN = ofModern(V1_13, "deep_warm_ocean");
+    public static final PreludeBiome LUKEWARM_OCEAN = ofModern(V1_13, "lukewarm_ocean");
+    public static final PreludeBiome DEEP_LUKEWARM_OCEAN = ofModern(V1_13, "deep_lukewarm_ocean");
+    public static final PreludeBiome COLD_OCEAN = ofModern(V1_13, "cold_ocean");
+    public static final PreludeBiome DEEP_COLD_OCEAN = ofModern(V1_13, "deep_cold_ocean");
+    public static final PreludeBiome DEEP_FROZEN_OCEAN = ofModern(V1_13, "deep_frozen_ocean");
+
+    public static final PreludeBiome DRIPSTONE_CAVES = ofModern(V1_17, "dripstone_caves");
+    public static final PreludeBiome LUSH_CAVES = ofModern(V1_17, "lush_caves");
+
+    public static final PreludeBiome MEADOW = ofModern(V1_18, "meadow");
+    public static final PreludeBiome GROVE = ofModern(V1_18, "grove");
+    public static final PreludeBiome SNOWY_SLOPES = ofModern(V1_18, "snowy_slopes");
+    public static final PreludeBiome JAGGED_PEAKS = ofModern(V1_18, "jagged_peaks");
+    public static final PreludeBiome FROZEN_PEAKS = ofModern(V1_18, "frozen_peaks");
+    public static final PreludeBiome STONY_PEAKS = ofModern(V1_18, "stony_peaks");
+
+    public static final PreludeBiome DEEP_DARK = ofModern(V1_19, "deep_dark");
+    public static final PreludeBiome MANGROVE_SWAMP = ofModern(V1_19, "mangove_swamp");
+
+    public static final PreludeBiome CHERRY_GROVE = ofModern(V1_20, "cherry_grove");
+
+    // ----------------------------- NETHER BIOMES -----------------------------
+    public static final PreludeBiome SOUL_SAND_VALLEY = ofModern(V1_16, "soulsand_valley");
+    public static final PreludeBiome CRIMSON_FOREST = ofModern(V1_16, "crimson_forest");
+    public static final PreludeBiome WARPED_FOREST = ofModern(V1_16, "warped_forest");
+    public static final PreludeBiome BASALT_DELTA = ofModern(V1_16, "basalt_deltas");
 
     // ----------------------------- MUTATED BIOMES -----------------------------
     // these biomes are not in the needed biomes to visit list
@@ -223,4 +256,30 @@ public class PreludeBiomes {
      * Mesa Plateau M
      * */
     public static final PreludeBiome MUTATED_MESA_CLEAR_ROCK = ofLegacy(V1_8, 0xA6);
+
+    // ----------------------------- OTHER BIOMES -----------------------------
+    /**+
+     * The main End island (the big one in the middle uk?)
+     * */
+    public static final PreludeBiome THE_END = ofModern(V1_13, "the_end");
+
+    /**+
+     * Small End Islands
+     * */
+    public static final PreludeBiome THE_END_FLOATING_ISLANDS = ofModern(V1_13, "small_end_islands");
+
+    /**+
+     * End Highlands
+     * */
+    public static final PreludeBiome THE_END_HIGHLANDS = ofModern(V1_13, "end_highlands");
+
+    /**+
+     * End Midlands
+     * */
+    public static final PreludeBiome THE_END_MIDLANDS = ofModern(V1_13, "end_midlands");
+
+    /**+
+     * End Barrens
+     * */
+    public static final PreludeBiome THE_END_BARRENS = ofModern(V1_13, "end_barrens");
 }

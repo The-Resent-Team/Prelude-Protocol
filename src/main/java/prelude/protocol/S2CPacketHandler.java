@@ -22,6 +22,7 @@ import prelude.protocol.packets.s2c.*;
 import prelude.protocol.packets.s2c.play.ServerTpsS2CPacket;
 import prelude.protocol.packets.s2c.play.TotemUsedS2CPacket;
 import prelude.protocol.packets.s2c.play.UpdateOffhandS2CPacket;
+import prelude.protocol.packets.s2c.world.ChunkDataUnderYZeroS2CPacket;
 
 /*
 * Extended by ResentS2CPacketHandler on the client
@@ -40,4 +41,6 @@ public interface S2CPacketHandler {
     void handleWaypoints(SetWaypointsS2CPacket packet);
 
     void handleSyncRequest(ServerSyncRequestS2CPacket packet);
+
+    void handleChunkDataUnderYZero(ChunkDataUnderYZeroS2CPacket packet);
 }

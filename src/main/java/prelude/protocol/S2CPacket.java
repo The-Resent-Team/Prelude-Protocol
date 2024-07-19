@@ -22,6 +22,7 @@ import prelude.protocol.packets.s2c.*;
 import prelude.protocol.packets.s2c.play.ServerTpsS2CPacket;
 import prelude.protocol.packets.s2c.play.TotemUsedS2CPacket;
 import prelude.protocol.packets.s2c.play.UpdateOffhandS2CPacket;
+import prelude.protocol.packets.s2c.world.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -43,6 +44,11 @@ public abstract class S2CPacket extends Packet<S2CPacketHandler> {
         registerS2CPacket(TotemUsedS2CPacket.class);
         registerS2CPacket(SetWaypointsS2CPacket.class);
         registerS2CPacket(ServerSyncRequestS2CPacket.class);
+        registerS2CPacket(ChunkDataBulkUnderYZeroS2CPacket.class);
+        registerS2CPacket(ChunkDataUnderYZeroS2CPacket.class);
+        registerS2CPacket(MultiBlockChangeUnderYZeroS2CPacket.class);
+        registerS2CPacket(BlockChangeUnderYZeroS2CPacket.class);
+        registerS2CPacket(SupplementMissingBlocksS2CPacket.class);
     }
 
     protected S2CPacket() {

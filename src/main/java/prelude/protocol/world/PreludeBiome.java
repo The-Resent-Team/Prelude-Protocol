@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol.packets.s2c.world.impl;
+package prelude.protocol.world;
 
 import prelude.protocol.StreamUtils;
 import prelude.protocol.Version;

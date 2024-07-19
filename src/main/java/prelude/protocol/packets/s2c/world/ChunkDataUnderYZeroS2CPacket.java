@@ -22,7 +22,7 @@ import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
 import prelude.protocol.S2CPacketHandler;
 import prelude.protocol.StreamUtils;
-import prelude.protocol.packets.s2c.world.impl.PreludeUndergroundChunk;
+import prelude.protocol.world.PreludeUndergroundChunk;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -30,7 +30,7 @@ import java.io.InputStream;
 
 public class ChunkDataUnderYZeroS2CPacket extends S2CPacket {
     private int chunkCoordX;
-    private int chunkCoordY;
+    private int chunkCoordZ;
     private boolean isChunkPreChunk;
     private PreludeUndergroundChunk chunk;
 
@@ -38,9 +38,9 @@ public class ChunkDataUnderYZeroS2CPacket extends S2CPacket {
 
     }
 
-    private ChunkDataUnderYZeroS2CPacket(int chunkCoordX, int chunkCoordY, PreludeUndergroundChunk chunk, boolean isChunkPreChunk) {
+    private ChunkDataUnderYZeroS2CPacket(int chunkCoordX, int chunkCoordZ, PreludeUndergroundChunk chunk, boolean isChunkPreChunk) {
         this.chunkCoordX = chunkCoordX;
-        this.chunkCoordY = chunkCoordY;
+        this.chunkCoordZ = chunkCoordZ;
         this.chunk = chunk;
         this.isChunkPreChunk = isChunkPreChunk;
     }
@@ -52,7 +52,7 @@ public class ChunkDataUnderYZeroS2CPacket extends S2CPacket {
         bao.write(packetId);
 
         StreamUtils.writeVarInt(chunkCoordX, bao);
-        StreamUtils.writeVarInt(chunkCoordY, bao);
+        StreamUtils.writeVarInt(chunkCoordZ, bao);
 
         bao.write(isChunkPreChunk ? 1 : 0);
         chunk.write(bao);
@@ -67,12 +67,23 @@ public class ChunkDataUnderYZeroS2CPacket extends S2CPacket {
 
     @Override
     public void loadData(InputStream is) throws InvalidPacketException {
+        try {
+            this.validateOrThrow("CHUNK_DATA_UNDER_Y_ZERO_ID", is);
 
+            this.chunkCoordX = StreamUtils.readVarInt(is);
+            this.chunkCoordZ = StreamUtils.readVarInt(is);
+            this.isChunkPreChunk = is.read() != 0;
+            this.chunk = PreludeUndergroundChunk.deserialize(is);
+        } catch (InvalidPacketException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new InvalidPacketException("Failed to parse CHUNK_DATA_UNDER_Y_ZERO_PACKET!", e);
+        }
     }
 
     @Override
     public void processSelf(S2CPacketHandler handler) {
-
+        handler.handleChunkDataUnderYZero(this);
     }
 
     public static Builder builder() {
@@ -80,6 +91,33 @@ public class ChunkDataUnderYZeroS2CPacket extends S2CPacket {
     }
 
     public static class Builder {
-        // TODO
+        private int chunkCoordX;
+        private int chunkCoordZ;
+        private boolean isChunkPreChunk;
+        private PreludeUndergroundChunk chunk;
+
+        public Builder chunkCoordX(int chunkCoordX) {
+            this.chunkCoordX = chunkCoordX;
+            return this;
+        }
+
+        public Builder chunkCoordZ(int chunkCoordZ) {
+            this.chunkCoordZ = chunkCoordZ;
+            return this;
+        }
+
+        public Builder isChunkPreChunk(boolean isChunkPreChunk) {
+            this.isChunkPreChunk = isChunkPreChunk;
+            return this;
+        }
+
+        public Builder chunk(PreludeUndergroundChunk chunk) {
+            this.chunk = chunk;
+            return this;
+        }
+
+        public ChunkDataUnderYZeroS2CPacket build() {
+            return new ChunkDataUnderYZeroS2CPacket(chunkCoordX, chunkCoordZ, chunk, isChunkPreChunk);
+        }
     }
 }

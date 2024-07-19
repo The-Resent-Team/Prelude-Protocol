@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol.packets.s2c.world.impl;
+package prelude.protocol.world;
 
 import prelude.protocol.StreamUtils;
 import prelude.protocol.WriteableObject;
@@ -64,7 +64,6 @@ public class PreludeUndergroundChunk implements WriteableObject {
         for (int x = 0; x < 16; x++)
             for (int y = 0; y < 16; y++) {
                 for (int z = 0; z < 64; z++) {
-                    StreamUtils.writeVarInt((x << X_SHIFT) + (z << Z_SHIFT) + (y << Y_SHIFT), out);
                     blocks[x][y][z].write(out);
                 }
 
@@ -83,11 +82,6 @@ public class PreludeUndergroundChunk implements WriteableObject {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 for (int k = 0; k < 64; k++) {
-                    int serialized = StreamUtils.readVarInt(is);
-                    int x = (serialized & X_MASK) >> X_SHIFT;
-                    int z = (serialized & Z_MASK) >> Z_SHIFT;
-                    int y = (serialized & Y_MASK) >> Y_SHIFT;
-
                     PreludeBlockType block = PreludeBlockType.deserialize(is);
 
                     blocks[i][j][k] = block;
