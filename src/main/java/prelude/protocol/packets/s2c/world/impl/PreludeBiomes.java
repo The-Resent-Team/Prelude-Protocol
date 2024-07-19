@@ -18,8 +18,6 @@
 
 package prelude.protocol.packets.s2c.world.impl;
 
-import prelude.protocol.Version;
-
 import static prelude.protocol.packets.s2c.world.impl.PreludeBiome.ofLegacy;
 import static prelude.protocol.packets.s2c.world.impl.PreludeBiome.ofModern;
 
@@ -33,84 +31,84 @@ public class PreludeBiomes {
     public static final PreludeBiome EXTREME_HILLS = ofLegacy(V1_8, 0x03);
     public static final PreludeBiome FOREST = ofLegacy(V1_8, 0x04);
     public static final PreludeBiome TAIGA = ofLegacy(V1_8, 0x05);
-    PreludeBiome SWAMPLAND = ofLegacy(V1_8, 0x06);
-    PreludeBiome RIVER = ofLegacy(V1_8, 0x07);
+    public static final PreludeBiome SWAMPLAND = ofLegacy(V1_8, 0x06);
+    public static final PreludeBiome RIVER = ofLegacy(V1_8, 0x07);
 
     /**+
      * The Nether
      * */
-    PreludeBiome HELL = ofLegacy(V1_8, 0x08);
+    public static final PreludeBiome HELL = ofLegacy(V1_8, 0x08);
 
     /**+
      * The End
      * */
-    PreludeBiome SKY = ofLegacy(V1_8, 0x09);
-    PreludeBiome FROZEN_OCEAN = ofLegacy(V1_8, 0x0A);
-    PreludeBiome FROZEN_RIVER = ofLegacy(V1_8, 0x0B);
+    public static final PreludeBiome SKY = ofLegacy(V1_8, 0x09);
+    public static final PreludeBiome FROZEN_OCEAN = ofLegacy(V1_8, 0x0A);
+    public static final PreludeBiome FROZEN_RIVER = ofLegacy(V1_8, 0x0B);
 
     /**+
      * Ice Plains
      * */
-    PreludeBiome ICE_FLATS = ofLegacy(V1_8, 0x0C);
-    PreludeBiome ICE_MOUNTAINS = ofLegacy(V1_8, 0x0D);
-    PreludeBiome MUSHROOM_ISLAND = ofLegacy(V1_8, 0x0E);
-    PreludeBiome MUSHROOM_ISLAND_SHORE = ofLegacy(V1_8, 0x0F);
+    public static final PreludeBiome ICE_FLATS = ofLegacy(V1_8, 0x0C);
+    public static final PreludeBiome ICE_MOUNTAINS = ofLegacy(V1_8, 0x0D);
+    public static final PreludeBiome MUSHROOM_ISLAND = ofLegacy(V1_8, 0x0E);
+    public static final PreludeBiome MUSHROOM_ISLAND_SHORE = ofLegacy(V1_8, 0x0F);
 
     /**+
      * Beach
      * */
-    PreludeBiome BEACHES = ofLegacy(V1_8, 0x10);
-    PreludeBiome DESERT_HILLS = ofLegacy(V1_8, 0x11);
-    PreludeBiome FOREST_HILLS = ofLegacy(V1_8, 0x12);
-    PreludeBiome TAIGA_HILLS = ofLegacy(V1_8, 0x13);
-    PreludeBiome SMALLER_EXTREME_HILLS = ofLegacy(V1_8, 0x14);
-    PreludeBiome JUNGLE = ofLegacy(V1_8, 0x15);
-    PreludeBiome JUNGLE_HILLS = ofLegacy(V1_8, 0x16);
-    PreludeBiome JUNGLE_EDGE = ofLegacy(V1_8, 0x17);
-    PreludeBiome DEEP_OCEAN = ofLegacy(V1_8, 0x18);
-    PreludeBiome STONE_BEACH = ofLegacy(V1_8, 0x19);
-    PreludeBiome COLD_BEACH = ofLegacy(V1_8, 0x1A);
-    PreludeBiome BIRCH_FOREST = ofLegacy(V1_8, 0x1B);
-    PreludeBiome BIRCH_FOREST_HILLS = ofLegacy(V1_8, 0x1C);
-    PreludeBiome ROOFED_FOREST = ofLegacy(V1_8, 0x1D);
+    public static final PreludeBiome BEACHES = ofLegacy(V1_8, 0x10);
+    public static final PreludeBiome DESERT_HILLS = ofLegacy(V1_8, 0x11);
+    public static final PreludeBiome FOREST_HILLS = ofLegacy(V1_8, 0x12);
+    public static final PreludeBiome TAIGA_HILLS = ofLegacy(V1_8, 0x13);
+    public static final PreludeBiome SMALLER_EXTREME_HILLS = ofLegacy(V1_8, 0x14);
+    public static final PreludeBiome JUNGLE = ofLegacy(V1_8, 0x15);
+    public static final PreludeBiome JUNGLE_HILLS = ofLegacy(V1_8, 0x16);
+    public static final PreludeBiome JUNGLE_EDGE = ofLegacy(V1_8, 0x17);
+    public static final PreludeBiome DEEP_OCEAN = ofLegacy(V1_8, 0x18);
+    public static final PreludeBiome STONE_BEACH = ofLegacy(V1_8, 0x19);
+    public static final PreludeBiome COLD_BEACH = ofLegacy(V1_8, 0x1A);
+    public static final PreludeBiome BIRCH_FOREST = ofLegacy(V1_8, 0x1B);
+    public static final PreludeBiome BIRCH_FOREST_HILLS = ofLegacy(V1_8, 0x1C);
+    public static final PreludeBiome ROOFED_FOREST = ofLegacy(V1_8, 0x1D);
 
     /**+
      * Cold Taiga
      * */
-    PreludeBiome TAIGA_COLD = ofLegacy(V1_8, 0x1E);
+    public static final PreludeBiome TAIGA_COLD = ofLegacy(V1_8, 0x1E);
 
     /**+
      * Cold Taiga Hills
      * */
-    PreludeBiome TAIGA_COLD_HILLS = ofLegacy(V1_8, 0x1F);
+    public static final PreludeBiome TAIGA_COLD_HILLS = ofLegacy(V1_8, 0x1F);
 
     /**+
      * Mega Taiga
      * */
-    PreludeBiome REDWOOD_TAIGA = ofLegacy(V1_8, 0x20);
+    public static final PreludeBiome REDWOOD_TAIGA = ofLegacy(V1_8, 0x20);
 
     /**+
      * Mega Taiga Hills
      * */
-    PreludeBiome REDWOOD_TAIGA_HILLS = ofLegacy(V1_8, 0x21);
+    public static final PreludeBiome REDWOOD_TAIGA_HILLS = ofLegacy(V1_8, 0x21);
 
     /**+
      * Extreme Hills Plus
      * */
-    PreludeBiome EXTREME_HILLS_WITH_TREES = ofLegacy(V1_8, 0x22);
-    PreludeBiome SAVANNA = ofLegacy(V1_8, 0x23);
-    PreludeBiome SAVANNA_PLATEAU = ofLegacy(V1_8, 0x24);
-    PreludeBiome MESA = ofLegacy(V1_8, 0x25);
+    public static final PreludeBiome EXTREME_HILLS_WITH_TREES = ofLegacy(V1_8, 0x22);
+    public static final PreludeBiome SAVANNA = ofLegacy(V1_8, 0x23);
+    public static final PreludeBiome SAVANNA_PLATEAU = ofLegacy(V1_8, 0x24);
+    public static final PreludeBiome MESA = ofLegacy(V1_8, 0x25);
 
     /**+
      * Mesa Plateau F
      * */
-    PreludeBiome MESA_ROCK = ofLegacy(V1_8, 0x26);
+    public static final PreludeBiome MESA_ROCK = ofLegacy(V1_8, 0x26);
 
     /**+
      * Mesa Plateau
      * */
-    PreludeBiome MESA_CLEAR_ROCK = ofLegacy(V1_8, 0x27);
+    public static final PreludeBiome MESA_CLEAR_ROCK = ofLegacy(V1_8, 0x27);
 
     // ----------------------------- MUTATED BIOMES -----------------------------
     // these biomes are not in the needed biomes to visit list
@@ -119,110 +117,110 @@ public class PreludeBiomes {
     /**+
      * Not the void, but rather this is a biome only accessible with Superflat Presets
      */
-    PreludeBiome THE_VOID = ofLegacy(V1_9, 0x7F);
+    public static final PreludeBiome THE_VOID = ofLegacy(V1_9, 0x7F);
 
     /**+
      * Sunflower Plains
      * */
-    PreludeBiome MUTATED_PLAINS = ofLegacy(V1_8, 0x81);
+    public static final PreludeBiome MUTATED_PLAINS = ofLegacy(V1_8, 0x81);
 
     /**+
      * Unsure, known as "Desert M" pre-1.13
      * */
-    PreludeBiome MUTATED_DESERT = ofLegacy(V1_8, 0x82);
+    public static final PreludeBiome MUTATED_DESERT = ofLegacy(V1_8, 0x82);
 
     /**+
      * Extreme Hills M
      * */
-    PreludeBiome MUTATED_EXTREME_HILLS = ofLegacy(V1_8, 0x83);
+    public static final PreludeBiome MUTATED_EXTREME_HILLS = ofLegacy(V1_8, 0x83);
 
     /**+
      * Flower Forest
      * */
-    PreludeBiome MUTATED_FOREST = ofLegacy(V1_8, 0x84);
+    public static final PreludeBiome MUTATED_FOREST = ofLegacy(V1_8, 0x84);
 
     /**+
      * Taiga M
      * */
-    PreludeBiome MUTATED_TAIGA = ofLegacy(V1_8, 0x85);
+    public static final PreludeBiome MUTATED_TAIGA = ofLegacy(V1_8, 0x85);
 
     /**+
      * Swampland M
      * */
-    PreludeBiome MUTATED_SWAMPLAND = ofLegacy(V1_8, 0x86);
+    public static final PreludeBiome MUTATED_SWAMPLAND = ofLegacy(V1_8, 0x86);
 
     /**+
      * Ice Plains Spikes
      * */
-    PreludeBiome MUTATED_ICE_FLATS = ofLegacy(V1_8, 0x8C);
+    public static final PreludeBiome MUTATED_ICE_FLATS = ofLegacy(V1_8, 0x8C);
 
     /**+
      * Jungle M
      * */
-    PreludeBiome MUTATED_JUNGLE = ofLegacy(V1_8, 0x95);
+    public static final PreludeBiome MUTATED_JUNGLE = ofLegacy(V1_8, 0x95);
 
     /**+
      * Jungle Edge M
      * */
-    PreludeBiome MUTATED_JUNGLE_EDGE = ofLegacy(V1_8, 0x97);
+    public static final PreludeBiome MUTATED_JUNGLE_EDGE = ofLegacy(V1_8, 0x97);
 
     /**+
      * Birch Forest M
      * */
-    PreludeBiome MUTATED_BIRCH_FOREST = ofLegacy(V1_8, 0x9B);
+    public static final PreludeBiome MUTATED_BIRCH_FOREST = ofLegacy(V1_8, 0x9B);
 
     /**+
      * Birch Forest Hills M
      * */
-    PreludeBiome MUTATED_BIRCH_FOREST_HILLS = ofLegacy(V1_8, 0x9C);
+    public static final PreludeBiome MUTATED_BIRCH_FOREST_HILLS = ofLegacy(V1_8, 0x9C);
 
     /**+
      * Roofed Forest M
      */
-    PreludeBiome MUTATED_ROOFED_FOREST = ofLegacy(V1_8, 0x9D);
+    public static final PreludeBiome MUTATED_ROOFED_FOREST = ofLegacy(V1_8, 0x9D);
 
     /**+
      * Cold Taiga M
      * */
-    PreludeBiome MUTATED_TAIGA_COLD = ofLegacy(V1_8, 0x9E);
+    public static final PreludeBiome MUTATED_TAIGA_COLD = ofLegacy(V1_8, 0x9E);
 
     /**+
      * Mega Spruce Taiga
      */
-    PreludeBiome MUTATED_REDWOOD_TAIGA = ofLegacy(V1_8, 0xA0);
+    public static final PreludeBiome MUTATED_REDWOOD_TAIGA = ofLegacy(V1_8, 0xA0);
 
     /**+
      * Redwood Taiga Hills M
      * */
-    PreludeBiome MUTATED_REDWOOD_TAIGA_HILLS = ofLegacy(V1_8, 0xA1);
+    public static final PreludeBiome MUTATED_REDWOOD_TAIGA_HILLS = ofLegacy(V1_8, 0xA1);
 
     /**+
      * Extreme Hills Plus M
      * */
-    PreludeBiome MUTATED_EXTREME_HILLS_WITH_TREES = ofLegacy(V1_8, 0xA2);
+    public static final PreludeBiome MUTATED_EXTREME_HILLS_WITH_TREES = ofLegacy(V1_8, 0xA2);
 
     /**+
      * Savanna M
      * */
-    PreludeBiome MUTATED_SAVANNA = ofLegacy(V1_8, 0xA3);
+    public static final PreludeBiome MUTATED_SAVANNA = ofLegacy(V1_8, 0xA3);
 
     /**+
      * Savanna Plateau M
      * */
-    PreludeBiome MUTATED_SAVANNA_ROCK = ofLegacy(V1_8, 0xA4);
+    public static final PreludeBiome MUTATED_SAVANNA_ROCK = ofLegacy(V1_8, 0xA4);
 
     /**+
      * Mesa (Bryce)
      * */
-    PreludeBiome MUTATED_MESA = ofLegacy(V1_8, 0xA5);
+    public static final PreludeBiome MUTATED_MESA = ofLegacy(V1_8, 0xA5);
 
     /**+
      * Mesa Plateau F M
      * */
-    PreludeBiome MUTATED_MESA_ROCK = ofLegacy(V1_8, 0xA6);
+    public static final PreludeBiome MUTATED_MESA_ROCK = ofLegacy(V1_8, 0xA6);
 
     /**+
      * Mesa Plateau M
      * */
-    PreludeBiome MUTATED_MESA_CLEAR_ROCK = ofLegacy(V1_8, 0xA6);
+    public static final PreludeBiome MUTATED_MESA_CLEAR_ROCK = ofLegacy(V1_8, 0xA6);
 }
