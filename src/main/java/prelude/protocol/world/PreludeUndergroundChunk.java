@@ -62,12 +62,12 @@ public class PreludeUndergroundChunk implements WriteableObject {
         StreamUtils.writeVarInt(chunkZ, out);
 
         for (int x = 0; x < 16; x++)
-            for (int y = 0; y < 16; y++) {
-                for (int z = 0; z < 64; z++) {
-                    blocks[x][y][z].write(out);
+            for (int z = 0; z < 16; z++) {
+                for (int y = 0; y < 64; y++) {
+                    blocks[x][z][y].write(out);
                 }
 
-                biomes[x][y].write(out);
+                biomes[x][z].write(out);
             }
     }
 
