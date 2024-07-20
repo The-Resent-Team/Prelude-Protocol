@@ -31,7 +31,8 @@ import java.io.InputStream;
 import java.util.Objects;
 
 /*
-* Used to update y < 0 or y > 255 blocks
+* Used to update ONE y < 0 or y > 255 block (specified by #getChunkType)
+* This is also used to replace viaversion replacements
 * */
 public class BlockChangeModernS2CPacket extends S2CPacket {
     private PreludeChunkType chunkType;

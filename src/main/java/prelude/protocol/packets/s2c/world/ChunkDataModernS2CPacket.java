@@ -28,6 +28,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/*
+* Also used to update chunks when more than 64 blocks are changed
+* */
 public class ChunkDataModernS2CPacket extends S2CPacket {
     private int chunkCoordX;
     private int chunkCoordZ;

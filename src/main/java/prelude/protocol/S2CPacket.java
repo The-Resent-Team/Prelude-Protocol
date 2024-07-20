@@ -47,7 +47,6 @@ public abstract class S2CPacket extends Packet<S2CPacketHandler> {
         registerS2CPacket(ChunkDataModernS2CPacket.class);
         registerS2CPacket(MultiBlockChangeModernS2CPacket.class);
         registerS2CPacket(BlockChangeModernS2CPacket.class);
-        registerS2CPacket(CorrectViaVersionBlocksS2CPacket.class);
     }
 
     protected S2CPacket() {
