@@ -106,7 +106,7 @@ public class MultiBlockChangeModernS2CPacket extends S2CPacket {
 
     @Override
     public void processSelf(S2CPacketHandler handler) {
-
+        handler.handleMultiBlockChangeModern(this);
     }
 
     public static Builder builder() {

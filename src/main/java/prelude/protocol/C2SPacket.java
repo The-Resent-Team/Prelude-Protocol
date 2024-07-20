@@ -31,8 +31,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public abstract class C2SPacket extends Packet<C2SPacketHandler> {
-    public static C2SPacketHandler handler = null;
-
     private static final Map<Integer, Class<? extends C2SPacket>> C2S_ID_TO_PACKET = new HashMap<>();
     private static final Map<Class<? extends C2SPacket>, Integer> C2S_PACKET_TO_ID = new HashMap<>();
 
@@ -48,25 +46,10 @@ public abstract class C2SPacket extends Packet<C2SPacketHandler> {
         this.packetId = C2S_PACKET_TO_ID.get(this.getClass());
     }
 
-    public static void setHandler(C2SPacketHandler newHandler) {
-        if (handler != null)
-            throw new IllegalStateException("Handler already set!");
-
-        handler = newHandler;
-    }
-
-    public static void trySetHandler(C2SPacketHandler newHandler) {
-        if (handler == null)
-            handler = newHandler;
-    }
-
     @Override
     public abstract void loadData(InputStream is) throws InvalidPacketException;
 
     public static Optional<C2SPacket> parsePacket(byte[] bytes) throws Exception {
-        if (handler == null)
-            throw new IllegalStateException("Handler not set!");
-
         if (bytes == null)
             return Optional.empty();
 

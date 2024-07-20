@@ -24,6 +24,7 @@ import prelude.protocol.packets.s2c.play.TotemUsedS2CPacket;
 import prelude.protocol.packets.s2c.play.UpdateOffhandS2CPacket;
 import prelude.protocol.packets.s2c.world.BlockChangeModernS2CPacket;
 import prelude.protocol.packets.s2c.world.ChunkDataModernS2CPacket;
+import prelude.protocol.packets.s2c.world.MultiBlockChangeModernS2CPacket;
 
 /*
 * Extended by ResentS2CPacketHandler on the client
@@ -46,4 +47,6 @@ public interface S2CPacketHandler {
     void handleChunkDataModern(ChunkDataModernS2CPacket packet);
 
     void handleBlockChangeModern(BlockChangeModernS2CPacket packet);
+
+    void handleMultiBlockChangeModern(MultiBlockChangeModernS2CPacket packet);
 }
