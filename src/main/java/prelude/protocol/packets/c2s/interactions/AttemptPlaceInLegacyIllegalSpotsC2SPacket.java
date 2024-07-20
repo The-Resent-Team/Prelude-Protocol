@@ -21,25 +21,23 @@ package prelude.protocol.packets.c2s.interactions;
 import prelude.protocol.C2SPacket;
 import prelude.protocol.C2SPacketHandler;
 import prelude.protocol.InvalidPacketException;
+import prelude.protocol.world.PreludeChunkCoordinate;
 import prelude.protocol.world.PreludeChunkType;
+import prelude.protocol.world.PreludeCompactCoordinate;
+import prelude.protocol.world.PreludeRelativeCoordinate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 public class AttemptPlaceInLegacyIllegalSpotsC2SPacket extends C2SPacket {
-    private PreludeChunkType chunkType;
-    private int attemptedXPosRelativeToChunk;
-    private int attemptedYPosRelativeToChunkToLegacyBuildLimit;
-    private int attemptedZPosRelativeToChunk;
+    private PreludeCompactCoordinate compactCoordinate;
 
     public AttemptPlaceInLegacyIllegalSpotsC2SPacket() {}
 
-    private AttemptPlaceInLegacyIllegalSpotsC2SPacket(PreludeChunkType chunkType, int attemptedXPosRelativeToChunk, int attemptedYPosRelativeToChunkToLegacyBuildLimit, int attemptedZPosRelativeToChunk) {
-        this.chunkType = chunkType;
-        this.attemptedXPosRelativeToChunk = attemptedXPosRelativeToChunk;
-        this.attemptedYPosRelativeToChunkToLegacyBuildLimit = attemptedYPosRelativeToChunkToLegacyBuildLimit;
-        this.attemptedZPosRelativeToChunk = attemptedZPosRelativeToChunk;
+    private AttemptPlaceInLegacyIllegalSpotsC2SPacket(PreludeCompactCoordinate compactCoordinate) {
+        this.compactCoordinate = compactCoordinate;
     }
 
     @Override
@@ -47,10 +45,7 @@ public class AttemptPlaceInLegacyIllegalSpotsC2SPacket extends C2SPacket {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
         bao.write(packetId);
-        chunkType.write(bao);
-        bao.write(attemptedXPosRelativeToChunk);
-        bao.write(attemptedYPosRelativeToChunkToLegacyBuildLimit);
-        bao.write(attemptedZPosRelativeToChunk);
+        compactCoordinate.write(bao);
 
         return bao.toByteArray();
     }
@@ -60,7 +55,7 @@ public class AttemptPlaceInLegacyIllegalSpotsC2SPacket extends C2SPacket {
         if (this == object) return true;
         if (!(object instanceof AttemptPlaceInLegacyIllegalSpotsC2SPacket)) return false;
         AttemptPlaceInLegacyIllegalSpotsC2SPacket that = (AttemptPlaceInLegacyIllegalSpotsC2SPacket) object;
-        return chunkType == that.chunkType && attemptedXPosRelativeToChunk == that.attemptedXPosRelativeToChunk && attemptedYPosRelativeToChunkToLegacyBuildLimit == that.attemptedYPosRelativeToChunkToLegacyBuildLimit && attemptedZPosRelativeToChunk == that.attemptedZPosRelativeToChunk;
+        return Objects.equals(compactCoordinate, that.compactCoordinate);
     }
 
     @Override
@@ -68,10 +63,7 @@ public class AttemptPlaceInLegacyIllegalSpotsC2SPacket extends C2SPacket {
         try {
             this.validateOrThrow("ATTEMPT_PLACE_IN_LEGACY_ILLEGAL_SPOTS_ID", is);
 
-            this.chunkType = PreludeChunkType.deserialize(is);
-            this.attemptedXPosRelativeToChunk = is.read();
-            this.attemptedYPosRelativeToChunkToLegacyBuildLimit = is.read();
-            this.attemptedZPosRelativeToChunk = is.read();
+            this.compactCoordinate = PreludeCompactCoordinate.deserialize(is);
         } catch (InvalidPacketException e) {
             throw e;
         } catch (Exception e) {
@@ -90,12 +82,24 @@ public class AttemptPlaceInLegacyIllegalSpotsC2SPacket extends C2SPacket {
 
     public static class Builder {
         private PreludeChunkType chunkType;
+        private int chunkX;
+        private int chunkZ;
         private int attemptedXPosRelativeToChunk;
         private int attemptedYPosRelativeToChunkToLegacyBuildLimit;
         private int attemptedZPosRelativeToChunk;
 
         public Builder chunkType(PreludeChunkType chunkType) {
             this.chunkType = chunkType;
+            return this;
+        }
+
+        public Builder chunkX(int chunkX) {
+            this.chunkX = chunkX;
+            return this;
+        }
+
+        public Builder chunkZ(int chunkZ) {
+            this.chunkZ = chunkZ;
             return this;
         }
 
@@ -115,23 +119,11 @@ public class AttemptPlaceInLegacyIllegalSpotsC2SPacket extends C2SPacket {
         }
 
         public AttemptPlaceInLegacyIllegalSpotsC2SPacket build() {
-            return new AttemptPlaceInLegacyIllegalSpotsC2SPacket(chunkType, attemptedXPosRelativeToChunk, attemptedYPosRelativeToChunkToLegacyBuildLimit, attemptedZPosRelativeToChunk);
+            return new AttemptPlaceInLegacyIllegalSpotsC2SPacket(new PreludeCompactCoordinate(chunkType, new PreludeChunkCoordinate(chunkX, chunkZ), new PreludeRelativeCoordinate(attemptedXPosRelativeToChunk, attemptedYPosRelativeToChunkToLegacyBuildLimit, attemptedZPosRelativeToChunk)));
         }
     }
 
-    public PreludeChunkType getChunkType() {
-        return chunkType;
-    }
-
-    public int getAttemptedXPosRelativeToChunk() {
-        return attemptedXPosRelativeToChunk;
-    }
-
-    public int getAttemptedYPosRelativeToChunkToLegacyBuildLimit() {
-        return attemptedYPosRelativeToChunkToLegacyBuildLimit;
-    }
-
-    public int getAttemptedZPosRelativeToChunk() {
-        return attemptedZPosRelativeToChunk;
+    public PreludeCompactCoordinate getCompactCoordinate() {
+        return compactCoordinate;
     }
 }

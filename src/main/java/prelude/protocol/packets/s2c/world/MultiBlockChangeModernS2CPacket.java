@@ -20,7 +20,9 @@ package prelude.protocol.packets.s2c.world;
 
 import prelude.protocol.*;
 import prelude.protocol.world.PreludeBlockType;
+import prelude.protocol.world.PreludeChunkCoordinate;
 import prelude.protocol.world.PreludeChunkType;
+import prelude.protocol.world.PreludeRelativeCoordinate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -36,16 +38,14 @@ import java.util.Set;
  * */
 public class MultiBlockChangeModernS2CPacket extends S2CPacket {
     private PreludeChunkType chunkType;
-    private int chunkX;
-    private int chunkZ;
+    private PreludeChunkCoordinate chunkCoordinate;
     private Set<PreludeBlock> blocksToChange;
 
     public MultiBlockChangeModernS2CPacket() {}
 
-    private MultiBlockChangeModernS2CPacket(PreludeChunkType chunkType, int chunkX, int chunkZ, Set<PreludeBlock> blocksToChange) {
+    private MultiBlockChangeModernS2CPacket(PreludeChunkType chunkType, PreludeChunkCoordinate chunkCoordinate, Set<PreludeBlock> blocksToChange) {
         this.chunkType = chunkType;
-        this.chunkX = chunkX;
-        this.chunkZ = chunkZ;
+        this.chunkCoordinate = chunkCoordinate;
 
         if (blocksToChange.size() > 64 || blocksToChange.size() < 2)
             throw new IllegalArgumentException("This packet can only update between 2 and 64 blocks!");
@@ -58,8 +58,7 @@ public class MultiBlockChangeModernS2CPacket extends S2CPacket {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
         bao.write(packetId);
 
-        StreamUtils.writeVarInt(chunkX, bao);
-        StreamUtils.writeVarInt(chunkZ, bao);
+        chunkCoordinate.write(bao);
         chunkType.write(bao);
         // only up to 64, we can write as a byte
         bao.write(blocksToChange.size());
@@ -75,7 +74,7 @@ public class MultiBlockChangeModernS2CPacket extends S2CPacket {
         if (this == object) return true;
         if (!(object instanceof MultiBlockChangeModernS2CPacket)) return false;
         MultiBlockChangeModernS2CPacket that = (MultiBlockChangeModernS2CPacket) object;
-        return chunkX == that.chunkX && chunkZ == that.chunkZ && chunkType == that.chunkType && Objects.equals(blocksToChange, that.blocksToChange);
+        return chunkType == that.chunkType && Objects.equals(chunkCoordinate, that.chunkCoordinate) && Objects.equals(blocksToChange, that.blocksToChange);
     }
 
     @Override
@@ -83,8 +82,7 @@ public class MultiBlockChangeModernS2CPacket extends S2CPacket {
         try {
             this.validateOrThrow("MULTI_BLOCK_CHANGE_MODERN_ID", is);
 
-            int chunkX = StreamUtils.readVarInt(is);
-            int chunkZ = StreamUtils.readVarInt(is);
+            PreludeChunkCoordinate chunkCoordinate = PreludeChunkCoordinate.deserialize(is);
             PreludeChunkType chunkType = PreludeChunkType.deserialize(is);
 
             int amt = is.read();
@@ -93,8 +91,7 @@ public class MultiBlockChangeModernS2CPacket extends S2CPacket {
             for (int i = 0; i < amt; i++)
                 blocks.add(PreludeBlock.deserialize(is));
 
-            this.chunkX = chunkX;
-            this.chunkZ = chunkZ;
+            this.chunkCoordinate = chunkCoordinate;
             this.chunkType = chunkType;
             this.blocksToChange = blocks;
         } catch (InvalidPacketException e) {
@@ -145,38 +142,30 @@ public class MultiBlockChangeModernS2CPacket extends S2CPacket {
         }
 
         public MultiBlockChangeModernS2CPacket build() {
-            return new MultiBlockChangeModernS2CPacket(chunkType, chunkX, chunkZ, blocksToChange);
+            return new MultiBlockChangeModernS2CPacket(chunkType, new PreludeChunkCoordinate(chunkX, chunkZ), blocksToChange);
         }
     }
 
     public static class PreludeBlock implements WriteableObject {
-        private int relativeX;
-        private int relativeY;
-        private int relativeZ;
+        private PreludeRelativeCoordinate relativeCoordinate;
         private PreludeBlockType type;
 
-        public PreludeBlock(int relativeX, int relativeY, int relativeZ, PreludeBlockType type) {
-            this.relativeX = relativeX;
-            this.relativeY = relativeY;
-            this.relativeZ = relativeZ;
+        public PreludeBlock(PreludeRelativeCoordinate relativeCoordinate, PreludeBlockType type) {
+            this.relativeCoordinate = relativeCoordinate;
             this.type = type;
         }
 
         @Override
         public void write(OutputStream out) throws IOException {
-            out.write(relativeX);
-            out.write(relativeY);
-            out.write(relativeZ);
+            relativeCoordinate.write(out);
             type.write(out);
         }
 
         public static PreludeBlock deserialize(InputStream in) throws IOException {
-            int relativeX = in.read();
-            int relativeY = in.read();
-            int relativeZ = in.read();
+            PreludeRelativeCoordinate coordinate = PreludeRelativeCoordinate.deserialize(in);
             PreludeBlockType type = PreludeBlockType.deserialize(in);
 
-            return new PreludeBlock(relativeX, relativeY, relativeZ, type);
+            return new PreludeBlock(coordinate, type);
         }
 
         @Override
@@ -184,28 +173,27 @@ public class MultiBlockChangeModernS2CPacket extends S2CPacket {
             if (this == object) return true;
             if (!(object instanceof PreludeBlock)) return false;
             PreludeBlock that = (PreludeBlock) object;
-            return relativeX == that.relativeX && relativeY == that.relativeY && relativeZ == that.relativeZ && Objects.equals(type, that.type);
+            return Objects.equals(relativeCoordinate, that.relativeCoordinate) && Objects.equals(type, that.type);
         }
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(relativeX, relativeY, relativeZ, type);
-        }
-
-        public int getRelativeX() {
-            return relativeX;
-        }
-
-        public int getRelativeY() {
-            return relativeY;
-        }
-
-        public int getRelativeZ() {
-            return relativeZ;
+        public PreludeRelativeCoordinate getRelativeCoordinate() {
+            return relativeCoordinate;
         }
 
         public PreludeBlockType getType() {
             return type;
         }
+    }
+
+    public PreludeChunkType getChunkType() {
+        return chunkType;
+    }
+
+    public PreludeChunkCoordinate getChunkCoordinate() {
+        return chunkCoordinate;
+    }
+
+    public Set<PreludeBlock> getBlocksToChange() {
+        return blocksToChange;
     }
 }

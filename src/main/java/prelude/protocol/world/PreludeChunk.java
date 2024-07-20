@@ -18,28 +18,46 @@
 
 package prelude.protocol.world;
 
-import prelude.protocol.StreamUtils;
 import prelude.protocol.WriteableObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class PreludeChunk implements WriteableObject {
     private final PreludeBlockType[][][] blocks;
     private final PreludeBiome[][] biomes;
-    private final int chunkX;
-    private final int chunkZ;
+    private final PreludeChunkCoordinate chunkCoordinate;
     private final boolean isPreChunk;
-    private final PreludeChunkType chunkType;
 
-    public PreludeChunk(final int chunkX, final int chunkZ, final boolean isPreChunk, final PreludeChunkType chunkType) {
+    public PreludeChunk(PreludeChunkCoordinate chunkCoordinate, final boolean isPreChunk) {
         this.blocks = new PreludeBlockType[16][16][64];
         this.biomes = new PreludeBiome[16][16];
-        this.chunkX = chunkX;
-        this.chunkZ = chunkZ;
+        this.chunkCoordinate = chunkCoordinate;
         this.isPreChunk = isPreChunk;
-        this.chunkType = chunkType;
+    }
+
+    public PreludeChunk(PreludeBlockType[][][] blocks, PreludeBiome[][] biomes, PreludeChunkCoordinate chunkCoordinate, final boolean isPreChunk) {
+        if (blocks.length != 16)
+            throw new IllegalArgumentException("A chunk must be exactly 16 blocks long in the X axis, but this is {} blocks long!"
+                    .replace("{}", blocks.length + ""));
+        if (blocks[0].length != 16)
+            throw new IllegalArgumentException("A chunk must be exactly 16 blocks long in the Z axis, but this is {} blocks long!"
+                    .replace("{}", blocks[0].length + ""));
+        if (blocks[0][0].length != 64)
+            throw new IllegalArgumentException("A chunk must be exactly 64 blocks long in the Y axis, but this is {} blocks long!"
+                    .replace("{}", blocks[0][0].length + ""));
+
+        this.blocks = blocks;
+        this.biomes = biomes;
+        this.chunkCoordinate = chunkCoordinate;
+        this.isPreChunk = isPreChunk;
+    }
+
+    public void setBlock(PreludeRelativeCoordinate coordinate, PreludeBlockType block) {
+        blocks[coordinate.relativePosX][coordinate.relativePosY][coordinate.relativePosZ] = block;
     }
 
     public void setBlock(final int xPosRelative, final int yPosRelative, final int zPosRelative, final PreludeBlockType block) {
@@ -53,9 +71,7 @@ public class PreludeChunk implements WriteableObject {
     @Override
     public void write(OutputStream out) throws IOException {
         out.write(isPreChunk ? 1 : 0);
-        chunkType.write(out);
-        StreamUtils.writeVarInt(chunkX, out);
-        StreamUtils.writeVarInt(chunkZ, out);
+        chunkCoordinate.write(out);
 
         for (int x = 0; x < 16; x++)
             for (int z = 0; z < 16; z++) {
@@ -67,11 +83,17 @@ public class PreludeChunk implements WriteableObject {
             }
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof PreludeChunk)) return false;
+        PreludeChunk that = (PreludeChunk) object;
+        return isPreChunk == that.isPreChunk && Objects.deepEquals(blocks, that.blocks) && Objects.deepEquals(biomes, that.biomes) && Objects.equals(chunkCoordinate, that.chunkCoordinate);
+    }
+
     public static PreludeChunk deserialize(InputStream is) throws IOException {
         boolean isPreChunk = is.read() != 0;
-        PreludeChunkType chunkType = PreludeChunkType.deserialize(is);
-        int chunkX = StreamUtils.readVarInt(is);
-        int chunkZ = StreamUtils.readVarInt(is);
+        PreludeChunkCoordinate chunkCoordinate = PreludeChunkCoordinate.deserialize(is);
 
         PreludeBlockType[][][] blocks = new PreludeBlockType[16][16][64];
         PreludeBiome[][] biomes = new PreludeBiome[16][16];
@@ -88,7 +110,7 @@ public class PreludeChunk implements WriteableObject {
             }
         }
 
-        return new PreludeChunk(chunkX, chunkZ, isPreChunk, chunkType);
+        return new PreludeChunk(blocks, biomes, chunkCoordinate, isPreChunk);
     }
 
     public PreludeBlockType[][][] getBlocks() {
@@ -99,19 +121,11 @@ public class PreludeChunk implements WriteableObject {
         return biomes;
     }
 
-    public int getChunkX() {
-        return chunkX;
-    }
-
-    public int getChunkZ() {
-        return chunkZ;
+    public PreludeChunkCoordinate getChunkCoordinate() {
+        return chunkCoordinate;
     }
 
     public boolean isPreChunk() {
         return isPreChunk;
-    }
-
-    public PreludeChunkType getChunkType() {
-        return chunkType;
     }
 }

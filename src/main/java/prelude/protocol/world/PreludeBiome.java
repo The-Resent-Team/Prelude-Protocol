@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class PreludeBiome implements WriteableObject {
     public final Version version;
@@ -44,6 +45,17 @@ public class PreludeBiome implements WriteableObject {
         this.version = version;
         this.biomeName = biomeName;
         this.biomeId = biomeId;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof PreludeBiome)) return false;
+        PreludeBiome that = (PreludeBiome) object;
+        if (version.usesStringIds != that.version.usesStringIds) return false;
+        if (version.usesStringIds)
+            return Objects.equals(biomeName, that.biomeName);
+        else return biomeId == that.biomeId;
     }
 
     @Override

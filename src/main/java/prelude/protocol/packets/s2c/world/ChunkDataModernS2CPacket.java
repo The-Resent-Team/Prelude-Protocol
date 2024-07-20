@@ -21,26 +21,22 @@ package prelude.protocol.packets.s2c.world;
 import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
 import prelude.protocol.S2CPacketHandler;
-import prelude.protocol.StreamUtils;
 import prelude.protocol.world.PreludeChunk;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 /*
 * Also used to update chunks when more than 64 blocks are changed
 * */
 public class ChunkDataModernS2CPacket extends S2CPacket {
-    private int chunkCoordX;
-    private int chunkCoordZ;
     private PreludeChunk chunk;
 
     public ChunkDataModernS2CPacket() {}
 
-    private ChunkDataModernS2CPacket(int chunkCoordX, int chunkCoordZ, PreludeChunk chunk) {
-        this.chunkCoordX = chunkCoordX;
-        this.chunkCoordZ = chunkCoordZ;
+    private ChunkDataModernS2CPacket(PreludeChunk chunk) {
         this.chunk = chunk;
     }
 
@@ -49,17 +45,17 @@ public class ChunkDataModernS2CPacket extends S2CPacket {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
         bao.write(packetId);
-
-        StreamUtils.writeVarInt(chunkCoordX, bao);
-        StreamUtils.writeVarInt(chunkCoordZ, bao);
         chunk.write(bao);
 
         return bao.toByteArray();
     }
 
     @Override
-    public boolean equals(Object packet) {
-        return false;
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof ChunkDataModernS2CPacket)) return false;
+        ChunkDataModernS2CPacket that = (ChunkDataModernS2CPacket) object;
+        return Objects.equals(chunk, that.chunk);
     }
 
     @Override
@@ -67,8 +63,6 @@ public class ChunkDataModernS2CPacket extends S2CPacket {
         try {
             this.validateOrThrow("CHUNK_DATA_MODERN_ID", is);
 
-            this.chunkCoordX = StreamUtils.readVarInt(is);
-            this.chunkCoordZ = StreamUtils.readVarInt(is);
             this.chunk = PreludeChunk.deserialize(is);
         } catch (InvalidPacketException e) {
             throw e;
@@ -87,19 +81,7 @@ public class ChunkDataModernS2CPacket extends S2CPacket {
     }
 
     public static class Builder {
-        private int chunkCoordX;
-        private int chunkCoordZ;
         private PreludeChunk chunk;
-
-        public Builder chunkCoordX(int chunkCoordX) {
-            this.chunkCoordX = chunkCoordX;
-            return this;
-        }
-
-        public Builder chunkCoordZ(int chunkCoordZ) {
-            this.chunkCoordZ = chunkCoordZ;
-            return this;
-        }
 
         public Builder chunk(PreludeChunk chunk) {
             this.chunk = chunk;
@@ -107,16 +89,8 @@ public class ChunkDataModernS2CPacket extends S2CPacket {
         }
 
         public ChunkDataModernS2CPacket build() {
-            return new ChunkDataModernS2CPacket(chunkCoordX, chunkCoordZ, chunk);
+            return new ChunkDataModernS2CPacket(chunk);
         }
-    }
-
-    public int getChunkCoordX() {
-        return chunkCoordX;
-    }
-
-    public int getChunkCoordZ() {
-        return chunkCoordZ;
     }
 
     public PreludeChunk getChunk() {

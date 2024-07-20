@@ -21,9 +21,7 @@ package prelude.protocol.packets.s2c.world;
 import prelude.protocol.InvalidPacketException;
 import prelude.protocol.S2CPacket;
 import prelude.protocol.S2CPacketHandler;
-import prelude.protocol.StreamUtils;
-import prelude.protocol.world.PreludeBlockType;
-import prelude.protocol.world.PreludeChunkType;
+import prelude.protocol.world.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,24 +33,14 @@ import java.util.Objects;
 * This is also used to replace viaversion replacements
 * */
 public class BlockChangeModernS2CPacket extends S2CPacket {
-    private PreludeChunkType chunkType;
-    private int chunkX;
-    private int chunkZ;
+    private PreludeCompactCoordinate compactCoordinate;
     private PreludeBlockType newBlock;
-    private int relativePosX;
-    private int relativePosY;
-    private int relativePosZ;
 
     public BlockChangeModernS2CPacket() {}
 
-    private BlockChangeModernS2CPacket(PreludeChunkType chunkType, int chunkX, int chunkZ, PreludeBlockType newBlock, int relativePosX, int relativePosY, int relativePosZ) {
-        this.chunkType = chunkType;
-        this.chunkX = chunkX;
-        this.chunkZ = chunkZ;
+    private BlockChangeModernS2CPacket(PreludeCompactCoordinate compactCoordinate, PreludeBlockType newBlock) {
+        this.compactCoordinate = compactCoordinate;
         this.newBlock = newBlock;
-        this.relativePosX = relativePosX;
-        this.relativePosY = relativePosY;
-        this.relativePosZ = relativePosZ;
     }
 
     @Override
@@ -60,13 +48,8 @@ public class BlockChangeModernS2CPacket extends S2CPacket {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
         bao.write(packetId);
 
-        chunkType.write(bao);
-        StreamUtils.writeVarInt(chunkX, bao);
-        StreamUtils.writeVarInt(chunkZ, bao);
+        compactCoordinate.write(bao);
         newBlock.write(bao);
-        bao.write(relativePosX);
-        bao.write(relativePosY);
-        bao.write(relativePosZ);
 
         return bao.toByteArray();
     }
@@ -76,7 +59,7 @@ public class BlockChangeModernS2CPacket extends S2CPacket {
         if (this == object) return true;
         if (!(object instanceof BlockChangeModernS2CPacket)) return false;
         BlockChangeModernS2CPacket that = (BlockChangeModernS2CPacket) object;
-        return chunkX == that.chunkX && chunkZ == that.chunkZ && relativePosX == that.relativePosX && relativePosY == that.relativePosY && relativePosZ == that.relativePosZ && chunkType == that.chunkType && Objects.equals(newBlock, that.newBlock);
+        return Objects.equals(newBlock, that.newBlock) && Objects.equals(compactCoordinate, that.compactCoordinate);
     }
 
     @Override
@@ -84,21 +67,11 @@ public class BlockChangeModernS2CPacket extends S2CPacket {
         try {
             this.validateOrThrow("BLOCK_CHANGE_MODERN_ID", is);
 
-            PreludeChunkType chunkType = PreludeChunkType.deserialize(is);
-            int chunkX = StreamUtils.readVarInt(is);
-            int chunkZ = StreamUtils.readVarInt(is);
+            PreludeCompactCoordinate compactCoordinate = PreludeCompactCoordinate.deserialize(is);
             PreludeBlockType newBlock = PreludeBlockType.deserialize(is);
-            int relativePosX = is.read();
-            int relativePosY = is.read();
-            int relativePosZ = is.read();
 
-            this.chunkType = chunkType;
-            this.chunkX = chunkX;
-            this.chunkZ = chunkZ;
+            this.compactCoordinate = compactCoordinate;
             this.newBlock = newBlock;
-            this.relativePosX = relativePosX;
-            this.relativePosY = relativePosY;
-            this.relativePosZ = relativePosZ;
         } catch (InvalidPacketException e) {
             throw e;
         } catch (Exception e) {
@@ -160,35 +133,15 @@ public class BlockChangeModernS2CPacket extends S2CPacket {
         }
 
         public BlockChangeModernS2CPacket build() {
-            return new BlockChangeModernS2CPacket(chunkType, chunkX, chunkZ, newBlock, relativePosX, relativePosY, relativePosZ);
+            return new BlockChangeModernS2CPacket(new PreludeCompactCoordinate(chunkType, new PreludeChunkCoordinate(chunkX, chunkZ), new PreludeRelativeCoordinate(relativePosX, relativePosY, relativePosZ)), newBlock);
         }
     }
 
-    public PreludeChunkType getChunkType() {
-        return chunkType;
-    }
-
-    public int getChunkX() {
-        return chunkX;
-    }
-
-    public int getChunkZ() {
-        return chunkZ;
+    public PreludeCompactCoordinate getCompactCoordinate() {
+        return compactCoordinate;
     }
 
     public PreludeBlockType getNewBlock() {
         return newBlock;
-    }
-
-    public int getRelativePosX() {
-        return relativePosX;
-    }
-
-    public int getRelativePosY() {
-        return relativePosY;
-    }
-
-    public int getRelativePosZ() {
-        return relativePosZ;
     }
 }

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class PreludeBlockType implements WriteableObject {
     public final Version version;
@@ -45,6 +46,17 @@ public class PreludeBlockType implements WriteableObject {
         this.blockName = blockName;
         this.blockId = blockId;
         this.state = state;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof PreludeBlockType)) return false;
+        PreludeBlockType that = (PreludeBlockType) object;
+        if (version.usesStringIds != that.version.usesStringIds) return false;
+        if (version.usesStringIds)
+            return Objects.equals(blockName, that.blockName);
+        return blockId == that.blockId && Objects.equals(state, that.state);
     }
 
     @Override

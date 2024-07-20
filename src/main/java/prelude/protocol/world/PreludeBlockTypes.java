@@ -20,6 +20,10 @@ package prelude.protocol.world;
 
 import prelude.protocol.Version;
 
+import static prelude.protocol.world.PreludeBlockType.ofModern;
+import static prelude.protocol.world.PreludeBlockType.ofLegacy;
+
 public class PreludeBlockTypes {
-    public static final PreludeBlockType VOID_AIR = PreludeBlockType.ofModern(Version.V1_13, "void_air");
+    public static final PreludeBlockType VOID_AIR = ofModern(Version.V1_13, "void_air");
+    public static final PreludeBlockType RESPAWN_ANCHOR = ofModern(Version.V1_13, "respawn_anchor");
 }
