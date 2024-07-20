@@ -28,6 +28,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/*
+ * This packet is used when the client attempts to interact with a non-block item in their offhand
+ * */
 public class InteractWithOffhandC2SPacket extends C2SPacket {
     private InteractType interactType;
 
@@ -60,7 +63,7 @@ public class InteractWithOffhandC2SPacket extends C2SPacket {
         try {
             this.validateOrThrow("INTERACT_WITH_OFFHAND_ID", is);
 
-            this.interactType = InteractType.of(is.read());
+            this.interactType = InteractType.deserialize(is);
         } catch (InvalidPacketException e) {
             throw e;
         } catch (Exception e) {
@@ -99,7 +102,7 @@ public class InteractWithOffhandC2SPacket extends C2SPacket {
             this.value = value;
         }
 
-        public static InteractType of(int value) {
+        private static InteractType of(int value) {
             for (InteractType type : values()) {
                 if (type.value == value) {
                     return type;
@@ -108,9 +111,17 @@ public class InteractWithOffhandC2SPacket extends C2SPacket {
             return null;
         }
 
+        public static InteractType deserialize(InputStream is) throws IOException {
+            return of(is.read());
+        }
+
         @Override
         public void write(OutputStream out) throws IOException {
             out.write(value);
         }
+    }
+
+    public InteractType getInteractType() {
+        return interactType;
     }
 }

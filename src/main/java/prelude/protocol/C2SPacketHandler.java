@@ -21,8 +21,7 @@ package prelude.protocol;
 import prelude.protocol.packets.c2s.ClientHandshakeC2SPacket;
 import prelude.protocol.packets.c2s.ClientSyncResponseC2SPacket;
 import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
-import prelude.protocol.packets.c2s.interactions.AttemptPlaceAboveGroundC2SPacket;
-import prelude.protocol.packets.c2s.interactions.AttemptPlaceBelowGroundC2SPacket;
+import prelude.protocol.packets.c2s.interactions.AttemptPlaceInLegacyIllegalSpotsC2SPacket;
 import prelude.protocol.packets.c2s.interactions.InteractWithOffhandC2SPacket;
 
 /*
@@ -37,7 +36,5 @@ public interface C2SPacketHandler {
 
     void handleInteractWithOffhand(InteractWithOffhandC2SPacket packet);
 
-    void handleAttemptPlaceAboveGround(AttemptPlaceAboveGroundC2SPacket packet);
-
-    void handleAttemptPlaceBelowGround(AttemptPlaceBelowGroundC2SPacket packet);
+    void handleAttemptPlaceInLegacyIllegalSpots(AttemptPlaceInLegacyIllegalSpotsC2SPacket packet);
 }

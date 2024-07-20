@@ -18,14 +18,12 @@
 
 package prelude.protocol.packets.c2s;
 
-import prelude.protocol.C2SPacketHandler;
-import prelude.protocol.StreamUtils;
-import prelude.protocol.C2SPacket;
-import prelude.protocol.InvalidPacketException;
+import prelude.protocol.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Objects;
@@ -76,7 +74,7 @@ public final class ClientHandshakeC2SPacket extends C2SPacket {
         bao.write(resentMinorVersion);
 
         // write client type
-        bao.write(clientType.value);
+        clientType.write(bao);
 
         // write boolean
         bao.write(clientClaimsSelfIsRankedPlayer ? 1 : 0);
@@ -99,7 +97,7 @@ public final class ClientHandshakeC2SPacket extends C2SPacket {
             String username = StreamUtils.readASCII(is.read(), is);
             int major = is.read();
             int minor = is.read();
-            ClientType type = ClientType.from(is.read());
+            ClientType type = ClientType.deserialize(is);
             boolean clientClaimsSelfIsRankedPlayer = is.read() == 1;
             String enabledMods = StreamUtils.readASCII(StreamUtils.readShort(is), is);
             String[] mods = enabledMods.split(NULL_TERMINATOR);
@@ -137,7 +135,7 @@ public final class ClientHandshakeC2SPacket extends C2SPacket {
         return new Builder();
     }
 
-    public enum ClientType {
+    public enum ClientType implements WriteableObject {
         STABLE(0),
         BETA(1),
         DEV(2);
@@ -147,13 +145,22 @@ public final class ClientHandshakeC2SPacket extends C2SPacket {
             this.value = value;
         }
 
-        public static ClientType from(int b) {
+        private static ClientType of(int b) {
             for (ClientType type : ClientType.values()) {
                 if (type.value == b)
                     return type;
             }
 
             return null;
+        }
+
+        public static ClientType deserialize(InputStream is) throws IOException {
+            return of(is.read());
+        }
+
+        @Override
+        public void write(OutputStream out) throws IOException {
+            out.write(value);
         }
     }
 

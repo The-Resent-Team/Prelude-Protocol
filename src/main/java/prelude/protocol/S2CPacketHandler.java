@@ -22,7 +22,8 @@ import prelude.protocol.packets.s2c.*;
 import prelude.protocol.packets.s2c.play.ServerTpsS2CPacket;
 import prelude.protocol.packets.s2c.play.TotemUsedS2CPacket;
 import prelude.protocol.packets.s2c.play.UpdateOffhandS2CPacket;
-import prelude.protocol.packets.s2c.world.ChunkDataUnderYZeroS2CPacket;
+import prelude.protocol.packets.s2c.world.BlockChangeModernS2CPacket;
+import prelude.protocol.packets.s2c.world.ChunkDataModernS2CPacket;
 
 /*
 * Extended by ResentS2CPacketHandler on the client
@@ -42,5 +43,7 @@ public interface S2CPacketHandler {
 
     void handleSyncRequest(ServerSyncRequestS2CPacket packet);
 
-    void handleChunkDataUnderYZero(ChunkDataUnderYZeroS2CPacket packet);
+    void handleChunkDataModern(ChunkDataModernS2CPacket packet);
+
+    void handleBlockChangeModern(BlockChangeModernS2CPacket packet);
 }

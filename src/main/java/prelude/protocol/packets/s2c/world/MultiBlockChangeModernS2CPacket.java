@@ -16,11 +16,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol;
+package prelude.protocol.packets.s2c.world;
+
+import prelude.protocol.InvalidPacketException;
+import prelude.protocol.S2CPacket;
+import prelude.protocol.S2CPacketHandler;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 
-public interface WriteableObject {
-    void write(OutputStream out) throws IOException;
+public class MultiBlockChangeModernS2CPacket extends S2CPacket {
+    @Override
+    public byte[] toBytes() throws IOException {
+        return new byte[0];
+    }
+
+    @Override
+    public boolean equals(Object packet) {
+        return false;
+    }
+
+    @Override
+    public void loadData(InputStream is) throws InvalidPacketException {
+
+    }
+
+    @Override
+    public void processSelf(S2CPacketHandler handler) {
+
+    }
 }

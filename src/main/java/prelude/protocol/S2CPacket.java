@@ -44,11 +44,10 @@ public abstract class S2CPacket extends Packet<S2CPacketHandler> {
         registerS2CPacket(TotemUsedS2CPacket.class);
         registerS2CPacket(SetWaypointsS2CPacket.class);
         registerS2CPacket(ServerSyncRequestS2CPacket.class);
-        registerS2CPacket(ChunkDataBulkUnderYZeroS2CPacket.class);
-        registerS2CPacket(ChunkDataUnderYZeroS2CPacket.class);
-        registerS2CPacket(MultiBlockChangeUnderYZeroS2CPacket.class);
-        registerS2CPacket(BlockChangeUnderYZeroS2CPacket.class);
-        registerS2CPacket(SupplementMissingBlocksS2CPacket.class);
+        registerS2CPacket(ChunkDataModernS2CPacket.class);
+        registerS2CPacket(MultiBlockChangeModernS2CPacket.class);
+        registerS2CPacket(BlockChangeModernS2CPacket.class);
+        registerS2CPacket(CorrectViaVersionBlocksS2CPacket.class);
     }
 
     protected S2CPacket() {

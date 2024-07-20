@@ -16,11 +16,40 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol;
+package prelude.protocol.world;
+
+import prelude.protocol.WriteableObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
-public interface WriteableObject {
-    void write(OutputStream out) throws IOException;
+public enum PreludeChunkType implements WriteableObject {
+    BELOW_Y0(0x00),
+    ABOVE_Y255(0x01);
+
+    public final int value;
+
+    PreludeChunkType(int value) {
+        this.value = value;
+    }
+
+    private static PreludeChunkType of(int value) {
+        for (PreludeChunkType type : PreludeChunkType.values()) {
+            if (type.value == value) {
+                return type;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public void write(OutputStream out) throws IOException {
+        out.write(value);
+    }
+
+    public static PreludeChunkType deserialize(InputStream in) throws IOException {
+        return of(in.read());
+    }
 }

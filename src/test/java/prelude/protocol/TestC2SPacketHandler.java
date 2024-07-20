@@ -21,8 +21,7 @@ package prelude.protocol;
 import prelude.protocol.packets.c2s.ClientHandshakeC2SPacket;
 import prelude.protocol.packets.c2s.ClientSyncResponseC2SPacket;
 import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
-import prelude.protocol.packets.c2s.interactions.AttemptPlaceAboveGroundC2SPacket;
-import prelude.protocol.packets.c2s.interactions.AttemptPlaceBelowGroundC2SPacket;
+import prelude.protocol.packets.c2s.interactions.AttemptPlaceInLegacyIllegalSpotsC2SPacket;
 import prelude.protocol.packets.c2s.interactions.InteractWithOffhandC2SPacket;
 
 public class TestC2SPacketHandler implements C2SPacketHandler {
@@ -47,12 +46,7 @@ public class TestC2SPacketHandler implements C2SPacketHandler {
     }
 
     @Override
-    public void handleAttemptPlaceAboveGround(AttemptPlaceAboveGroundC2SPacket packet) {
-        System.out.println("Attempt place above ground received");
-    }
-
-    @Override
-    public void handleAttemptPlaceBelowGround(AttemptPlaceBelowGroundC2SPacket packet) {
-        System.out.println("Attempt place below ground received");
+    public void handleAttemptPlaceInLegacyIllegalSpots(AttemptPlaceInLegacyIllegalSpotsC2SPacket packet) {
+        System.out.println("Attempt place in legacy illegal spots received");
     }
 }
