@@ -18,6 +18,7 @@
 
 package prelude.protocol;
 
+import prelude.protocol.packets.c2s.ClientAcknowledgeServerHandshakeC2SPacket;
 import prelude.protocol.packets.c2s.ClientHandshakeC2SPacket;
 import prelude.protocol.packets.c2s.ClientSyncResponseC2SPacket;
 import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
@@ -29,6 +30,8 @@ import prelude.protocol.packets.c2s.interactions.InteractWithOffhandC2SPacket;
 * */
 public interface C2SPacketHandler {
     void handleClientHandshake(ClientHandshakeC2SPacket packet);
+
+    void handleClientAcknowledgeServerHandshake(ClientAcknowledgeServerHandshakeC2SPacket packet);
 
     void handleEquipOffhand(EquipOffhandC2SPacket packet);
 

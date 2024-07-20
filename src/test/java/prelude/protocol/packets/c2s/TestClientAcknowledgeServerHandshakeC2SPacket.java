@@ -16,42 +16,40 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package prelude.protocol.packets.s2c.play;
+package prelude.protocol.packets.c2s;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
+import prelude.protocol.C2SPacket;
 import prelude.protocol.InvalidPacketException;
-import prelude.protocol.S2CPacket;
-import prelude.protocol.packets.c2s.ClientAcknowledgeServerHandshakeC2SPacket;
+import prelude.protocol.packets.s2c.ServerSyncRequestS2CPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Optional;
 
 @Testable
-public class TestServerTpsS2CPacket {
+public class TestClientAcknowledgeServerHandshakeC2SPacket {
     @Test
-    public void testServerTpsPacket() throws IOException {
-        ServerTpsS2CPacket notPossiblePacket = ServerTpsS2CPacket.builder().characteristic(124).mantissa(Short.MAX_VALUE & 0xFFFF).build();
-        ServerTpsS2CPacket packet = ServerTpsS2CPacket.builder().characteristic(19).mantissa(19372).build();
-        Assertions.assertNotEquals(notPossiblePacket, packet);
+    public void testClientAcknowledgeServerHandshakePacket() throws IOException {
+        Assertions.assertEquals(1, new ClientAcknowledgeServerHandshakeC2SPacket().toBytes()[0]);
 
-        byte[] bytes = packet.toBytes();
+        byte[] bytes = { 1 };
         try {
-            Optional<S2CPacket> optional = S2CPacket.parsePacket(bytes);
+            Optional<C2SPacket> optional = C2SPacket.parsePacket(bytes);
 
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof ServerTpsS2CPacket)
-                Assertions.assertEquals(ServerTpsS2CPacket.class, optional.get().getClass());
+            if (optional.get() instanceof ClientAcknowledgeServerHandshakeC2SPacket)
+                Assertions.assertEquals(ClientAcknowledgeServerHandshakeC2SPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            ServerTpsS2CPacket deserialized = (ServerTpsS2CPacket) optional.get();
-            Assertions.assertEquals(packet, deserialized);
+            ClientAcknowledgeServerHandshakeC2SPacket deserialized = (ClientAcknowledgeServerHandshakeC2SPacket) optional.get();
+            Assertions.assertArrayEquals(bytes, deserialized.toBytes());
 
-            ClientAcknowledgeServerHandshakeC2SPacket invalidPacket = new ClientAcknowledgeServerHandshakeC2SPacket();
+            ServerSyncRequestS2CPacket invalidPacket = new ServerSyncRequestS2CPacket();
             try {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");

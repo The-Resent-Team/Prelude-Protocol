@@ -18,6 +18,7 @@
 
 package prelude.protocol;
 
+import prelude.protocol.packets.c2s.ClientAcknowledgeServerHandshakeC2SPacket;
 import prelude.protocol.packets.c2s.ClientHandshakeC2SPacket;
 import prelude.protocol.packets.c2s.ClientSyncResponseC2SPacket;
 import prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
@@ -36,6 +37,7 @@ public abstract class C2SPacket extends Packet<C2SPacketHandler> {
 
     static {
         registerC2SPacket(ClientHandshakeC2SPacket.class);
+        registerC2SPacket(ClientAcknowledgeServerHandshakeC2SPacket.class);
         registerC2SPacket(EquipOffhandC2SPacket.class);
         registerC2SPacket(ClientSyncResponseC2SPacket.class);
         registerC2SPacket(InteractWithOffhandC2SPacket.class);
