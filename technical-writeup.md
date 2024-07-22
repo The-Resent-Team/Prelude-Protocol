@@ -26,9 +26,13 @@ The plugin can also send an UpdateOffhandS2CPacket to update offhand, or send th
 
 ## QoL
 TotemUsedS2CPacket is used to render the proper totem popping animation.
+
 ServerTpsS2CPacket is used to accurately show the TPS.
+
 ServerSyncRequestS2CPacket is used to sync a lot of things, and ClientSyncResponseC2SPacket is the client counterpart
+
 SetWaypointsS2CPacket is useful for servers to set the waypoints on the client
+
 ModStatusS2CPacket is used to inform if a mod is supported or is disabled on the server
 
 ## the end
