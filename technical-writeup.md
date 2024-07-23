@@ -22,7 +22,7 @@ to update the state (p sure viaver will drop the packet but better to be safe th
 
 ## Offhanding
 The client will send a EquipOffhandC2SPacket when the client attempts to offhand an item. The client will try to predict the results of this, and the plugin will verify that if the #getSlot is in an inventory, the player is in an inventory, and if it's in hotbar, it will verify that the current slot is the hotbar. It will fire the appropriate bukkit event, in order to not cause incompatibilies.
-The plugin can also send an UpdateOffhandS2CPacket to update offhand, or send the packet to deny offhanding.
+The plugin can also send an UpdateOffhandS2CPacket to update offhand, or send said packet to deny offhanding.
 
 ## QoL
 TotemUsedS2CPacket is used to render the proper totem popping animation.
