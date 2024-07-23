@@ -15,7 +15,7 @@ The reason Y > 255 needs specific handling is because if I just let the client s
 many anticheats would not be prepared for this since it isnt in vanilla, and incompatibilies are to be avoided at all costs. Therefore, I use my own packet, AttemptPlaceInLegacyIllegalSpotsC2SPacket.
 The prelude bukkit plugin will manually verify that the place is legal, and fire the bukkit event for a block being placed. It will then send a BlockChangeModernS2CPacket to update the block on the client
 as the client does not try to predict results of placing in illegal spots (incompatabilies once again). The plugin will also send the Minecraft Protocol's update block packet, in order for anticheats 
-to update the state and not false flag the player. Rendering on the client side is handled via an extended chunk system.
+to update the state (p sure viaver will drop the packet but better to be safe than sorry) and not false flag the player. Rendering on the client side is handled via an extended chunk system.
 
 ## World
 // TODO i'm lazy + this is a bit mroe complicated to explain
