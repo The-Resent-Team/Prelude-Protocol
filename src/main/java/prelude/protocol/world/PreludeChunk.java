@@ -77,9 +77,8 @@ public class PreludeChunk implements WriteableObject {
             for (int z = 0; z < 16; z++) {
                 for (int x = 0; x < 16; x++) {
                     blocks[y][z][x].write(out);
+                    biomes[x][z].write(out);
                 }
-
-                biomes[x][z].write(out);
             }
     }
 
