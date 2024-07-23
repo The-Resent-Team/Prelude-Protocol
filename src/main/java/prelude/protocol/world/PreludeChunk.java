@@ -33,21 +33,21 @@ public class PreludeChunk implements WriteableObject {
     private final boolean isPreChunk;
 
     public PreludeChunk(PreludeChunkCoordinate chunkCoordinate, final boolean isPreChunk) {
-        this.blocks = new PreludeBlockType[16][16][64];
+        this.blocks = new PreludeBlockType[64][16][16];
         this.biomes = new PreludeBiome[16][16];
         this.chunkCoordinate = chunkCoordinate;
         this.isPreChunk = isPreChunk;
     }
 
     public PreludeChunk(PreludeBlockType[][][] blocks, PreludeBiome[][] biomes, PreludeChunkCoordinate chunkCoordinate, final boolean isPreChunk) {
-        if (blocks.length != 16)
-            throw new IllegalArgumentException("A chunk must be exactly 16 blocks long in the X axis, but this is {} blocks long!"
+        if (blocks.length != 64)
+            throw new IllegalArgumentException("A chunk must be exactly 16 blocks long in the Y axis, but this is {} blocks long!"
                     .replace("{}", blocks.length + ""));
         if (blocks[0].length != 16)
             throw new IllegalArgumentException("A chunk must be exactly 16 blocks long in the Z axis, but this is {} blocks long!"
                     .replace("{}", blocks[0].length + ""));
-        if (blocks[0][0].length != 64)
-            throw new IllegalArgumentException("A chunk must be exactly 64 blocks long in the Y axis, but this is {} blocks long!"
+        if (blocks[0][0].length != 16)
+            throw new IllegalArgumentException("A chunk must be exactly 16 blocks long in the X axis, but this is {} blocks long!"
                     .replace("{}", blocks[0][0].length + ""));
 
         this.blocks = blocks;
@@ -73,10 +73,10 @@ public class PreludeChunk implements WriteableObject {
         out.write(isPreChunk ? 1 : 0);
         chunkCoordinate.write(out);
 
-        for (int x = 0; x < 16; x++)
+        for (int y = 0; y < 64; y++)
             for (int z = 0; z < 16; z++) {
-                for (int y = 0; y < 64; y++) {
-                    blocks[x][z][y].write(out);
+                for (int x = 0; x < 16; x++) {
+                    blocks[y][z][x].write(out);
                 }
 
                 biomes[x][z].write(out);
@@ -98,9 +98,9 @@ public class PreludeChunk implements WriteableObject {
         PreludeBlockType[][][] blocks = new PreludeBlockType[16][16][64];
         PreludeBiome[][] biomes = new PreludeBiome[16][16];
 
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 64; i++) {
             for (int j = 0; j < 16; j++) {
-                for (int k = 0; k < 64; k++) {
+                for (int k = 0; k < 16; k++) {
                     PreludeBlockType block = PreludeBlockType.deserialize(is);
 
                     blocks[i][j][k] = block;
