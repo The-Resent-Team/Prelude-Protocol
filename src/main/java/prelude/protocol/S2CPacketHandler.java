@@ -20,6 +20,7 @@ package prelude.protocol;
 
 import prelude.protocol.packets.s2c.*;
 import prelude.protocol.packets.s2c.play.ServerTpsS2CPacket;
+import prelude.protocol.packets.s2c.play.SetItemTypeS2CPacket;
 import prelude.protocol.packets.s2c.play.TotemUsedS2CPacket;
 import prelude.protocol.packets.s2c.play.UpdateOffhandS2CPacket;
 import prelude.protocol.packets.s2c.world.BlockChangeModernS2CPacket;
@@ -49,4 +50,6 @@ public interface S2CPacketHandler {
     void handleBlockChangeModern(BlockChangeModernS2CPacket packet);
 
     void handleMultiBlockChangeModern(MultiBlockChangeModernS2CPacket packet);
+
+    void handleSetItemType(SetItemTypeS2CPacket packet);
 }

@@ -23,6 +23,7 @@ import prelude.protocol.WriteableObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Objects;
 
 public class PreludeBlockStatePreFlattening implements WriteableObject {
     public final int subId;
@@ -38,5 +39,13 @@ public class PreludeBlockStatePreFlattening implements WriteableObject {
 
     public static PreludeBlockStatePreFlattening deserialize(InputStream is) throws IOException {
         return new PreludeBlockStatePreFlattening(is.read());
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof PreludeBlockStatePreFlattening)) return false;
+        PreludeBlockStatePreFlattening that = (PreludeBlockStatePreFlattening) object;
+        return subId == that.subId;
     }
 }

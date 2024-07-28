@@ -41,13 +41,13 @@ public class PreludeChunk implements WriteableObject {
 
     public PreludeChunk(PreludeBlockType[][][] blocks, PreludeBiome[][] biomes, PreludeChunkCoordinate chunkCoordinate, final boolean isPreChunk) {
         if (blocks.length != 64)
-            throw new IllegalArgumentException("A chunk must be exactly 16 blocks long in the Y axis, but this is {} blocks long!"
+            throw new IllegalArgumentException("A chunk must be exactly 64 blocks long in the Y axis, but this is {} blocks long!"
                     .replace("{}", blocks.length + ""));
         if (blocks[0].length != 16)
-            throw new IllegalArgumentException("A chunk must be exactly 16 blocks long in the Z axis, but this is {} blocks long!"
+            throw new IllegalArgumentException("A chunk must be exactly 16 blocks long in the X axis, but this is {} blocks long!"
                     .replace("{}", blocks[0].length + ""));
         if (blocks[0][0].length != 16)
-            throw new IllegalArgumentException("A chunk must be exactly 16 blocks long in the X axis, but this is {} blocks long!"
+            throw new IllegalArgumentException("A chunk must be exactly 16 blocks long in the Z axis, but this is {} blocks long!"
                     .replace("{}", blocks[0][0].length + ""));
 
         this.blocks = blocks;
@@ -57,11 +57,11 @@ public class PreludeChunk implements WriteableObject {
     }
 
     public void setBlock(PreludeRelativeCoordinate coordinate, PreludeBlockType block) {
-        blocks[coordinate.relativePosX][coordinate.relativePosY][coordinate.relativePosZ] = block;
+        blocks[coordinate.relativePosY][coordinate.relativePosX][coordinate.relativePosZ] = block;
     }
 
     public void setBlock(final int xPosRelative, final int yPosRelative, final int zPosRelative, final PreludeBlockType block) {
-        blocks[xPosRelative][yPosRelative][zPosRelative] = block;
+        blocks[yPosRelative][xPosRelative][zPosRelative] = block;
     }
 
     public void setBiome(final int xPosRelative, final int zPosRelative, final PreludeBiome biome) {
@@ -76,7 +76,7 @@ public class PreludeChunk implements WriteableObject {
         for (int y = 0; y < 64; y++)
             for (int z = 0; z < 16; z++) {
                 for (int x = 0; x < 16; x++) {
-                    blocks[y][z][x].write(out);
+                    blocks[y][x][z].write(out);
                     biomes[x][z].write(out);
                 }
             }
@@ -94,7 +94,7 @@ public class PreludeChunk implements WriteableObject {
         boolean isPreChunk = is.read() != 0;
         PreludeChunkCoordinate chunkCoordinate = PreludeChunkCoordinate.deserialize(is);
 
-        PreludeBlockType[][][] blocks = new PreludeBlockType[16][16][64];
+        PreludeBlockType[][][] blocks = new PreludeBlockType[64][16][16];
         PreludeBiome[][] biomes = new PreludeBiome[16][16];
 
         for (int i = 0; i < 64; i++) {
@@ -103,9 +103,8 @@ public class PreludeChunk implements WriteableObject {
                     PreludeBlockType block = PreludeBlockType.deserialize(is);
 
                     blocks[i][j][k] = block;
+                    biomes[j][k] = PreludeBiome.deserialize(is);
                 }
-
-                biomes[i][j] = PreludeBiome.deserialize(is);
             }
         }
 

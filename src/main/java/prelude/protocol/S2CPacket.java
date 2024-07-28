@@ -20,6 +20,7 @@ package prelude.protocol;
 
 import prelude.protocol.packets.s2c.*;
 import prelude.protocol.packets.s2c.play.ServerTpsS2CPacket;
+import prelude.protocol.packets.s2c.play.SetItemTypeS2CPacket;
 import prelude.protocol.packets.s2c.play.TotemUsedS2CPacket;
 import prelude.protocol.packets.s2c.play.UpdateOffhandS2CPacket;
 import prelude.protocol.packets.s2c.world.*;
@@ -45,6 +46,7 @@ public abstract class S2CPacket extends Packet<S2CPacketHandler> {
         registerS2CPacket(ChunkDataModernS2CPacket.class);
         registerS2CPacket(MultiBlockChangeModernS2CPacket.class);
         registerS2CPacket(BlockChangeModernS2CPacket.class);
+        registerS2CPacket(SetItemTypeS2CPacket.class);
     }
 
     protected S2CPacket() {
