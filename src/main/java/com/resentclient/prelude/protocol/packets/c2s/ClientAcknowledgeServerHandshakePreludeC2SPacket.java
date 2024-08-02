@@ -20,13 +20,13 @@ package com.resentclient.prelude.protocol.packets.c2s;
 
 import com.resentclient.prelude.protocol.PreludeC2SPacket;
 import com.resentclient.prelude.protocol.PreludeC2SPacketHandler;
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ClientAcknowledgeServerHandshakeC2SPacket extends PreludeC2SPacket {
-    public ClientAcknowledgeServerHandshakeC2SPacket() {
+public class ClientAcknowledgeServerHandshakePreludeC2SPacket extends PreludeC2SPacket {
+    public ClientAcknowledgeServerHandshakePreludeC2SPacket() {
     }
 
     @Override
@@ -35,14 +35,14 @@ public class ClientAcknowledgeServerHandshakeC2SPacket extends PreludeC2SPacket 
     }
 
     @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("CLIENT_ACKNOWLEDGE_SERVER_HANDSHAKE_ID", is);
 
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse CLIENT_ACKNOWLEDGE_SERVER_HANDSHAKE_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse CLIENT_ACKNOWLEDGE_SERVER_HANDSHAKE_PACKET!", e);
         }
     }
 
@@ -53,6 +53,6 @@ public class ClientAcknowledgeServerHandshakeC2SPacket extends PreludeC2SPacket 
 
     @Override
     public boolean equals(Object packet) {
-        return packet instanceof ClientAcknowledgeServerHandshakeC2SPacket;
+        return packet instanceof ClientAcknowledgeServerHandshakePreludeC2SPacket;
     }
 }

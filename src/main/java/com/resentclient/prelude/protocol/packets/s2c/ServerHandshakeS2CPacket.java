@@ -18,7 +18,7 @@
 
 package com.resentclient.prelude.protocol.packets.s2c;
 
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.PreludeS2CPacket;
 import com.resentclient.prelude.protocol.PreludeS2CPacketHandler;
 
@@ -63,7 +63,7 @@ public class ServerHandshakeS2CPacket extends PreludeS2CPacket {
     }
 
     @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("SERVER_HANDSHAKE_ID", is);
 
@@ -75,7 +75,7 @@ public class ServerHandshakeS2CPacket extends PreludeS2CPacket {
             int serverPatchVersion = is.read();
 
             if (preludeMajorVersion < 0 || preludeMinorVersion < 0 || preludePatchVersion < 0 || serverMajorVersion < 0 || serverMinorVersion < 0 || serverPatchVersion < 0)
-                throw new InvalidPacketException("Constructed SERVER_HANDSHAKE_PACKET is invalid!");
+                throw new InvalidPreludePacketException("Constructed SERVER_HANDSHAKE_PACKET is invalid!");
 
             this.preludeMajorVersion = preludeMajorVersion;
             this.preludeMinorVersion = preludeMinorVersion;
@@ -83,10 +83,10 @@ public class ServerHandshakeS2CPacket extends PreludeS2CPacket {
             this.serverMajorVersion = serverMajorVersion;
             this.serverMinorVersion = serverMinorVersion;
             this.serverPatchVersion = serverPatchVersion;
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse SERVER_HANDSHAKE_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse SERVER_HANDSHAKE_PACKET!", e);
         }
     }
 

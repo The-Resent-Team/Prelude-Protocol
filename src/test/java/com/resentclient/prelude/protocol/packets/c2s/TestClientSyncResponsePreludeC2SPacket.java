@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
 import com.resentclient.prelude.protocol.PreludeC2SPacket;
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -32,7 +32,7 @@ import java.util.Optional;
 public class TestClientSyncResponsePreludeC2SPacket {
     @Test
     public void testClientHandshakePacket() throws IOException {
-        ClientSyncResponseC2SPacket packet = ClientSyncResponseC2SPacket.builder()
+        ClientSyncResponsePreludeC2SPacket packet = ClientSyncResponsePreludeC2SPacket.builder()
                 .syncId(Integer.MAX_VALUE).build();
 
         byte[] bytes = packet.toBytes();
@@ -43,19 +43,19 @@ public class TestClientSyncResponsePreludeC2SPacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof ClientSyncResponseC2SPacket)
-                Assertions.assertEquals(ClientSyncResponseC2SPacket.class, optional.get().getClass());
+            if (optional.get() instanceof ClientSyncResponsePreludeC2SPacket)
+                Assertions.assertEquals(ClientSyncResponsePreludeC2SPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            ClientSyncResponseC2SPacket deserialized = (ClientSyncResponseC2SPacket) optional.get();
+            ClientSyncResponsePreludeC2SPacket deserialized = (ClientSyncResponsePreludeC2SPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
-            EquipOffhandC2SPacket invalidPacket = new EquipOffhandC2SPacket();
+            EquipOffhandPreludeC2SPacket invalidPacket = new EquipOffhandPreludeC2SPacket();
             try {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");
             } catch (Exception e) {
-                Assertions.assertInstanceOf(InvalidPacketException.class, e);
+                Assertions.assertInstanceOf(InvalidPreludePacketException.class, e);
             }
         } catch (Exception e) {
             // erm what the

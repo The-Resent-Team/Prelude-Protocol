@@ -22,8 +22,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
 import com.resentclient.prelude.protocol.PreludeC2SPacket;
-import com.resentclient.prelude.protocol.InvalidPacketException;
-import com.resentclient.prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
+import com.resentclient.prelude.protocol.packets.c2s.EquipOffhandPreludeC2SPacket;
 import com.resentclient.prelude.protocol.world.PreludeChunkType;
 
 import java.io.ByteArrayInputStream;
@@ -34,7 +34,7 @@ import java.util.Optional;
 public class TestAttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket {
     @Test
     public void testAttemptPlaceInLegacyIllegalSpotsC2SPacket() throws IOException {
-        AttemptPlaceInLegacyIllegalSpotsC2SPacket packet = AttemptPlaceInLegacyIllegalSpotsC2SPacket.builder()
+        AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket packet = AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket.builder()
                 .chunkType(PreludeChunkType.ABOVE_Y255)
                 .chunkX(15)
                 .chunkZ(250161)
@@ -51,19 +51,19 @@ public class TestAttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof AttemptPlaceInLegacyIllegalSpotsC2SPacket)
-                Assertions.assertEquals(AttemptPlaceInLegacyIllegalSpotsC2SPacket.class, optional.get().getClass());
+            if (optional.get() instanceof AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket)
+                Assertions.assertEquals(AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            AttemptPlaceInLegacyIllegalSpotsC2SPacket deserialized = (AttemptPlaceInLegacyIllegalSpotsC2SPacket) optional.get();
+            AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket deserialized = (AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
-            EquipOffhandC2SPacket invalidPacket = new EquipOffhandC2SPacket();
+            EquipOffhandPreludeC2SPacket invalidPacket = new EquipOffhandPreludeC2SPacket();
             try {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");
             } catch (Exception e) {
-                Assertions.assertInstanceOf(InvalidPacketException.class, e);
+                Assertions.assertInstanceOf(InvalidPreludePacketException.class, e);
             }
         } catch (Exception e) {
             // erm what the

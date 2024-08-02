@@ -20,19 +20,19 @@ package com.resentclient.prelude.protocol.packets.c2s;
 
 import com.resentclient.prelude.protocol.PreludeC2SPacket;
 import com.resentclient.prelude.protocol.PreludeC2SPacketHandler;
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.StreamUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class EquipOffhandC2SPacket extends PreludeC2SPacket {
+public class EquipOffhandPreludeC2SPacket extends PreludeC2SPacket {
     private short slot;
 
-    public EquipOffhandC2SPacket() {}
+    public EquipOffhandPreludeC2SPacket() {}
 
-    private EquipOffhandC2SPacket(short slot) {
+    private EquipOffhandPreludeC2SPacket(short slot) {
         this.slot = slot;
     }
 
@@ -51,7 +51,7 @@ public class EquipOffhandC2SPacket extends PreludeC2SPacket {
     * to try to cause damage to the server running prelude
     * we must sanitize all input to this to prevent damage
     * */
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("EQUIP_OFFHAND_ID", is);
 
@@ -61,13 +61,13 @@ public class EquipOffhandC2SPacket extends PreludeC2SPacket {
             // slot id from here without hard coding it
             // we must let the bukkit implementation check this
             if (slot < 0)
-                throw new InvalidPacketException("Constructed EQUIP_OFFHAND_PACKET has a negative slot!");
+                throw new InvalidPreludePacketException("Constructed EQUIP_OFFHAND_PACKET has a negative slot!");
 
             this.slot = slot;
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse EQUIP_OFFHAND_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse EQUIP_OFFHAND_PACKET!", e);
         }
     }
 
@@ -79,8 +79,8 @@ public class EquipOffhandC2SPacket extends PreludeC2SPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof EquipOffhandC2SPacket)) return false;
-        EquipOffhandC2SPacket that = (EquipOffhandC2SPacket) o;
+        if (!(o instanceof EquipOffhandPreludeC2SPacket)) return false;
+        EquipOffhandPreludeC2SPacket that = (EquipOffhandPreludeC2SPacket) o;
         return slot == that.slot;
     }
 
@@ -98,11 +98,11 @@ public class EquipOffhandC2SPacket extends PreludeC2SPacket {
             return this;
         }
 
-        public EquipOffhandC2SPacket build() {
+        public EquipOffhandPreludeC2SPacket build() {
             if (slot == -1)
                 throw new IllegalStateException("Not all required fields are set!");
 
-            return new EquipOffhandC2SPacket(slot);
+            return new EquipOffhandPreludeC2SPacket(slot);
         }
     }
 

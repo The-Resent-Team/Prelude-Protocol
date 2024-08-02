@@ -22,9 +22,9 @@ import com.resentclient.prelude.protocol.world.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.PreludeS2CPacket;
-import com.resentclient.prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
+import com.resentclient.prelude.protocol.packets.c2s.EquipOffhandPreludeC2SPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -63,12 +63,12 @@ public class TestChunkDataModernPreludeS2CPacket {
             ChunkDataModernS2CPacket deserialized = (ChunkDataModernS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
-            EquipOffhandC2SPacket invalidPacket = new EquipOffhandC2SPacket();
+            EquipOffhandPreludeC2SPacket invalidPacket = new EquipOffhandPreludeC2SPacket();
             try {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");
             } catch (Exception e) {
-                Assertions.assertInstanceOf(InvalidPacketException.class, e);
+                Assertions.assertInstanceOf(InvalidPreludePacketException.class, e);
             }
         } catch (Exception e) {
             // erm what the

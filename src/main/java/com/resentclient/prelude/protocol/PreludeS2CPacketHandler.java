@@ -30,11 +30,11 @@ public interface PreludeS2CPacketHandler {
 
     void handleModStatus(ModStatusS2CPacket packet);
 
-    void handleServerTps(ServerTpsS2CPacket packet);
+    void handleServerTps(ServerTpsPreludeS2CPacket packet);
 
-    void handleOffhandUpdate(UpdateOffhandS2CPacket packet);
+    void handleOffhandUpdate(UpdateOffhandPreludeS2CPacket packet);
 
-    void handleTotemUsed(TotemUsedS2CPacket packet);
+    void handleTotemUsed(TotemUsedPreludeS2CPacket packet);
 
     void handleWaypoints(SetWaypointsS2CPacket packet);
 
@@ -46,5 +46,5 @@ public interface PreludeS2CPacketHandler {
 
     void handleMultiBlockChangeModern(MultiBlockChangeModernS2CPacket packet);
 
-    void handleSetItemType(SetItemTypeS2CPacket packet);
+    void handleSetItemType(SetItemTypePreludeS2CPacket packet);
 }

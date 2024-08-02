@@ -25,15 +25,15 @@ import com.resentclient.prelude.protocol.packets.c2s.interactions.*;
 * Extended by BukkitC2SPacketHandler on the plugin
 * */
 public interface PreludeC2SPacketHandler {
-    void handleClientHandshake(ClientHandshakeC2SPacket packet);
+    void handleClientHandshake(ClientHandshakePreludeC2SPacket packet);
 
-    void handleClientAcknowledgeServerHandshake(ClientAcknowledgeServerHandshakeC2SPacket packet);
+    void handleClientAcknowledgeServerHandshake(ClientAcknowledgeServerHandshakePreludeC2SPacket packet);
 
-    void handleEquipOffhand(EquipOffhandC2SPacket packet);
+    void handleEquipOffhand(EquipOffhandPreludeC2SPacket packet);
 
-    void handleClientSyncResponse(ClientSyncResponseC2SPacket packet);
+    void handleClientSyncResponse(ClientSyncResponsePreludeC2SPacket packet);
 
-    void handleInteractWithOffhand(InteractWithOffhandC2SPacket packet);
+    void handleInteractWithOffhand(InteractWithOffhandPreludeC2SPacket packet);
 
-    void handleAttemptPlaceInLegacyIllegalSpots(AttemptPlaceInLegacyIllegalSpotsC2SPacket packet);
+    void handleAttemptPlaceInLegacyIllegalSpots(AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket packet);
 }

@@ -18,7 +18,7 @@
 
 package com.resentclient.prelude.protocol.packets.s2c.play;
 
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.PreludeS2CPacket;
 import com.resentclient.prelude.protocol.PreludeS2CPacketHandler;
 import com.resentclient.prelude.protocol.StreamUtils;
@@ -32,13 +32,13 @@ import java.util.Objects;
 /*
 * Used to correct viaversion
 * */
-public class SetItemTypeS2CPacket extends PreludeS2CPacket {
+public class SetItemTypePreludeS2CPacket extends PreludeS2CPacket {
     private int slot;
     private PreludeItem item; // i cba to deal with enchantments, so we only take the item type for rendering
 
-    public SetItemTypeS2CPacket() {}
+    public SetItemTypePreludeS2CPacket() {}
 
-    private SetItemTypeS2CPacket(int slot, PreludeItem item) {
+    private SetItemTypePreludeS2CPacket(int slot, PreludeItem item) {
         this.slot = slot;
         this.item = item;
     }
@@ -57,13 +57,13 @@ public class SetItemTypeS2CPacket extends PreludeS2CPacket {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (!(object instanceof SetItemTypeS2CPacket)) return false;
-        SetItemTypeS2CPacket that = (SetItemTypeS2CPacket) object;
+        if (!(object instanceof SetItemTypePreludeS2CPacket)) return false;
+        SetItemTypePreludeS2CPacket that = (SetItemTypePreludeS2CPacket) object;
         return slot == that.slot && Objects.equals(item, that.item);
     }
 
     @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("SET_ITEM_TYPE_ID", is);
             int slot = StreamUtils.readShort(is);
@@ -71,10 +71,10 @@ public class SetItemTypeS2CPacket extends PreludeS2CPacket {
 
             this.slot = slot;
             this.item = item;
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse SET_ITEM_TYPE_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse SET_ITEM_TYPE_PACKET!", e);
         }
     }
 
@@ -101,8 +101,8 @@ public class SetItemTypeS2CPacket extends PreludeS2CPacket {
             return this;
         }
 
-        public SetItemTypeS2CPacket build() {
-            return new SetItemTypeS2CPacket(slot, item);
+        public SetItemTypePreludeS2CPacket build() {
+            return new SetItemTypePreludeS2CPacket(slot, item);
         }
     }
 

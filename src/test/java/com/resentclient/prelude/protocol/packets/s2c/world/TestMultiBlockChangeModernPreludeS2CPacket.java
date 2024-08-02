@@ -16,14 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.resentclient.prelude.protocol;
+package com.resentclient.prelude.protocol.packets.s2c.world;
 
-public class InvalidPacketException extends Exception {
-    public InvalidPacketException(String message) {
-        super(message);
-    }
-
-    public InvalidPacketException(String message, Throwable cause) {
-        super(message, cause);
-    }
+public class TestMultiBlockChangeModernPreludeS2CPacket {
 }

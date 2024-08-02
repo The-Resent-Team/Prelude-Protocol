@@ -18,12 +18,12 @@
 
 package com.resentclient.prelude.protocol.packets.s2c;
 
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.PreludeS2CPacket;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
-import com.resentclient.prelude.protocol.packets.c2s.ClientHandshakeC2SPacket;
+import com.resentclient.prelude.protocol.packets.c2s.ClientHandshakePreludeC2SPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -52,12 +52,12 @@ public class TestModStatusPreludeS2CPacket {
             ModStatusS2CPacket deserialized = (ModStatusS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
-            ClientHandshakeC2SPacket invalidPacket = new ClientHandshakeC2SPacket();
+            ClientHandshakePreludeC2SPacket invalidPacket = new ClientHandshakePreludeC2SPacket();
             try {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");
             } catch (Exception e) {
-                Assertions.assertInstanceOf(InvalidPacketException.class, e);
+                Assertions.assertInstanceOf(InvalidPreludePacketException.class, e);
             }
         } catch (Exception e) {
             // erm what the

@@ -18,7 +18,7 @@
 
 package com.resentclient.prelude.protocol.packets.s2c.world;
 
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.PreludeS2CPacket;
 import com.resentclient.prelude.protocol.PreludeS2CPacketHandler;
 import com.resentclient.prelude.protocol.world.PreludeChunk;
@@ -59,15 +59,15 @@ public class ChunkDataModernS2CPacket extends PreludeS2CPacket {
     }
 
     @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("CHUNK_DATA_MODERN_ID", is);
 
             this.chunk = PreludeChunk.deserialize(is);
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse CHUNK_DATA_MODERN_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse CHUNK_DATA_MODERN_PACKET!", e);
         }
     }
 

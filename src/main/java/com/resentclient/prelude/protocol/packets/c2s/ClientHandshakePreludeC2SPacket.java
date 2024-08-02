@@ -28,7 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Objects;
 
-public final class ClientHandshakeC2SPacket extends PreludeC2SPacket {
+public final class ClientHandshakePreludeC2SPacket extends PreludeC2SPacket {
     private static final String NULL_TERMINATOR = "\u0000";
 
     private String username;
@@ -45,10 +45,10 @@ public final class ClientHandshakeC2SPacket extends PreludeC2SPacket {
     private boolean clientClaimsSelfIsRankedPlayer;
     private String[] enabledMods;
 
-    public ClientHandshakeC2SPacket() {}
+    public ClientHandshakePreludeC2SPacket() {}
 
-    private ClientHandshakeC2SPacket(String username, byte resentMajorVersion, byte resentMinorVersion, int resentBuildInteger, ClientType clientType,
-                                     boolean clientClaimsSelfIsRankedPlayer, String[] enabledMods) {
+    private ClientHandshakePreludeC2SPacket(String username, byte resentMajorVersion, byte resentMinorVersion, int resentBuildInteger, ClientType clientType,
+                                            boolean clientClaimsSelfIsRankedPlayer, String[] enabledMods) {
         this.username = username;
         this.resentMajorVersion = resentMajorVersion;
         this.resentMinorVersion = resentMinorVersion;
@@ -90,7 +90,7 @@ public final class ClientHandshakeC2SPacket extends PreludeC2SPacket {
         return bao.toByteArray();
     }
 
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("CLIENT_HANDSHAKE_ID", is);
 
@@ -103,7 +103,7 @@ public final class ClientHandshakeC2SPacket extends PreludeC2SPacket {
             String[] mods = enabledMods.split(NULL_TERMINATOR);
 
             if (username.length() < 3 || username.length() > 16 || minor < 0 || major < 0 || type == null)
-                throw new InvalidPacketException("Constructed CLIENT_HANDSHAKE_PACKET is invalid!");
+                throw new InvalidPreludePacketException("Constructed CLIENT_HANDSHAKE_PACKET is invalid!");
 
             this.username = username;
             this.resentMajorVersion = major;
@@ -111,10 +111,10 @@ public final class ClientHandshakeC2SPacket extends PreludeC2SPacket {
             this.clientType = type;
             this.clientClaimsSelfIsRankedPlayer = clientClaimsSelfIsRankedPlayer;
             this.enabledMods = mods;
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse CLIENT_HANDSHAKE_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse CLIENT_HANDSHAKE_PACKET!", e);
         }
     }
 
@@ -126,8 +126,8 @@ public final class ClientHandshakeC2SPacket extends PreludeC2SPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ClientHandshakeC2SPacket)) return false;
-        ClientHandshakeC2SPacket that = (ClientHandshakeC2SPacket) o;
+        if (!(o instanceof ClientHandshakePreludeC2SPacket)) return false;
+        ClientHandshakePreludeC2SPacket that = (ClientHandshakePreludeC2SPacket) o;
         return resentMajorVersion == that.resentMajorVersion && resentMinorVersion == that.resentMinorVersion && clientClaimsSelfIsRankedPlayer == that.clientClaimsSelfIsRankedPlayer && Objects.equals(username, that.username) && clientType == that.clientType && Objects.deepEquals(enabledMods, that.enabledMods);
     }
 
@@ -210,14 +210,14 @@ public final class ClientHandshakeC2SPacket extends PreludeC2SPacket {
             return this;
         }
 
-        public ClientHandshakeC2SPacket build() {
+        public ClientHandshakePreludeC2SPacket build() {
             if (username == null || username.length() > 16 || username.length() < 3)
                 throw new RuntimeException("Username must be between 3 and 16 characters");
 
             if (resentMajorVersion == -1 || resentMinorVersion == -1 || resentBuildInteger == -1 || clientType == null || enabledMods == null)
                 throw new IllegalStateException("Not all required fields are set!");
 
-            return new ClientHandshakeC2SPacket(username, resentMajorVersion, resentMinorVersion, resentBuildInteger, clientType, clientClaimsSelfIsRankedPlayer, enabledMods);
+            return new ClientHandshakePreludeC2SPacket(username, resentMajorVersion, resentMinorVersion, resentBuildInteger, clientType, clientClaimsSelfIsRankedPlayer, enabledMods);
         }
     }
 

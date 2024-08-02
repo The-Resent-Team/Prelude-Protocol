@@ -32,12 +32,12 @@ public abstract class PreludeC2SPacket extends PreludePacket<PreludeC2SPacketHan
     private static final Map<Class<? extends PreludeC2SPacket>, Integer> C2S_PACKET_TO_ID = new HashMap<>();
 
     static {
-        registerC2SPacket(ClientHandshakeC2SPacket.class);
-        registerC2SPacket(ClientAcknowledgeServerHandshakeC2SPacket.class);
-        registerC2SPacket(EquipOffhandC2SPacket.class);
-        registerC2SPacket(ClientSyncResponseC2SPacket.class);
-        registerC2SPacket(InteractWithOffhandC2SPacket.class);
-        registerC2SPacket(AttemptPlaceInLegacyIllegalSpotsC2SPacket.class);
+        registerC2SPacket(ClientHandshakePreludeC2SPacket.class);
+        registerC2SPacket(ClientAcknowledgeServerHandshakePreludeC2SPacket.class);
+        registerC2SPacket(EquipOffhandPreludeC2SPacket.class);
+        registerC2SPacket(ClientSyncResponsePreludeC2SPacket.class);
+        registerC2SPacket(InteractWithOffhandPreludeC2SPacket.class);
+        registerC2SPacket(AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket.class);
     }
 
     protected PreludeC2SPacket() {
@@ -45,7 +45,7 @@ public abstract class PreludeC2SPacket extends PreludePacket<PreludeC2SPacketHan
     }
 
     @Override
-    public abstract void loadData(InputStream is) throws InvalidPacketException;
+    public abstract void loadData(InputStream is) throws InvalidPreludePacketException;
 
     public static Optional<PreludeC2SPacket> parsePacket(byte[] bytes) throws Exception {
         if (bytes == null)
@@ -57,7 +57,7 @@ public abstract class PreludeC2SPacket extends PreludePacket<PreludeC2SPacketHan
         int id = bytes[0] & 0xFF;
         Class<? extends PreludeC2SPacket> clazz = C2S_ID_TO_PACKET.get(id);
         if (clazz == null)
-            throw new InvalidPacketException("Invalid packet id for C2SPacket ids!");
+            throw new InvalidPreludePacketException("Invalid packet id for C2SPacket ids!");
 
         // it's deprecated however it's the only way it works with teavm iirc
         @SuppressWarnings("deprecation")

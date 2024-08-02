@@ -18,7 +18,7 @@
 
 package com.resentclient.prelude.protocol.packets.s2c.play;
 
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.PreludeS2CPacket;
 import com.resentclient.prelude.protocol.PreludeS2CPacketHandler;
 import com.resentclient.prelude.protocol.StreamUtils;
@@ -40,14 +40,14 @@ import java.io.InputStream;
 * raw 8 byte double is far worse than encoding 3 bytes)
 * 3) these assumptions make it easier for the client
 * */
-public class ServerTpsS2CPacket extends PreludeS2CPacket {
+public class ServerTpsPreludeS2CPacket extends PreludeS2CPacket {
     // we will just assume that the characteristic does reach over 255
     private int characteristic;
     private short mantissa;
 
-    public ServerTpsS2CPacket() {}
+    public ServerTpsPreludeS2CPacket() {}
 
-    private ServerTpsS2CPacket(int characteristic, short mantissa) {
+    private ServerTpsPreludeS2CPacket(int characteristic, short mantissa) {
         this.characteristic = characteristic;
         this.mantissa = mantissa;
     }
@@ -64,7 +64,7 @@ public class ServerTpsS2CPacket extends PreludeS2CPacket {
     }
 
     @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("SERVER_TPS_ID", is);
 
@@ -73,14 +73,14 @@ public class ServerTpsS2CPacket extends PreludeS2CPacket {
 
             // how the actual hell would you get negative tps
             if (characteristic < 0 || mantissa < 0)
-                throw new InvalidPacketException("Constructed SERVER_TPS_PACKET is invalid!");
+                throw new InvalidPreludePacketException("Constructed SERVER_TPS_PACKET is invalid!");
 
             this.characteristic = characteristic;
             this.mantissa = mantissa;
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse SERVER_TPS_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse SERVER_TPS_PACKET!", e);
         }
     }
 
@@ -92,8 +92,8 @@ public class ServerTpsS2CPacket extends PreludeS2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ServerTpsS2CPacket)) return false;
-        ServerTpsS2CPacket that = (ServerTpsS2CPacket) o;
+        if (!(o instanceof ServerTpsPreludeS2CPacket)) return false;
+        ServerTpsPreludeS2CPacket that = (ServerTpsPreludeS2CPacket) o;
         return characteristic == that.characteristic && mantissa == that.mantissa;
     }
 
@@ -115,11 +115,11 @@ public class ServerTpsS2CPacket extends PreludeS2CPacket {
             return this;
         }
 
-        public ServerTpsS2CPacket build() {
+        public ServerTpsPreludeS2CPacket build() {
             if (characteristic == -1 || mantissa == -1)
                 throw new IllegalStateException("Not all required fields are set!");
 
-            return new ServerTpsS2CPacket(characteristic, mantissa);
+            return new ServerTpsPreludeS2CPacket(characteristic, mantissa);
         }
     }
 

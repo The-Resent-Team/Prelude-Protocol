@@ -20,7 +20,7 @@ package com.resentclient.prelude.protocol.packets.c2s.interactions;
 
 import com.resentclient.prelude.protocol.PreludeC2SPacket;
 import com.resentclient.prelude.protocol.PreludeC2SPacketHandler;
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.world.PreludeChunkCoordinate;
 import com.resentclient.prelude.protocol.world.PreludeChunkType;
 import com.resentclient.prelude.protocol.world.PreludeCompactCoordinate;
@@ -31,12 +31,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
-public class AttemptPlaceInLegacyIllegalSpotsC2SPacket extends PreludeC2SPacket {
+public class AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket extends PreludeC2SPacket {
     private PreludeCompactCoordinate compactCoordinate;
 
-    public AttemptPlaceInLegacyIllegalSpotsC2SPacket() {}
+    public AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket() {}
 
-    private AttemptPlaceInLegacyIllegalSpotsC2SPacket(PreludeCompactCoordinate compactCoordinate) {
+    private AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket(PreludeCompactCoordinate compactCoordinate) {
         this.compactCoordinate = compactCoordinate;
     }
 
@@ -53,21 +53,21 @@ public class AttemptPlaceInLegacyIllegalSpotsC2SPacket extends PreludeC2SPacket 
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (!(object instanceof AttemptPlaceInLegacyIllegalSpotsC2SPacket)) return false;
-        AttemptPlaceInLegacyIllegalSpotsC2SPacket that = (AttemptPlaceInLegacyIllegalSpotsC2SPacket) object;
+        if (!(object instanceof AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket)) return false;
+        AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket that = (AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket) object;
         return Objects.equals(compactCoordinate, that.compactCoordinate);
     }
 
     @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("ATTEMPT_PLACE_IN_LEGACY_ILLEGAL_SPOTS_ID", is);
 
             this.compactCoordinate = PreludeCompactCoordinate.deserialize(is);
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse ATTEMPT_PLACE_IN_LEGACY_ILLEGAL_SPOTS_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse ATTEMPT_PLACE_IN_LEGACY_ILLEGAL_SPOTS_PACKET!", e);
         }
     }
 
@@ -118,8 +118,8 @@ public class AttemptPlaceInLegacyIllegalSpotsC2SPacket extends PreludeC2SPacket 
             return this;
         }
 
-        public AttemptPlaceInLegacyIllegalSpotsC2SPacket build() {
-            return new AttemptPlaceInLegacyIllegalSpotsC2SPacket(new PreludeCompactCoordinate(chunkType, new PreludeChunkCoordinate(chunkX, chunkZ), new PreludeRelativeCoordinate(attemptedXPosRelativeToChunk, attemptedYPosRelativeToChunkToLegacyBuildLimit, attemptedZPosRelativeToChunk)));
+        public AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket build() {
+            return new AttemptPlaceInLegacyIllegalSpotsPreludeC2SPacket(new PreludeCompactCoordinate(chunkType, new PreludeChunkCoordinate(chunkX, chunkZ), new PreludeRelativeCoordinate(attemptedXPosRelativeToChunk, attemptedYPosRelativeToChunkToLegacyBuildLimit, attemptedZPosRelativeToChunk)));
         }
     }
 

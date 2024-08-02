@@ -20,19 +20,19 @@ package com.resentclient.prelude.protocol.packets.c2s;
 
 import com.resentclient.prelude.protocol.PreludeC2SPacket;
 import com.resentclient.prelude.protocol.PreludeC2SPacketHandler;
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.StreamUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ClientSyncResponseC2SPacket extends PreludeC2SPacket {
+public class ClientSyncResponsePreludeC2SPacket extends PreludeC2SPacket {
     private int syncId;
 
-    public ClientSyncResponseC2SPacket() {}
+    public ClientSyncResponsePreludeC2SPacket() {}
 
-    private ClientSyncResponseC2SPacket(int syncId) {
+    private ClientSyncResponsePreludeC2SPacket(int syncId) {
         this.syncId = syncId;
     }
 
@@ -50,21 +50,21 @@ public class ClientSyncResponseC2SPacket extends PreludeC2SPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ClientSyncResponseC2SPacket)) return false;
-        ClientSyncResponseC2SPacket that = (ClientSyncResponseC2SPacket) o;
+        if (!(o instanceof ClientSyncResponsePreludeC2SPacket)) return false;
+        ClientSyncResponsePreludeC2SPacket that = (ClientSyncResponsePreludeC2SPacket) o;
         return syncId == that.syncId;
     }
 
     @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("CLIENT_SYNC_RESPONSE_ID", is);
 
             this.syncId = StreamUtils.readVarInt(is);
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse CLIENT_SYNC_RESPONSE_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse CLIENT_SYNC_RESPONSE_PACKET!", e);
         }
     }
 
@@ -85,8 +85,8 @@ public class ClientSyncResponseC2SPacket extends PreludeC2SPacket {
             return this;
         }
 
-        public ClientSyncResponseC2SPacket build() {
-            return new ClientSyncResponseC2SPacket(syncId);
+        public ClientSyncResponsePreludeC2SPacket build() {
+            return new ClientSyncResponsePreludeC2SPacket(syncId);
         }
     }
 

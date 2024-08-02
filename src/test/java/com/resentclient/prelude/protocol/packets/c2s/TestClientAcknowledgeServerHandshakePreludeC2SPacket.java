@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
 import com.resentclient.prelude.protocol.PreludeC2SPacket;
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.packets.s2c.ServerSyncRequestS2CPacket;
 
 import java.io.ByteArrayInputStream;
@@ -33,7 +33,7 @@ import java.util.Optional;
 public class TestClientAcknowledgeServerHandshakePreludeC2SPacket {
     @Test
     public void testClientAcknowledgeServerHandshakePacket() throws IOException {
-        Assertions.assertEquals(1, new ClientAcknowledgeServerHandshakeC2SPacket().toBytes()[0]);
+        Assertions.assertEquals(1, new ClientAcknowledgeServerHandshakePreludeC2SPacket().toBytes()[0]);
 
         byte[] bytes = { 1 };
         try {
@@ -42,11 +42,11 @@ public class TestClientAcknowledgeServerHandshakePreludeC2SPacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof ClientAcknowledgeServerHandshakeC2SPacket)
-                Assertions.assertEquals(ClientAcknowledgeServerHandshakeC2SPacket.class, optional.get().getClass());
+            if (optional.get() instanceof ClientAcknowledgeServerHandshakePreludeC2SPacket)
+                Assertions.assertEquals(ClientAcknowledgeServerHandshakePreludeC2SPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            ClientAcknowledgeServerHandshakeC2SPacket deserialized = (ClientAcknowledgeServerHandshakeC2SPacket) optional.get();
+            ClientAcknowledgeServerHandshakePreludeC2SPacket deserialized = (ClientAcknowledgeServerHandshakePreludeC2SPacket) optional.get();
             Assertions.assertArrayEquals(bytes, deserialized.toBytes());
 
             ServerSyncRequestS2CPacket invalidPacket = new ServerSyncRequestS2CPacket();
@@ -54,7 +54,7 @@ public class TestClientAcknowledgeServerHandshakePreludeC2SPacket {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");
             } catch (Exception e) {
-                Assertions.assertInstanceOf(InvalidPacketException.class, e);
+                Assertions.assertInstanceOf(InvalidPreludePacketException.class, e);
             }
         } catch (Exception e) {
             // erm what the

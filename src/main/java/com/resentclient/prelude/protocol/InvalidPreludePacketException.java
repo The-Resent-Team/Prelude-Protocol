@@ -16,7 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.resentclient.prelude.protocol.packets.s2c.world;
+package com.resentclient.prelude.protocol;
 
-public class TestMultiBlockChangeModernS2CPacket {
+public class InvalidPreludePacketException extends Exception {
+    public InvalidPreludePacketException(String message) {
+        super(message);
+    }
+
+    public InvalidPreludePacketException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

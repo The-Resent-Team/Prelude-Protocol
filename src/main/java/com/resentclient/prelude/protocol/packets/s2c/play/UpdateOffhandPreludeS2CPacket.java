@@ -18,7 +18,7 @@
 
 package com.resentclient.prelude.protocol.packets.s2c.play;
 
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.PreludeS2CPacket;
 import com.resentclient.prelude.protocol.PreludeS2CPacketHandler;
 import com.resentclient.prelude.protocol.StreamUtils;
@@ -29,13 +29,13 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-public class UpdateOffhandS2CPacket extends PreludeS2CPacket {
+public class UpdateOffhandPreludeS2CPacket extends PreludeS2CPacket {
     private boolean canClientDisregardThis;
     private String serializedItem;
 
-    public UpdateOffhandS2CPacket() {}
+    public UpdateOffhandPreludeS2CPacket() {}
 
-    private UpdateOffhandS2CPacket(boolean canClientDisregardThis, String serializedItem) {
+    private UpdateOffhandPreludeS2CPacket(boolean canClientDisregardThis, String serializedItem) {
         this.canClientDisregardThis = canClientDisregardThis;
         this.serializedItem = serializedItem;
     }
@@ -54,7 +54,7 @@ public class UpdateOffhandS2CPacket extends PreludeS2CPacket {
     }
 
     @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("UPDATE_OFFHAND_ID", is);
 
@@ -62,14 +62,14 @@ public class UpdateOffhandS2CPacket extends PreludeS2CPacket {
             String serializedItem = StreamUtils.readASCII(StreamUtils.readShort(is), is);
 
             if (!serializedItem.startsWith("ItemStack{") || !serializedItem.endsWith("}"))
-                throw new InvalidPacketException("Constructed UPDATE_OFFHAND_PACKET has an invalid serialized item!");
+                throw new InvalidPreludePacketException("Constructed UPDATE_OFFHAND_PACKET has an invalid serialized item!");
 
             this.canClientDisregardThis = canClientDisregardThis;
             this.serializedItem = serializedItem;
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse UPDATE_OFFHAND_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse UPDATE_OFFHAND_PACKET!", e);
         }
     }
 
@@ -81,8 +81,8 @@ public class UpdateOffhandS2CPacket extends PreludeS2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UpdateOffhandS2CPacket)) return false;
-        UpdateOffhandS2CPacket that = (UpdateOffhandS2CPacket) o;
+        if (!(o instanceof UpdateOffhandPreludeS2CPacket)) return false;
+        UpdateOffhandPreludeS2CPacket that = (UpdateOffhandPreludeS2CPacket) o;
         return canClientDisregardThis == that.canClientDisregardThis && Objects.equals(serializedItem, that.serializedItem);
     }
 
@@ -106,11 +106,11 @@ public class UpdateOffhandS2CPacket extends PreludeS2CPacket {
             return this;
         }
 
-        public UpdateOffhandS2CPacket build() {
+        public UpdateOffhandPreludeS2CPacket build() {
             if (serializedItem == null)
                 throw new IllegalStateException("Not all required fields are set!");
 
-            return new UpdateOffhandS2CPacket(canClientDisregardThis, serializedItem);
+            return new UpdateOffhandPreludeS2CPacket(canClientDisregardThis, serializedItem);
         }
     }
 

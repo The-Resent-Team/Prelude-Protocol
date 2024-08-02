@@ -18,7 +18,7 @@
 
 package com.resentclient.prelude.protocol.packets.s2c.world;
 
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.PreludeS2CPacket;
 import com.resentclient.prelude.protocol.PreludeS2CPacketHandler;
 import com.resentclient.prelude.protocol.WriteableObject;
@@ -81,7 +81,7 @@ public class MultiBlockChangeModernS2CPacket extends PreludeS2CPacket {
     }
 
     @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("MULTI_BLOCK_CHANGE_MODERN_ID", is);
 
@@ -97,10 +97,10 @@ public class MultiBlockChangeModernS2CPacket extends PreludeS2CPacket {
             this.chunkCoordinate = chunkCoordinate;
             this.chunkType = chunkType;
             this.blocksToChange = blocks;
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse MULTI_BLOCK_CHANGE_MODERN_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse MULTI_BLOCK_CHANGE_MODERN_PACKET!", e);
         }
     }
 

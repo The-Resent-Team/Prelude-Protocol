@@ -18,7 +18,7 @@
 
 package com.resentclient.prelude.protocol.packets.s2c;
 
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.PreludeS2CPacket;
 import com.resentclient.prelude.protocol.PreludeS2CPacketHandler;
 import com.resentclient.prelude.protocol.StreamUtils;
@@ -57,15 +57,15 @@ public class ServerSyncRequestS2CPacket extends PreludeS2CPacket {
     }
 
     @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("SERVER_SYNC_REQUEST_ID", is);
 
             this.syncId = StreamUtils.readVarInt(is);
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse SERVER_SYNC_REQUEST_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse SERVER_SYNC_REQUEST_PACKET!", e);
         }
     }
 

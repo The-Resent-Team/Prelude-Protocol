@@ -53,7 +53,7 @@ public class ModStatusS2CPacket extends PreludeS2CPacket {
     }
 
     @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("MOD_STATUS_ID", is);
 
@@ -61,14 +61,14 @@ public class ModStatusS2CPacket extends PreludeS2CPacket {
             ModStatus modStatus = ModStatus.from((byte) is.read());
 
             if (modStatus == null)
-                throw new InvalidPacketException("Constructed MOD_STATUS_PACKET has an illegal ModStatus!");
+                throw new InvalidPreludePacketException("Constructed MOD_STATUS_PACKET has an illegal ModStatus!");
 
             this.modIdentifier = modId;
             this.modStatus = modStatus;
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse MOD_STATUS_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse MOD_STATUS_PACKET!", e);
         }
     }
 

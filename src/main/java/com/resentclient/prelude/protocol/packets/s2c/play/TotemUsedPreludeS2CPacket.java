@@ -18,15 +18,15 @@
 
 package com.resentclient.prelude.protocol.packets.s2c.play;
 
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.PreludeS2CPacket;
 import com.resentclient.prelude.protocol.PreludeS2CPacketHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-public class TotemUsedS2CPacket extends PreludeS2CPacket {
-    public TotemUsedS2CPacket() {}
+public class TotemUsedPreludeS2CPacket extends PreludeS2CPacket {
+    public TotemUsedPreludeS2CPacket() {}
 
     @Override
     public byte[] toBytes() throws IOException {
@@ -34,14 +34,14 @@ public class TotemUsedS2CPacket extends PreludeS2CPacket {
     }
 
     @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("TOTEM_USED_ID", is);
 
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse TOTEM_USED_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse TOTEM_USED_PACKET!", e);
         }
     }
 
@@ -52,6 +52,6 @@ public class TotemUsedS2CPacket extends PreludeS2CPacket {
 
     @Override
     public boolean equals(Object packet) {
-        return packet instanceof TotemUsedS2CPacket;
+        return packet instanceof TotemUsedPreludeS2CPacket;
     }
 }

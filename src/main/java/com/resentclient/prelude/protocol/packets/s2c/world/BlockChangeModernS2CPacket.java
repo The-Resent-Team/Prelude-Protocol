@@ -19,7 +19,7 @@
 package com.resentclient.prelude.protocol.packets.s2c.world;
 
 import com.resentclient.prelude.protocol.world.*;
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.PreludeS2CPacket;
 import com.resentclient.prelude.protocol.PreludeS2CPacketHandler;
 
@@ -63,7 +63,7 @@ public class BlockChangeModernS2CPacket extends PreludeS2CPacket {
     }
 
     @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("BLOCK_CHANGE_MODERN_ID", is);
 
@@ -72,10 +72,10 @@ public class BlockChangeModernS2CPacket extends PreludeS2CPacket {
 
             this.compactCoordinate = compactCoordinate;
             this.newBlock = newBlock;
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse BLOCK_CHANGE_MODERN_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse BLOCK_CHANGE_MODERN_PACKET!", e);
         }
     }
 

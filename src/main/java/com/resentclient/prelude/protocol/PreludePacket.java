@@ -26,16 +26,16 @@ public abstract class PreludePacket<E> {
 
     public abstract byte[] toBytes() throws IOException;
     public abstract boolean equals(Object packet);
-    public abstract void loadData(InputStream is) throws InvalidPacketException;
+    public abstract void loadData(InputStream is) throws InvalidPreludePacketException;
     public abstract void processSelf(E handler);
 
     public int getPacketId() {
         return packetId;
     }
 
-    protected void validateOrThrow(String packetIdAsString, InputStream is) throws IOException, InvalidPacketException {
+    protected void validateOrThrow(String packetIdAsString, InputStream is) throws IOException, InvalidPreludePacketException {
         if (is.read() != packetId)
-            throw new InvalidPacketException("Packet ID doesn't match with %packet_id_as_string% (%id%)!"
+            throw new InvalidPreludePacketException("Packet ID doesn't match with %packet_id_as_string% (%id%)!"
                     .replace("%id%", packetId + "")
                     .replace("%packet_id_as_string%", packetIdAsString));
     }

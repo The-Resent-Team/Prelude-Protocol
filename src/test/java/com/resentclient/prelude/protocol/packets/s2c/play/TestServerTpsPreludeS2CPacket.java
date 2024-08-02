@@ -21,9 +21,9 @@ package com.resentclient.prelude.protocol.packets.s2c.play;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.PreludeS2CPacket;
-import com.resentclient.prelude.protocol.packets.c2s.ClientAcknowledgeServerHandshakeC2SPacket;
+import com.resentclient.prelude.protocol.packets.c2s.ClientAcknowledgeServerHandshakePreludeC2SPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -33,8 +33,8 @@ import java.util.Optional;
 public class TestServerTpsPreludeS2CPacket {
     @Test
     public void testServerTpsPacket() throws IOException {
-        ServerTpsS2CPacket notPossiblePacket = ServerTpsS2CPacket.builder().characteristic(124).mantissa(Short.MAX_VALUE & 0xFFFF).build();
-        ServerTpsS2CPacket packet = ServerTpsS2CPacket.builder().characteristic(19).mantissa(19372).build();
+        ServerTpsPreludeS2CPacket notPossiblePacket = ServerTpsPreludeS2CPacket.builder().characteristic(124).mantissa(Short.MAX_VALUE & 0xFFFF).build();
+        ServerTpsPreludeS2CPacket packet = ServerTpsPreludeS2CPacket.builder().characteristic(19).mantissa(19372).build();
         Assertions.assertNotEquals(notPossiblePacket, packet);
 
         byte[] bytes = packet.toBytes();
@@ -44,19 +44,19 @@ public class TestServerTpsPreludeS2CPacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof ServerTpsS2CPacket)
-                Assertions.assertEquals(ServerTpsS2CPacket.class, optional.get().getClass());
+            if (optional.get() instanceof ServerTpsPreludeS2CPacket)
+                Assertions.assertEquals(ServerTpsPreludeS2CPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            ServerTpsS2CPacket deserialized = (ServerTpsS2CPacket) optional.get();
+            ServerTpsPreludeS2CPacket deserialized = (ServerTpsPreludeS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
-            ClientAcknowledgeServerHandshakeC2SPacket invalidPacket = new ClientAcknowledgeServerHandshakeC2SPacket();
+            ClientAcknowledgeServerHandshakePreludeC2SPacket invalidPacket = new ClientAcknowledgeServerHandshakePreludeC2SPacket();
             try {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");
             } catch (Exception e) {
-                Assertions.assertInstanceOf(InvalidPacketException.class, e);
+                Assertions.assertInstanceOf(InvalidPreludePacketException.class, e);
             }
         } catch (Exception e) {
             // erm what the

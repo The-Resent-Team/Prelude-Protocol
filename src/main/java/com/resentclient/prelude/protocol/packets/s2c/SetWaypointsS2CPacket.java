@@ -53,7 +53,7 @@ public class SetWaypointsS2CPacket extends PreludeS2CPacket {
     }
 
     @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("SET_WAYPOINTS_ID", is);
 
@@ -77,10 +77,10 @@ public class SetWaypointsS2CPacket extends PreludeS2CPacket {
             }
 
             this.waypoints = waypointList.toArray(new Waypoint[0]);
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse WAYPOINTS_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse WAYPOINTS_PACKET!", e);
         }
     }
 

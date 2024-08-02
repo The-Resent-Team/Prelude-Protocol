@@ -20,7 +20,7 @@ package com.resentclient.prelude.protocol.packets.c2s.interactions;
 
 import com.resentclient.prelude.protocol.PreludeC2SPacket;
 import com.resentclient.prelude.protocol.PreludeC2SPacketHandler;
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.WriteableObject;
 
 import java.io.ByteArrayOutputStream;
@@ -31,12 +31,12 @@ import java.io.OutputStream;
 /*
  * This packet is used when the client attempts to interact with a non-block item in their offhand
  * */
-public class InteractWithOffhandC2SPacket extends PreludeC2SPacket {
+public class InteractWithOffhandPreludeC2SPacket extends PreludeC2SPacket {
     private InteractType interactType;
 
-    public InteractWithOffhandC2SPacket() {}
+    public InteractWithOffhandPreludeC2SPacket() {}
 
-    private InteractWithOffhandC2SPacket(InteractType interactType) {
+    private InteractWithOffhandPreludeC2SPacket(InteractType interactType) {
         this.interactType = interactType;
     }
 
@@ -53,21 +53,21 @@ public class InteractWithOffhandC2SPacket extends PreludeC2SPacket {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (!(object instanceof InteractWithOffhandC2SPacket)) return false;
-        InteractWithOffhandC2SPacket that = (InteractWithOffhandC2SPacket) object;
+        if (!(object instanceof InteractWithOffhandPreludeC2SPacket)) return false;
+        InteractWithOffhandPreludeC2SPacket that = (InteractWithOffhandPreludeC2SPacket) object;
         return interactType == that.interactType;
     }
 
     @Override
-    public void loadData(InputStream is) throws InvalidPacketException {
+    public void loadData(InputStream is) throws InvalidPreludePacketException {
         try {
             this.validateOrThrow("INTERACT_WITH_OFFHAND_ID", is);
 
             this.interactType = InteractType.deserialize(is);
-        } catch (InvalidPacketException e) {
+        } catch (InvalidPreludePacketException e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPacketException("Failed to parse CLIENT_SYNC_RESPONSE_PACKET!", e);
+            throw new InvalidPreludePacketException("Failed to parse CLIENT_SYNC_RESPONSE_PACKET!", e);
         }
     }
 
@@ -88,8 +88,8 @@ public class InteractWithOffhandC2SPacket extends PreludeC2SPacket {
             return this;
         }
 
-        public InteractWithOffhandC2SPacket build() {
-            return new InteractWithOffhandC2SPacket(interactType);
+        public InteractWithOffhandPreludeC2SPacket build() {
+            return new InteractWithOffhandPreludeC2SPacket(interactType);
         }
     }
 

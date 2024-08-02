@@ -21,9 +21,9 @@ package com.resentclient.prelude.protocol.packets.s2c.play;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
-import com.resentclient.prelude.protocol.InvalidPacketException;
+import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.PreludeS2CPacket;
-import com.resentclient.prelude.protocol.packets.c2s.EquipOffhandC2SPacket;
+import com.resentclient.prelude.protocol.packets.c2s.EquipOffhandPreludeC2SPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -33,7 +33,7 @@ import java.util.Optional;
 public class TestUpdateOffhandPreludeS2CPacket {
     @Test
     public void testUpdateOffhandPacket() throws IOException {
-        UpdateOffhandS2CPacket packet = UpdateOffhandS2CPacket.builder()
+        UpdateOffhandPreludeS2CPacket packet = UpdateOffhandPreludeS2CPacket.builder()
                 .canClientDisregardThis(false)
                 .serializedItem("ItemStack{DISPENSER x 35}")
                 .build();
@@ -45,19 +45,19 @@ public class TestUpdateOffhandPreludeS2CPacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof UpdateOffhandS2CPacket)
-                Assertions.assertEquals(UpdateOffhandS2CPacket.class, optional.get().getClass());
+            if (optional.get() instanceof UpdateOffhandPreludeS2CPacket)
+                Assertions.assertEquals(UpdateOffhandPreludeS2CPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            UpdateOffhandS2CPacket deserialized = (UpdateOffhandS2CPacket) optional.get();
+            UpdateOffhandPreludeS2CPacket deserialized = (UpdateOffhandPreludeS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
-            EquipOffhandC2SPacket invalidPacket = new EquipOffhandC2SPacket();
+            EquipOffhandPreludeC2SPacket invalidPacket = new EquipOffhandPreludeC2SPacket();
             try {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");
             } catch (Exception e) {
-                Assertions.assertInstanceOf(InvalidPacketException.class, e);
+                Assertions.assertInstanceOf(InvalidPreludePacketException.class, e);
             }
         } catch (Exception e) {
             // erm what the

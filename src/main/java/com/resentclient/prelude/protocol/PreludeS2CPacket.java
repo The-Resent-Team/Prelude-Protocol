@@ -35,15 +35,15 @@ public abstract class PreludeS2CPacket extends PreludePacket<PreludeS2CPacketHan
     static {
         registerS2CPacket(ServerHandshakeS2CPacket.class);
         registerS2CPacket(ModStatusS2CPacket.class);
-        registerS2CPacket(ServerTpsS2CPacket.class);
-        registerS2CPacket(UpdateOffhandS2CPacket.class);
-        registerS2CPacket(TotemUsedS2CPacket.class);
+        registerS2CPacket(ServerTpsPreludeS2CPacket.class);
+        registerS2CPacket(UpdateOffhandPreludeS2CPacket.class);
+        registerS2CPacket(TotemUsedPreludeS2CPacket.class);
         registerS2CPacket(SetWaypointsS2CPacket.class);
         registerS2CPacket(ServerSyncRequestS2CPacket.class);
         registerS2CPacket(ChunkDataModernS2CPacket.class);
         registerS2CPacket(MultiBlockChangeModernS2CPacket.class);
         registerS2CPacket(BlockChangeModernS2CPacket.class);
-        registerS2CPacket(SetItemTypeS2CPacket.class);
+        registerS2CPacket(SetItemTypePreludeS2CPacket.class);
     }
 
     protected PreludeS2CPacket() {
@@ -51,7 +51,7 @@ public abstract class PreludeS2CPacket extends PreludePacket<PreludeS2CPacketHan
     }
 
     @Override
-    public abstract void loadData(InputStream is) throws InvalidPacketException;
+    public abstract void loadData(InputStream is) throws InvalidPreludePacketException;
 
     public static Optional<PreludeS2CPacket> parsePacket(byte[] bytes) throws Exception {
         if (bytes == null)
@@ -63,7 +63,7 @@ public abstract class PreludeS2CPacket extends PreludePacket<PreludeS2CPacketHan
         byte id = bytes[0];
         Class<? extends PreludeS2CPacket> clazz = S2C_ID_TO_PACKET.get(id & 0xFF);
         if (clazz == null)
-            throw new InvalidPacketException("Invalid packet id for S2CPacket ids!");
+            throw new InvalidPreludePacketException("Invalid packet id for S2CPacket ids!");
 
         // it's deprecated however it's the only way it works with teavm iirc
         @SuppressWarnings("deprecation")

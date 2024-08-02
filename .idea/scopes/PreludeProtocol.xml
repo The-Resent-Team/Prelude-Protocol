@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="PreludeProtocol" pattern="file[Prelude-Protocol.main]:*/||file[Prelude-Protocol.test]:*/||file[Prelude-Protocol.test]:java/prelude/protocol/*||file[Prelude-Protocol.test]:java/prelude/protocol/c2s/*||file[Prelude-Protocol.test]:java/prelude/protocol/s2c/*" />
+  <scope name="PreludeProtocol" pattern="file[Prelude-Protocol.main]:java/com/resentclient/prelude//*||file[Prelude-Protocol.test]:java/com/resentclient/prelude//*" />
 </component>
