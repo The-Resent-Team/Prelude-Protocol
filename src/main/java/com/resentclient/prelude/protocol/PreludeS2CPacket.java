@@ -33,16 +33,16 @@ public abstract class PreludeS2CPacket extends PreludePacket<PreludeS2CPacketHan
     private static final Map<Class<? extends PreludeS2CPacket>, Integer> S2C_PACKET_TO_ID = new HashMap<>();
 
     static {
-        registerS2CPacket(ServerHandshakeS2CPacket.class);
-        registerS2CPacket(ModStatusS2CPacket.class);
+        registerS2CPacket(ServerHandshakePreludeS2CPacket.class);
+        registerS2CPacket(ModStatusPreludeS2CPacket.class);
         registerS2CPacket(ServerTpsPreludeS2CPacket.class);
         registerS2CPacket(UpdateOffhandPreludeS2CPacket.class);
         registerS2CPacket(TotemUsedPreludeS2CPacket.class);
-        registerS2CPacket(SetWaypointsS2CPacket.class);
-        registerS2CPacket(ServerSyncRequestS2CPacket.class);
-        registerS2CPacket(ChunkDataModernS2CPacket.class);
-        registerS2CPacket(MultiBlockChangeModernS2CPacket.class);
-        registerS2CPacket(BlockChangeModernS2CPacket.class);
+        registerS2CPacket(SetWaypointsPreludeS2CPacket.class);
+        registerS2CPacket(ServerSyncRequestPreludeS2CPacket.class);
+        registerS2CPacket(ChunkDataModernPreludeS2CPacket.class);
+        registerS2CPacket(MultiBlockChangeModernPreludeS2CPacket.class);
+        registerS2CPacket(BlockChangeModernPreludeS2CPacket.class);
         registerS2CPacket(SetItemTypePreludeS2CPacket.class);
     }
 

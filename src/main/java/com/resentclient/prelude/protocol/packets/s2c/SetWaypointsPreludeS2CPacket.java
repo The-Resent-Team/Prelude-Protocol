@@ -24,14 +24,14 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class SetWaypointsS2CPacket extends PreludeS2CPacket {
+public class SetWaypointsPreludeS2CPacket extends PreludeS2CPacket {
     private static final String SPLIT = "\u0000\u8301\u9281";
 
     private Waypoint[] waypoints;
 
-    public SetWaypointsS2CPacket() {}
+    public SetWaypointsPreludeS2CPacket() {}
 
-    private SetWaypointsS2CPacket(Waypoint[] waypoints) {
+    private SetWaypointsPreludeS2CPacket(Waypoint[] waypoints) {
         this.waypoints = waypoints;
     }
 
@@ -92,8 +92,8 @@ public class SetWaypointsS2CPacket extends PreludeS2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SetWaypointsS2CPacket)) return false;
-        SetWaypointsS2CPacket that = (SetWaypointsS2CPacket) o;
+        if (!(o instanceof SetWaypointsPreludeS2CPacket)) return false;
+        SetWaypointsPreludeS2CPacket that = (SetWaypointsPreludeS2CPacket) o;
         return Arrays.equals(this.waypoints, that.waypoints);
     }
 
@@ -121,8 +121,8 @@ public class SetWaypointsS2CPacket extends PreludeS2CPacket {
             return this;
         }
 
-        public SetWaypointsS2CPacket build() {
-            return new SetWaypointsS2CPacket(waypoints.toArray(new Waypoint[0]));
+        public SetWaypointsPreludeS2CPacket build() {
+            return new SetWaypointsPreludeS2CPacket(waypoints.toArray(new Waypoint[0]));
         }
     }
 

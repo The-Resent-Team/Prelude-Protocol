@@ -33,9 +33,9 @@ import java.util.Optional;
 public class TestModStatusPreludeS2CPacket {
     @Test
     public void testModStatusPacket() throws IOException {
-        ModStatusS2CPacket packet = ModStatusS2CPacket.builder()
+        ModStatusPreludeS2CPacket packet = ModStatusPreludeS2CPacket.builder()
                 .modIdentifier("offhand")
-                .modStatus(ModStatusS2CPacket.ModStatus.SUPPORTED)
+                .modStatus(ModStatusPreludeS2CPacket.ModStatus.SUPPORTED)
                 .build();
 
         byte[] bytes = packet.toBytes();
@@ -45,11 +45,11 @@ public class TestModStatusPreludeS2CPacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof ModStatusS2CPacket)
-                Assertions.assertEquals(ModStatusS2CPacket.class, optional.get().getClass());
+            if (optional.get() instanceof ModStatusPreludeS2CPacket)
+                Assertions.assertEquals(ModStatusPreludeS2CPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            ModStatusS2CPacket deserialized = (ModStatusS2CPacket) optional.get();
+            ModStatusPreludeS2CPacket deserialized = (ModStatusPreludeS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
             ClientHandshakePreludeC2SPacket invalidPacket = new ClientHandshakePreludeC2SPacket();

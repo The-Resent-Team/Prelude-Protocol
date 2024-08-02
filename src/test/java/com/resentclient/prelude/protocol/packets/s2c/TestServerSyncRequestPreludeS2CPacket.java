@@ -33,7 +33,7 @@ import java.util.Optional;
 public class TestServerSyncRequestPreludeS2CPacket {
     @Test
     public void testServerSyncRequestS2CPacket() throws IOException {
-        ServerSyncRequestS2CPacket packet = ServerSyncRequestS2CPacket.builder().syncId(Integer.MAX_VALUE).build();
+        ServerSyncRequestPreludeS2CPacket packet = ServerSyncRequestPreludeS2CPacket.builder().syncId(Integer.MAX_VALUE).build();
 
         byte[] bytes = packet.toBytes();
         try {
@@ -42,11 +42,11 @@ public class TestServerSyncRequestPreludeS2CPacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof ServerSyncRequestS2CPacket)
-                Assertions.assertEquals(ServerSyncRequestS2CPacket.class, optional.get().getClass());
+            if (optional.get() instanceof ServerSyncRequestPreludeS2CPacket)
+                Assertions.assertEquals(ServerSyncRequestPreludeS2CPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            ServerSyncRequestS2CPacket deserialized = (ServerSyncRequestS2CPacket) optional.get();
+            ServerSyncRequestPreludeS2CPacket deserialized = (ServerSyncRequestPreludeS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
             ClientHandshakePreludeC2SPacket invalidPacket = new ClientHandshakePreludeC2SPacket();

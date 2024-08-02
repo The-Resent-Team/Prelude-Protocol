@@ -26,7 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ServerHandshakeS2CPacket extends PreludeS2CPacket {
+public class ServerHandshakePreludeS2CPacket extends PreludeS2CPacket {
     private int preludeMajorVersion;
     private int preludeMinorVersion;
     private int preludePatchVersion;
@@ -35,9 +35,9 @@ public class ServerHandshakeS2CPacket extends PreludeS2CPacket {
     private int serverMinorVersion;
     private int serverPatchVersion;
 
-    public ServerHandshakeS2CPacket() {}
+    public ServerHandshakePreludeS2CPacket() {}
 
-    private ServerHandshakeS2CPacket(int preludeMajorVersion, int preludeMinorVersion, int preludePatchVersion, int serverMajorVersion, int serverMinorVersion, int serverPatchVersion) {
+    private ServerHandshakePreludeS2CPacket(int preludeMajorVersion, int preludeMinorVersion, int preludePatchVersion, int serverMajorVersion, int serverMinorVersion, int serverPatchVersion) {
         this.preludeMajorVersion = preludeMajorVersion;
         this.preludeMinorVersion = preludeMinorVersion;
         this.preludePatchVersion = preludePatchVersion;
@@ -98,8 +98,8 @@ public class ServerHandshakeS2CPacket extends PreludeS2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ServerHandshakeS2CPacket)) return false;
-        ServerHandshakeS2CPacket that = (ServerHandshakeS2CPacket) o;
+        if (!(o instanceof ServerHandshakePreludeS2CPacket)) return false;
+        ServerHandshakePreludeS2CPacket that = (ServerHandshakePreludeS2CPacket) o;
         return preludeMajorVersion == that.preludeMajorVersion && preludeMinorVersion == that.preludeMinorVersion && preludePatchVersion == that.preludePatchVersion && serverMajorVersion == that.serverMajorVersion && serverMinorVersion == that.serverMinorVersion && serverPatchVersion == that.serverPatchVersion;
     }
 
@@ -148,11 +148,11 @@ public class ServerHandshakeS2CPacket extends PreludeS2CPacket {
             return this;
         }
 
-        public ServerHandshakeS2CPacket build() {
+        public ServerHandshakePreludeS2CPacket build() {
             if (preludeMajorVersion == -1 || preludeMinorVersion == -1 || preludePatchVersion == -1 || serverMajorVersion == -1 || serverMinorVersion == -1 || serverPatchVersion == -1)
                 throw new IllegalStateException("Not all required fields are set!");
 
-            return new ServerHandshakeS2CPacket(preludeMajorVersion, preludeMinorVersion, preludePatchVersion, serverMajorVersion, serverMinorVersion, serverPatchVersion);
+            return new ServerHandshakePreludeS2CPacket(preludeMajorVersion, preludeMinorVersion, preludePatchVersion, serverMajorVersion, serverMinorVersion, serverPatchVersion);
         }
     }
 

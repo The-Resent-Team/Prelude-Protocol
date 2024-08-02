@@ -27,13 +27,13 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-public class ModStatusS2CPacket extends PreludeS2CPacket {
+public class ModStatusPreludeS2CPacket extends PreludeS2CPacket {
     private String modIdentifier;
     private ModStatus modStatus;
 
-    public ModStatusS2CPacket() {}
+    public ModStatusPreludeS2CPacket() {}
 
-    private ModStatusS2CPacket(String modIdentifier, ModStatus modStatus) {
+    private ModStatusPreludeS2CPacket(String modIdentifier, ModStatus modStatus) {
         this.modIdentifier = modIdentifier;
         this.modStatus = modStatus;
     }
@@ -80,8 +80,8 @@ public class ModStatusS2CPacket extends PreludeS2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ModStatusS2CPacket)) return false;
-        ModStatusS2CPacket that = (ModStatusS2CPacket) o;
+        if (!(o instanceof ModStatusPreludeS2CPacket)) return false;
+        ModStatusPreludeS2CPacket that = (ModStatusPreludeS2CPacket) o;
         return Objects.equals(modIdentifier, that.modIdentifier) && modStatus == that.modStatus;
     }
 
@@ -105,11 +105,11 @@ public class ModStatusS2CPacket extends PreludeS2CPacket {
             return this;
         }
 
-        public ModStatusS2CPacket build() {
+        public ModStatusPreludeS2CPacket build() {
             if (modIdentifier == null || modStatus == null)
                 throw new IllegalStateException("Not all required fields are set!");
 
-            return new ModStatusS2CPacket(modIdentifier, modStatus);
+            return new ModStatusPreludeS2CPacket(modIdentifier, modStatus);
         }
     }
 

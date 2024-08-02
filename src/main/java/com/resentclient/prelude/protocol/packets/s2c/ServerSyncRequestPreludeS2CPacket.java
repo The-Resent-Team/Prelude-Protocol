@@ -27,14 +27,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ServerSyncRequestS2CPacket extends PreludeS2CPacket {
+public class ServerSyncRequestPreludeS2CPacket extends PreludeS2CPacket {
     private int syncId;
 
-    public ServerSyncRequestS2CPacket() {
+    public ServerSyncRequestPreludeS2CPacket() {
 
     }
 
-    private ServerSyncRequestS2CPacket(int syncId) {
+    private ServerSyncRequestPreludeS2CPacket(int syncId) {
         this.syncId = syncId;
     }
 
@@ -51,8 +51,8 @@ public class ServerSyncRequestS2CPacket extends PreludeS2CPacket {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ServerSyncRequestS2CPacket)) return false;
-        ServerSyncRequestS2CPacket that = (ServerSyncRequestS2CPacket) o;
+        if (!(o instanceof ServerSyncRequestPreludeS2CPacket)) return false;
+        ServerSyncRequestPreludeS2CPacket that = (ServerSyncRequestPreludeS2CPacket) o;
         return syncId == that.syncId;
     }
 
@@ -86,8 +86,8 @@ public class ServerSyncRequestS2CPacket extends PreludeS2CPacket {
             return this;
         }
 
-        public ServerSyncRequestS2CPacket build() {
-            return new ServerSyncRequestS2CPacket(syncId);
+        public ServerSyncRequestPreludeS2CPacket build() {
+            return new ServerSyncRequestPreludeS2CPacket(syncId);
         }
     }
 

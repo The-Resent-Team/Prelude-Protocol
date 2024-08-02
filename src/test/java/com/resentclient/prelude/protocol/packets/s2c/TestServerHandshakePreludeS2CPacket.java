@@ -33,7 +33,7 @@ import java.util.Optional;
 public class TestServerHandshakePreludeS2CPacket {
     @Test
     public void testServerHandshakePacket() throws IOException {
-        ServerHandshakeS2CPacket packet = ServerHandshakeS2CPacket.builder()
+        ServerHandshakePreludeS2CPacket packet = ServerHandshakePreludeS2CPacket.builder()
                 .preludeMajorVersion(1)
                 .preludeMinorVersion(0)
                 .preludePatchVersion(0)
@@ -49,11 +49,11 @@ public class TestServerHandshakePreludeS2CPacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof ServerHandshakeS2CPacket)
-                Assertions.assertEquals(ServerHandshakeS2CPacket.class, optional.get().getClass());
+            if (optional.get() instanceof ServerHandshakePreludeS2CPacket)
+                Assertions.assertEquals(ServerHandshakePreludeS2CPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            ServerHandshakeS2CPacket deserialized = (ServerHandshakeS2CPacket) optional.get();
+            ServerHandshakePreludeS2CPacket deserialized = (ServerHandshakePreludeS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
             EquipOffhandPreludeC2SPacket invalidPacket = new EquipOffhandPreludeC2SPacket();

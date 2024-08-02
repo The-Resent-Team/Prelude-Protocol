@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
 import com.resentclient.prelude.protocol.PreludeC2SPacket;
 import com.resentclient.prelude.protocol.InvalidPreludePacketException;
-import com.resentclient.prelude.protocol.packets.s2c.ServerSyncRequestS2CPacket;
+import com.resentclient.prelude.protocol.packets.s2c.ServerSyncRequestPreludeS2CPacket;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -49,7 +49,7 @@ public class TestClientAcknowledgeServerHandshakePreludeC2SPacket {
             ClientAcknowledgeServerHandshakePreludeC2SPacket deserialized = (ClientAcknowledgeServerHandshakePreludeC2SPacket) optional.get();
             Assertions.assertArrayEquals(bytes, deserialized.toBytes());
 
-            ServerSyncRequestS2CPacket invalidPacket = new ServerSyncRequestS2CPacket();
+            ServerSyncRequestPreludeS2CPacket invalidPacket = new ServerSyncRequestPreludeS2CPacket();
             try {
                 invalidPacket.loadData(new ByteArrayInputStream(bytes));
                 Assertions.fail("Somehow parsed invalid packet!");

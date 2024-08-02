@@ -45,7 +45,7 @@ public class TestChunkDataModernPreludeS2CPacket {
             for (int j = 0; j < 16; j++)
                 biomes[i][j] = PreludeBiomes.DEEP_DARK; // fun
 
-        ChunkDataModernS2CPacket packet = ChunkDataModernS2CPacket.builder()
+        ChunkDataModernPreludeS2CPacket packet = ChunkDataModernPreludeS2CPacket.builder()
                 .chunk(new PreludeChunk(blocks, biomes, new PreludeChunkCoordinate(16, 13), false))
                 .build();
 
@@ -56,11 +56,11 @@ public class TestChunkDataModernPreludeS2CPacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof ChunkDataModernS2CPacket)
-                Assertions.assertEquals(ChunkDataModernS2CPacket.class, optional.get().getClass());
+            if (optional.get() instanceof ChunkDataModernPreludeS2CPacket)
+                Assertions.assertEquals(ChunkDataModernPreludeS2CPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            ChunkDataModernS2CPacket deserialized = (ChunkDataModernS2CPacket) optional.get();
+            ChunkDataModernPreludeS2CPacket deserialized = (ChunkDataModernPreludeS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
             EquipOffhandPreludeC2SPacket invalidPacket = new EquipOffhandPreludeC2SPacket();

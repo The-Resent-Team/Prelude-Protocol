@@ -32,13 +32,13 @@ import java.util.Objects;
 * Used to update ONE y < 0 or y > 255 block (specified by #getChunkType)
 * This is also used to replace viaversion replacements
 * */
-public class BlockChangeModernS2CPacket extends PreludeS2CPacket {
+public class BlockChangeModernPreludeS2CPacket extends PreludeS2CPacket {
     private PreludeCompactCoordinate compactCoordinate;
     private PreludeBlockType newBlock;
 
-    public BlockChangeModernS2CPacket() {}
+    public BlockChangeModernPreludeS2CPacket() {}
 
-    private BlockChangeModernS2CPacket(PreludeCompactCoordinate compactCoordinate, PreludeBlockType newBlock) {
+    private BlockChangeModernPreludeS2CPacket(PreludeCompactCoordinate compactCoordinate, PreludeBlockType newBlock) {
         this.compactCoordinate = compactCoordinate;
         this.newBlock = newBlock;
     }
@@ -57,8 +57,8 @@ public class BlockChangeModernS2CPacket extends PreludeS2CPacket {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (!(object instanceof BlockChangeModernS2CPacket)) return false;
-        BlockChangeModernS2CPacket that = (BlockChangeModernS2CPacket) object;
+        if (!(object instanceof BlockChangeModernPreludeS2CPacket)) return false;
+        BlockChangeModernPreludeS2CPacket that = (BlockChangeModernPreludeS2CPacket) object;
         return Objects.equals(newBlock, that.newBlock) && Objects.equals(compactCoordinate, that.compactCoordinate);
     }
 
@@ -132,8 +132,8 @@ public class BlockChangeModernS2CPacket extends PreludeS2CPacket {
             return this;
         }
 
-        public BlockChangeModernS2CPacket build() {
-            return new BlockChangeModernS2CPacket(new PreludeCompactCoordinate(chunkType, new PreludeChunkCoordinate(chunkX, chunkZ), new PreludeRelativeCoordinate(relativePosX, relativePosY, relativePosZ)), newBlock);
+        public BlockChangeModernPreludeS2CPacket build() {
+            return new BlockChangeModernPreludeS2CPacket(new PreludeCompactCoordinate(chunkType, new PreludeChunkCoordinate(chunkX, chunkZ), new PreludeRelativeCoordinate(relativePosX, relativePosY, relativePosZ)), newBlock);
         }
     }
 

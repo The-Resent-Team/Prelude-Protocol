@@ -39,14 +39,14 @@ import java.util.Set;
  * Used to update 2 to 64 y < 0 or y > 255 blocks (specified by #getChunkType)
  * This is also used to replace viaversion replacements
  * */
-public class MultiBlockChangeModernS2CPacket extends PreludeS2CPacket {
+public class MultiBlockChangeModernPreludeS2CPacket extends PreludeS2CPacket {
     private PreludeChunkType chunkType;
     private PreludeChunkCoordinate chunkCoordinate;
     private Set<PreludeBlock> blocksToChange;
 
-    public MultiBlockChangeModernS2CPacket() {}
+    public MultiBlockChangeModernPreludeS2CPacket() {}
 
-    private MultiBlockChangeModernS2CPacket(PreludeChunkType chunkType, PreludeChunkCoordinate chunkCoordinate, Set<PreludeBlock> blocksToChange) {
+    private MultiBlockChangeModernPreludeS2CPacket(PreludeChunkType chunkType, PreludeChunkCoordinate chunkCoordinate, Set<PreludeBlock> blocksToChange) {
         this.chunkType = chunkType;
         this.chunkCoordinate = chunkCoordinate;
 
@@ -75,8 +75,8 @@ public class MultiBlockChangeModernS2CPacket extends PreludeS2CPacket {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (!(object instanceof MultiBlockChangeModernS2CPacket)) return false;
-        MultiBlockChangeModernS2CPacket that = (MultiBlockChangeModernS2CPacket) object;
+        if (!(object instanceof MultiBlockChangeModernPreludeS2CPacket)) return false;
+        MultiBlockChangeModernPreludeS2CPacket that = (MultiBlockChangeModernPreludeS2CPacket) object;
         return chunkType == that.chunkType && Objects.equals(chunkCoordinate, that.chunkCoordinate) && Objects.equals(blocksToChange, that.blocksToChange);
     }
 
@@ -144,8 +144,8 @@ public class MultiBlockChangeModernS2CPacket extends PreludeS2CPacket {
             return this;
         }
 
-        public MultiBlockChangeModernS2CPacket build() {
-            return new MultiBlockChangeModernS2CPacket(chunkType, new PreludeChunkCoordinate(chunkX, chunkZ), blocksToChange);
+        public MultiBlockChangeModernPreludeS2CPacket build() {
+            return new MultiBlockChangeModernPreludeS2CPacket(chunkType, new PreludeChunkCoordinate(chunkX, chunkZ), blocksToChange);
         }
     }
 

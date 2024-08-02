@@ -31,12 +31,12 @@ import java.util.Objects;
 /*
 * Also used to update chunks when more than 64 blocks are changed
 * */
-public class ChunkDataModernS2CPacket extends PreludeS2CPacket {
+public class ChunkDataModernPreludeS2CPacket extends PreludeS2CPacket {
     private PreludeChunk chunk;
 
-    public ChunkDataModernS2CPacket() {}
+    public ChunkDataModernPreludeS2CPacket() {}
 
-    private ChunkDataModernS2CPacket(PreludeChunk chunk) {
+    private ChunkDataModernPreludeS2CPacket(PreludeChunk chunk) {
         this.chunk = chunk;
     }
 
@@ -53,8 +53,8 @@ public class ChunkDataModernS2CPacket extends PreludeS2CPacket {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (!(object instanceof ChunkDataModernS2CPacket)) return false;
-        ChunkDataModernS2CPacket that = (ChunkDataModernS2CPacket) object;
+        if (!(object instanceof ChunkDataModernPreludeS2CPacket)) return false;
+        ChunkDataModernPreludeS2CPacket that = (ChunkDataModernPreludeS2CPacket) object;
         return Objects.equals(chunk, that.chunk);
     }
 
@@ -88,8 +88,8 @@ public class ChunkDataModernS2CPacket extends PreludeS2CPacket {
             return this;
         }
 
-        public ChunkDataModernS2CPacket build() {
-            return new ChunkDataModernS2CPacket(chunk);
+        public ChunkDataModernPreludeS2CPacket build() {
+            return new ChunkDataModernPreludeS2CPacket(chunk);
         }
     }
 

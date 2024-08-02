@@ -26,9 +26,9 @@ import com.resentclient.prelude.protocol.packets.s2c.world.*;
 * Extended by ResentS2CPacketHandler on the client
 * */
 public interface PreludeS2CPacketHandler {
-    void handleServerHandshake(ServerHandshakeS2CPacket packet);
+    void handleServerHandshake(ServerHandshakePreludeS2CPacket packet);
 
-    void handleModStatus(ModStatusS2CPacket packet);
+    void handleModStatus(ModStatusPreludeS2CPacket packet);
 
     void handleServerTps(ServerTpsPreludeS2CPacket packet);
 
@@ -36,15 +36,15 @@ public interface PreludeS2CPacketHandler {
 
     void handleTotemUsed(TotemUsedPreludeS2CPacket packet);
 
-    void handleWaypoints(SetWaypointsS2CPacket packet);
+    void handleWaypoints(SetWaypointsPreludeS2CPacket packet);
 
-    void handleSyncRequest(ServerSyncRequestS2CPacket packet);
+    void handleSyncRequest(ServerSyncRequestPreludeS2CPacket packet);
 
-    void handleChunkDataModern(ChunkDataModernS2CPacket packet);
+    void handleChunkDataModern(ChunkDataModernPreludeS2CPacket packet);
 
-    void handleBlockChangeModern(BlockChangeModernS2CPacket packet);
+    void handleBlockChangeModern(BlockChangeModernPreludeS2CPacket packet);
 
-    void handleMultiBlockChangeModern(MultiBlockChangeModernS2CPacket packet);
+    void handleMultiBlockChangeModern(MultiBlockChangeModernPreludeS2CPacket packet);
 
     void handleSetItemType(SetItemTypePreludeS2CPacket packet);
 }

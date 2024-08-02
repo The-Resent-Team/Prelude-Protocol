@@ -35,7 +35,7 @@ import java.util.Optional;
 public class TestBlockChangeModernPreludeS2CPacket {
     @Test
     public void testBlockChangeModernS2CPacket() throws IOException {
-        BlockChangeModernS2CPacket packet = BlockChangeModernS2CPacket.builder()
+        BlockChangeModernPreludeS2CPacket packet = BlockChangeModernPreludeS2CPacket.builder()
                 .chunkType(PreludeChunkType.BELOW_Y0)
                 .chunkX(16)
                 .chunkZ(8172)
@@ -52,11 +52,11 @@ public class TestBlockChangeModernPreludeS2CPacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof BlockChangeModernS2CPacket)
-                Assertions.assertEquals(BlockChangeModernS2CPacket.class, optional.get().getClass());
+            if (optional.get() instanceof BlockChangeModernPreludeS2CPacket)
+                Assertions.assertEquals(BlockChangeModernPreludeS2CPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            BlockChangeModernS2CPacket deserialized = (BlockChangeModernS2CPacket) optional.get();
+            BlockChangeModernPreludeS2CPacket deserialized = (BlockChangeModernPreludeS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
             EquipOffhandPreludeC2SPacket invalidPacket = new EquipOffhandPreludeC2SPacket();

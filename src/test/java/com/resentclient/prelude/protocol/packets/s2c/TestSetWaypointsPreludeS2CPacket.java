@@ -33,8 +33,8 @@ import java.util.Optional;
 public class TestSetWaypointsPreludeS2CPacket {
     @Test
     public void testWaypointsPacket() throws IOException {
-        SetWaypointsS2CPacket packet = SetWaypointsS2CPacket.builder()
-                .addWaypoint(new SetWaypointsS2CPacket.Waypoint("spawn", 0, 75, 0))
+        SetWaypointsPreludeS2CPacket packet = SetWaypointsPreludeS2CPacket.builder()
+                .addWaypoint(new SetWaypointsPreludeS2CPacket.Waypoint("spawn", 0, 75, 0))
                 .build();
 
         Assertions.assertEquals(packet.getWaypoints().length, 1);
@@ -47,11 +47,11 @@ public class TestSetWaypointsPreludeS2CPacket {
             if (!optional.isPresent())
                 Assertions.fail("Failed to parse packet");
 
-            if (optional.get() instanceof SetWaypointsS2CPacket)
-                Assertions.assertEquals(SetWaypointsS2CPacket.class, optional.get().getClass());
+            if (optional.get() instanceof SetWaypointsPreludeS2CPacket)
+                Assertions.assertEquals(SetWaypointsPreludeS2CPacket.class, optional.get().getClass());
             else Assertions.fail("Parsing didn't return correct packet type!");
 
-            SetWaypointsS2CPacket deserialized = (SetWaypointsS2CPacket) optional.get();
+            SetWaypointsPreludeS2CPacket deserialized = (SetWaypointsPreludeS2CPacket) optional.get();
             Assertions.assertEquals(packet, deserialized);
 
             EquipOffhandPreludeC2SPacket invalidPacket = new EquipOffhandPreludeC2SPacket();
