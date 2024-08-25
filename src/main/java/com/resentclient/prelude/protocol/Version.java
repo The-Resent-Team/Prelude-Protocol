@@ -18,6 +18,8 @@
 
 package com.resentclient.prelude.protocol;
 
+import com.resentclient.common.WriteableObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

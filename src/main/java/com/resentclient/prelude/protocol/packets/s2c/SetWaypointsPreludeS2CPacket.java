@@ -18,6 +18,7 @@
 
 package com.resentclient.prelude.protocol.packets.s2c;
 
+import com.resentclient.common.WriteableObject;
 import com.resentclient.prelude.protocol.*;
 
 import java.io.*;

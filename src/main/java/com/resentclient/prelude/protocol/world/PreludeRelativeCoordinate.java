@@ -19,7 +19,7 @@
 package com.resentclient.prelude.protocol.world;
 
 import com.resentclient.prelude.protocol.StreamUtils;
-import com.resentclient.prelude.protocol.WriteableObject;
+import com.resentclient.common.WriteableObject;
 
 import java.io.IOException;
 import java.io.InputStream;

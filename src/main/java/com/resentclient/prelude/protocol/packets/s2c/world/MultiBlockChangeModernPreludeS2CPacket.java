@@ -21,7 +21,7 @@ package com.resentclient.prelude.protocol.packets.s2c.world;
 import com.resentclient.prelude.protocol.InvalidPreludePacketException;
 import com.resentclient.prelude.protocol.PreludeS2CPacket;
 import com.resentclient.prelude.protocol.PreludeS2CPacketHandler;
-import com.resentclient.prelude.protocol.WriteableObject;
+import com.resentclient.common.WriteableObject;
 import com.resentclient.prelude.protocol.world.PreludeBlockType;
 import com.resentclient.prelude.protocol.world.PreludeChunkCoordinate;
 import com.resentclient.prelude.protocol.world.PreludeChunkType;

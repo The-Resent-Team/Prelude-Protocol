@@ -18,6 +18,7 @@
 
 package com.resentclient.prelude.protocol.packets.c2s;
 
+import com.resentclient.common.WriteableObject;
 import com.resentclient.prelude.protocol.*;
 
 import java.io.ByteArrayOutputStream;

@@ -21,7 +21,7 @@ package com.resentclient.prelude.protocol.packets.c2s.interactions;
 import com.resentclient.prelude.protocol.PreludeC2SPacket;
 import com.resentclient.prelude.protocol.PreludeC2SPacketHandler;
 import com.resentclient.prelude.protocol.InvalidPreludePacketException;
-import com.resentclient.prelude.protocol.WriteableObject;
+import com.resentclient.common.WriteableObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
